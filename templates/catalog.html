@@ -1,0 +1,91 @@
+{% extends "main.html" %}
+{% load static %} {% load staticfiles %}
+
+{% block content %}
+ <div class="container hr well1 ins2">
+     <div class="row">
+
+
+             <div class="grid_3">
+          <div class="scrol-right-menu" >
+              <h2>Каталог</h2>
+         <ul class="marked-list">
+             {% for i in tags %}
+                  <li><a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a></li>
+             {% endfor %}
+
+                </ul>
+         </div>
+</div>
+         <div class="grid_6">
+
+
+            <h2 style="font-size: 22px">{{ pre }}: {{ cat_title.tag_title }}</h2>
+
+         <div class="row off2">
+              {%   for p in offer %}
+
+              <div class="grid_3  bg1">
+              <div class="catalog" style="overflow: hidden">
+                  <div style="max-height: 250px; overflow: hidden;">
+              {% if p.offer_url != None %}
+                  {% with p.offer_photo_url.all|first as img %}
+                      <img src="/media/{{ img.images_url }}"   alt="">
+                  {% endwith %}
+                  {% elif p.offer_photo != None %}
+                  <img src="/media/{{ p.offer_photo }}"  alt="">
+              {% else %}
+                  <img src="http://neskuchnij.net/nophoto.jpg" width="200px" height="auto" alt="">
+              {% endif %}
+                  </div>
+
+                  <h3>{{ p.offer_title }}</h3>
+              {% if p.offer_price != 0 %}
+                <b>{{ p.offer_price|stringformat:"i" }} руб.</b>
+              {% elif p.offer_price_from != 0 %}
+                  {{ p.offer_price_from|stringformat:"i" }} - {{ p.offer_price_to|stringformat:"i" }} руб.
+              {% else %}
+                <b>Нет в наличии</b>
+              {% endif %}
+                <p style="">{{ p.offer_pre_text|safe|truncatewords:17 }}</p>
+              </div>
+                  <div style="padding-top: 4px; margin-top: 20px">
+              <a href="/goods/{{ p.offer_url }}" class="btn">Просмотреть</a>
+                  </div>
+              </div>
+
+
+  {% if forloop.counter|divisibleby:2 %}
+</div>
+<div class="row">
+    {% endif %}
+{% endfor %}
+
+
+
+</div>
+
+
+
+</div>
+<div class="grid_3">
+    <ul class="cloud">
+        {% for tag in subtags %}
+            <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+     </div>
+ </div>
+{% endblock %}
+
+{% block footer %}<footer>
+<div class="container">
+            <div class="copyright">© Профсистемы-Крым 2016 г.
+г. Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89
+Время работы:
+пн-вс 8:00-18:00, без перерыва
+            </div>
+          </div>
+</footer>
+{% endblock %}

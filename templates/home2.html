@@ -1,0 +1,120 @@
+{% extends "main.html" %}
+{% load static %} {% load staticfiles %}
+{% block home %}
+            <div class="container">
+                <div class="content">
+                    <h1>I create webistes</h1>
+                    <h3>that communicates, connects and engages customers</h3>
+                    <br>
+                    <a href="#tf-contact" class="btn btn-primary my-btn">Contact</a>
+                    <a href="#tf-portfolio" class="btn btn-primary my-btn2">Portfolio</a>
+                </div>
+            </div>
+{% endblock %}
+
+{% block content %}
+    <div id="tf-service">
+        <div class="container">
+
+            <div class="col-md-4">
+
+                <div class="media">
+                  <div class="media-left media-middle">
+                    <i class="fa fa-motorcycle"></i>
+                  </div>
+                  <div class="media-body">
+                    <h4 class="media-heading">Brand & Graphics Design</h4>
+                    <p>Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                  </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="media">
+                  <div class="media-left media-middle">
+                    <i class="fa fa-gears"></i>
+                  </div>
+                  <div class="media-body">
+                    <h4 class="media-heading">Web Designer & Developer</h4>
+                    <p>Cras sit amet nibh libero, in gravida nulla. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                  </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="media">
+                  <div class="media-left media-middle">
+                    <i class="fa fa-heartbeat"></i>
+                  </div>
+                  <div class="media-body">
+                    <h4 class="media-heading">Business Consultant</h4>
+                    <p>Metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                  </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div id="tf-portfolio">
+        <div class="container">
+            <div class="section-title">
+                <h3>My Latest Works</h3>
+                <hr>
+            </div>
+
+            <div class="space"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <img src={% static "img/09.jpg" %} class="img-responsive">
+                </div>
+
+                <div class="col-md-4">
+                    <img src={% static "img/02.jpg" %} class="img-responsive">
+                </div>
+
+                <div class="col-md-4">
+                    <img src={% static "img/03.jpg" %} class="img-responsive">
+                </div>
+            </div>
+
+            <div class="row toppadding">
+                <div class="col-md-4">
+                    <img src={% static "img/04.jpg" %} class="img-responsive">
+                </div>
+
+                <div class="col-md-4">
+                    <img src={% static "img/05.jpg" %} class="img-responsive">
+                </div>
+
+                <div class="col-md-4">
+                    <img src={% static "img/06.jpg" %} class="img-responsive">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="tf-about">
+        <div class="overlay">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-6">
+                        <h3>About Me</h3>
+                        <br>
+                        <p>Cras sit amet nibh libero, in gravida nulla. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                        <p>Metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                        <br>
+                        <a href="#tf-why-me" class="btn btn-primary my-btn dark">Why Hire Me</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

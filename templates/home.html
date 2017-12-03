@@ -1,0 +1,233 @@
+{% extends "main.html" %}
+{% load static %} {% load staticfiles %}
+
+
+
+
+{% block content %}
+    <!--
+    ========================================================
+                                CONTENT
+    ========================================================
+    -->
+    <main>
+        <section class="camera_container">
+            <div id="camera" class="camera_wrap">
+                {% for i in baner %}123
+                    <div data-src=/media/{{ i.baner_img }} >
+                        <div class="camera_caption fadeIn">
+                            <div class="container">
+                                <div class="row"><a href="{{ i.baner_url }}" style="display: block"></a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+
+            </div>
+        </section>
+        <section>
+            <div class="container banner_wr">
+                <ul class="banner">
+                    <li><a href="{{ fb1.fb_url }}">
+                        <div class="fa-globe yel"></div>
+                        <h3>{{ fb1.fb_title }}</h3>
+                        <p>{{ fb1.fb_text }}</p>
+                    </a></li>
+                    <li><a href="{{ fb2.fb_url }}">
+                        <div class="fa-lightbulb-o"></div>
+                        <h3>{{ fb2.fb_title }}<br></h3>
+                        <p>{{ fb2.fb_text }}</p>
+                    </a></li>
+                    <li><a href="{{ fb3.fb_url }}">
+                        <div class="fa-cog"></div>
+                        <h3>{{ fb3.fb_title }}</h3>
+                        <p>{{ fb3.fb_text }}</p>
+                    </a></li>
+                    <li><a href="{{ fb4.fb_url }}">
+                        <div class="fa-briefcase"></div>
+                        <h3>{{ fb4.fb_title }}</h3>
+                        <p>{{ fb4.fb_text }}</p></a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section class="well ins1">
+            <div class="container hr">
+                <ul class="row product-list">
+                    <li class="grid_6">
+                        <div class="box wow fadeInRight wp">
+                            <div class="box_aside">
+                                <div class="icon {{ lb1.lb_icon }}"></div>
+                            </div>
+                            <div class="box_cnt__no-flow">
+                                <h3><a href="{{ lb1.lb_link }}">{{ lb1.lb_title }}</a></h3>
+                                <p>{{ lb1.lb_text }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div data-wow-delay="0.2s" class="box wow fadeInRight wp">
+                             <div class="box_aside">
+                                <div class="icon {{ lb2.lb_icon }}"></div>
+                            </div>
+                            <div class="box_cnt__no-flow">
+                                <h3><a href="{{ lb2.lb_link }}">{{ lb2.lb_title }}</a></h3>
+                                <p>{{ lb2.lb_text }}</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="grid_6">
+                        <div data-wow-delay="0.3s" class="box wow fadeInRight wp">
+                             <div class="box_aside">
+                                <div class="icon {{ lb3.lb_icon }}"></div>
+                            </div>
+                            <div class="box_cnt__no-flow">
+                                <h3><a href="{{ lb3.lb_link }}">{{ lb3.lb_title }}</a></h3>
+                                <p>{{ lb3.lb_text }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div data-wow-delay="0.4s" class="box wow fadeInRight wp">
+                             <div class="box_aside">
+                                <div class="icon {{ lb4.lb_icon }}"></div>
+                            </div>
+                            <div class="box_cnt__no-flow">
+                                <h3><a href="{{ lb4.lb_link }}">{{ lb4.lb_title }}</a></h3>
+                                <p>{{ lb4.lb_text }}</p>
+                            </div>
+                        </div>
+
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section class="well1">
+            <div class="container">
+                <div class="row">
+                    <div class="grid_4">
+                        <h2>{{ ac1.ac_title }}</h2>
+                        <p>{{ ac1.ac_text|safe }}</p>
+                        <a href="/about" class="btn">Читать больше</a>
+                    </div>
+                    <div class="grid_4">
+                        <h2>Товары</h2>
+                        <p>Список самых покупаемых товаров</p>
+                        <ul class="marked-list">
+                            {% for i in TO %}
+                            <li><a href="/goods/{{i.to_link}}">{{ i.to_title }}</a></li>
+                            {% endfor %}
+
+                        </ul>
+                        <a href="/catalog" class="btn">Читать больше</a>
+                    </div>
+                    <div class="grid_4">
+                        <div class="info-box">
+                            <h2 class="fa-comment">{{ sup.sup_title }}</h2>
+                            <hr>
+                            <h3>{{ sup.sup_slogan }}</h3>
+                            <dl>
+
+                                <dd>{{ sup.sup_time }}</dd>
+                            </dl>
+
+
+                            <p>{{ sup.sup_phone }}</p>
+
+                        </div>
+                        <div class="owl-carousel">
+                            {% for p in personal %}
+                            <div class="item">
+                                <blockquote class="box">
+                                    <div class="box_aside"><img
+                                            src="/media/{{ p.p_photo }}"
+                                            alt=""></div>
+                                    <div class="box_cnt__no-flow">
+                                        <p>
+                                            <q>{{ p.p_doljnost }}</q>
+                                        </p>
+                                        <cite><a href="/about">{{ p.p_name }}</a></cite>
+                                    </div>
+                                </blockquote>
+                            </div>
+                            {% endfor %}
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!--
+    ========================================================
+                                FOOTER
+    ========================================================
+    -->
+
+{% endblock %}
+
+{% block footer %}
+    <footer>
+        <section class="well3">
+            <div class="container">
+                <ul class="row contact-list">
+                    <li class="grid_4">
+                        <div class="box">
+                            <div class="box_aside">
+                                <div class="icon2 fa-map-marker"></div>
+                            </div>
+                            <div class="box_cnt__no-flow">
+                                <address>{{ footer.f_adres }}</address>
+                            </div>
+                        </div>
+                        <div class="box">
+                            <div class="box_aside">
+                                <div class="icon2 fa-skype"></div>
+                            </div>
+                            <div class="box_cnt__no-flow">{{ footer.f_skype }}</div>
+                        </div>
+                    </li>
+                    <li class="grid_4">
+                        <div class="box">
+                            <div class="box_aside">
+                                <div class="icon2 fa-phone"></div>
+                            </div>
+                            <div class="box_cnt__no-flow">{{ footer.f_mob_phone }}</div>
+                        </div>
+                        <div class="box">
+                            <div class="box_aside">
+                                <div class="icon2 fa-fax"></div>
+                            </div>
+                            <div class="box_cnt__no-flow">{{ footer.f_rob_phone }}</div>
+                        </div>
+                    </li>
+                    <li class="grid_4">
+                        <div class="box">
+                            <div class="box_aside">
+                                <div class="icon2 fa-facebook"></div>
+                            </div>
+                            <div class="box_cnt__no-flow"><a href="{{ footer.f_facebook_link }}">Мы в Фейсбуке</a></div>
+                        </div>
+                        <div class="box">
+                            <div class="box_aside">
+                                <div class="icon2 fa-twitter"></div>
+                            </div>
+                            <div class="box_cnt__no-flow"><a href="{{ footer.f_twitter_link }}">Мы в Твитере</a></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section>
+            <div class="container">
+                <div class="copyright">© Профсистемы-Крым 2016 г.
+                    г. Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89
+                    Время работы:
+                    пн-вс 8:00-18:00, без перерыва
+                </div>
+            </div>
+        </section>
+    </footer>
+{% endblock %}
