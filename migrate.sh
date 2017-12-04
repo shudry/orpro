@@ -1,4 +1,3 @@
-exit 0
 export PROJECT_NAME=app
 
 python manage.py migrate
