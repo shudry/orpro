@@ -12,9 +12,10 @@ import sys
 sys.path.insert(0, '/home/hosting_asteroid888/projects/2ziberon/app')
 sys.path.insert(0, '/home/hosting_asteroid888/projects/2ziberon')
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings.local'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 # ------ Ниже этой линии изменения скорее всего не нужны --------
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
+gt
