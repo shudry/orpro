@@ -12,7 +12,7 @@ import sys
 sys.path.insert(0, '/home/hosting_asteroid888/projects/2ziberon/app')
 sys.path.insert(0, '/home/hosting_asteroid888/projects/2ziberon')
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings.local'
 
 # ------ Ниже этой линии изменения скорее всего не нужны --------
 
