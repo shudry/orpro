@@ -1172,9 +1172,11 @@ header {
   padding-top: 24px;
   background: #ececec;
 }
-
+input, select {
+  font-size: 14px;
+}
 .info input{
-  width: 50px;
+  width: 70px;
 }
 
 .info button {
@@ -1192,7 +1194,7 @@ header {
 }
 
 h2 input {
-  width: 100%;
+  width: 98%;
 }
 
 @media  screen and (min-width: 1199px) {
