@@ -73,6 +73,9 @@
                     <dl class="info" style="margin-left: -50px">
                         <p>Мин. заказ: {{ offer.offer_minorder }} {{ offer.offer_minorder_value}}&nbsp;|&nbsp;{{ offer.offer_availability }}&nbsp;|&nbsp;Арт: {{ offer.offer_article }}</p>
                       <p style="font-size: 20px; font-weight:bold; padding-top: 10px"> Цена  &nbsp;: &nbsp;{% if offer.offer_price_from == 0 %}{{ offer.offer_price|stringformat:"i" }}{% else %}{{ offer.offer_price_from|stringformat:"i" }} - {{ offer.offer_price_to|stringformat:"i" }}{% endif%} руб.</p>
+                      {% if request.user.is_superuser %}
+                          <p><a href="{{ offer.get_admin_url }}">Редактировать</a></p>
+                      {% endif %}
                         </br>
 
                     </dl>
