@@ -1,0 +1,82 @@
+{% load staticfiles %}
+
+{% if request.user.is_superuser or edit %}
+    <form id="update_offer_form" method="{% if edit %}post{% else %}get{% endif %}">
+{% endif %}
+<section>
+                 <div class="container  well1 ins2">
+                     <div class="row">
+                         <h2 style="width: 50%; padding-left: 20px; padding-bottom: 30px" >
+                             {% if edit %}
+                                 {{ form.offer_title }}
+                             {% else %}
+                                {{ offer.offer_title }}
+                             {% endif %}
+                         </h2>
+                         <div class="grid_3">
+                             <div class="of_photo">
+                                 {% if offer.offer_photo or offer.offer_url%}
+                                     <ul id="imageGallery">
+                                         {% if offer.offer_photo %}
+                                             <li data-thumb="/media/{{ offer.offer_photo }}" data-src="/media/{{ offer.offer_photo }}">
+                                                 <a href="/media/{{ offer.offer_photo }}" data-lightbox="roadtrip"><img src="/media/{{ offer.offer_photo }}" width="220px"/></a>
+                                             </li>
+                                         {% endif %}
+                                         {% if offer.offer_url %}
+                                             {% for img in offer.offer_photo_url.all %}
+                                                 <li data-thumb="/media/{{ img.images_url }}" data-src="/media/{{ img.images_url }}" >
+                                                     <a href="/media/{{ img.images_url }}" data-lightbox="roadtrip"><img src="/media/{{ img.images_url }}" width="220px"/></a>
+                                                 </li>
+                                             {% endfor %}
+                                         {% endif %}
+                                     </ul>
+                                 {% else %}
+                                     <img src="http://neskuchnij.net/nophoto.jpg" width="200px" height="200px" alt="">
+                                 {% endif %}
+                             </div>
+                         </div>
+                         <div class="grid_6">
+                             <div class="row">
+                                 <div class="grid_6">
+                                     <dl class="info" style="margin-left: -50px">
+                                         {% if edit %}
+                                             <p>Мин. заказ: {{ form.offer_minorder }} {{ form.offer_minorder_value}}&nbsp;|&nbsp;<br>Наличие: {{ form.offer_availability }}&nbsp;|&nbsp;<br>Арт: {{ form.offer_article }}</p>
+                                             <p style="font-size: 20px; font-weight:bold; padding-top: 10px"> Цена  &nbsp;: &nbsp;{% if offer.offer_price_from == 0 %}{{ form.offer_price }}{% else %}{{ form.offer_price_form }} - {{ form.offer_price_value }}{% endif %} руб.</p>
+                                         {% else %}
+                                             <p>Мин. заказ: {{ offer.offer_minorder }} {{ offer.offer_minorder_value}}&nbsp;|&nbsp;{{ offer.offer_availability }}&nbsp;|&nbsp;Арт: {{ offer.offer_article }}</p>
+                                             <p style="font-size: 20px; font-weight:bold; padding-top: 10px"> Цена  &nbsp;: &nbsp;{% if offer.offer_price_from == 0 %}{{ offer.offer_price|stringformat:"i" }}{% else %}{{ offer.offer_price_from|stringformat:"i" }} - {{ offer.offer_price_to|stringformat:"i" }}{% endif%} руб.</p>
+                                         {% endif %}
+                                         {% if request.user.is_superuser %}
+                                             {% csrf_token %}
+                                             {% if edit %}
+                                                 <button type="submit">Сохранить</button>
+                                             {% else %}
+                                                <p><a href="{{ offer.get_admin_url }}" target="_blank">Редактировать в Админке</a></p>
+                                                 <input type="hidden" name="edit" value="1">
+                                                 <button type="submit">Быстрое редактирование</button>
+                                             {% endif %}
+                                         {% endif %}
+                                         </br>
+                                     </dl>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </section>
+             <section class="well1 ins3">
+                 <div class="container"><h3>Описание</h3><div class="row off1">
+                     <div class="grid_6">
+                         {% if edit %}
+                             {{ form.media }}
+                             {{ form.offer_text }}
+                         {% else %}
+                            {{ form.offer_text.value|safe }}
+                         {% endif %}
+                     </div>
+                 </div>
+                 </div>
+             </section>
+{% if request.user.is_superuser or edit %}
+    </form>
+{% endif %}

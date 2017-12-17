@@ -1172,6 +1172,31 @@ header {
   padding-top: 24px;
   background: #ececec;
 }
+input, select {
+  font-size: 14px;
+}
+.info input{
+  width: 70px;
+}
+
+.info button {
+  padding: 5px;
+  border: 1px solid #0c623b;
+  background: #0c623b;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.info button:hover{
+  color: #0c623b;
+  background: #fff;
+}
+
+h2 input {
+  width: 98%;
+}
+
 @media  screen and (min-width: 1199px) {
   header {
     padding-top: 24px;

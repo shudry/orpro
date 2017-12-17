@@ -41,7 +41,7 @@
 
                   <h3>{{ p.offer_title }}</h3>
               {% if p.offer_price != 0 %}
-                <b>{{ p.offer_price|stringformat:"i" }} руб.</b>
+                <b style="font-weight: bold; font-size: 16px; color: green">{{ p.offer_price|stringformat:"i" }} руб.</b>
               {% elif p.offer_price_from != 0 %}
                   {{ p.offer_price_from|stringformat:"i" }} - {{ p.offer_price_to|stringformat:"i" }} руб.
               {% else %}

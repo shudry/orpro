@@ -141,6 +141,9 @@ class Offers(models.Model):
     offer_tag = models.ForeignKey(Tags, blank=True, verbose_name='Группа 1 уровня')                      # Ссылка на категорию
     offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='Группа 2 уровня')          # Ссылка на категорию
 
+    @models.permalink
+    def get_admin_url(self):
+        return "admin:%s_%s_change" % (self._meta.app_label, self._meta.model_name), (self.id, )
 
 # Банер на главной
 class MainBaner(models.Model):
