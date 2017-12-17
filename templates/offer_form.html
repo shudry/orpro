@@ -41,7 +41,7 @@
                                      <dl class="info" style="margin-left: -50px">
                                          {% if edit %}
                                              <p>Мин. заказ: {{ form.offer_minorder }} {{ form.offer_minorder_value}}&nbsp;|&nbsp;<br>Наличие: {{ form.offer_availability }}&nbsp;|&nbsp;<br>Арт: {{ form.offer_article }}</p>
-                                             <p style="font-size: 20px; font-weight:bold; padding-top: 10px"> Цена  &nbsp;: &nbsp;{{ form.offer_price }} руб.</p>
+                                             <p style="font-size: 20px; font-weight:bold; padding-top: 10px"> Цена  &nbsp;: &nbsp;{% if offer.offer_price_from == 0 %}{{ form.offer_price }}{% else %}{{ form.offer_price_form }} - {{ form.offer_price_value }}{% endif %} руб.</p>
                                          {% else %}
                                              <p>Мин. заказ: {{ offer.offer_minorder }} {{ offer.offer_minorder_value}}&nbsp;|&nbsp;{{ offer.offer_availability }}&nbsp;|&nbsp;Арт: {{ offer.offer_article }}</p>
                                              <p style="font-size: 20px; font-weight:bold; padding-top: 10px"> Цена  &nbsp;: &nbsp;{% if offer.offer_price_from == 0 %}{{ offer.offer_price|stringformat:"i" }}{% else %}{{ offer.offer_price_from|stringformat:"i" }} - {{ offer.offer_price_to|stringformat:"i" }}{% endif%} руб.</p>
@@ -49,12 +49,9 @@
                                          {% if request.user.is_superuser %}
                                              {% csrf_token %}
                                              {% if edit %}
-                                                 {{ form.offer_valuta }}
-                                                 {{ form.offer_url }}
-                                                 {{ form.offer_publish }}
                                                  <button type="submit">Сохранить</button>
                                              {% else %}
-                                                <p><a href="{{ offer.get_admin_url }}">Редактировать в Админке</a></p>
+                                                <p><a href="{{ offer.get_admin_url }}" target="_blank">Редактировать в Админке</a></p>
                                                  <input type="hidden" name="edit" value="1">
                                                  <button type="submit">Быстрое редактирование</button>
                                              {% endif %}
