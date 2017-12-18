@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
+from django.views.generic import UpdateView, FormView
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from .models import Reviews, Post, Tags, Category, Offers, Subtags, MainBaner, FBlocks, LBlocks, AboutCompany, \
     TopOffers, Support, Personal, Footer, HeaderPhoto
-from .forms import ReviewsForm
+from .forms import ReviewsForm, OfferForm
 
 
 
@@ -76,18 +77,64 @@ def singlepage(request, post_seourl):
     return render (request, 'singlpage.html', args)
 
 
-def offer(request, off_url):
-    offers = Offers.objects.get (offer_url=off_url)
+class OfferAjaxUpdateView(UpdateView):
+    queryset = Offers.objects.all()
+    form_class = OfferForm
+    slug_field = "offer_url"
+    slug_url_kwarg = "off_url"
+    template_name = "offer.html"
+    ajax_template_name = "offer_form.html"
 
-    args = {}
-    args['hf'] = HeaderPhoto.objects.get (id=1)
+    def post(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return super().post(request, *args, **kwargs)
+            super().get_form()
+        else:
+            return HttpResponseForbidden()
 
-    args['topmenu_category'] = Post.objects.filter (~Q (post_cat_level=0))
-    args['offer'] = offers
-    args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
-    args['subtags'] = Subtags.objects.filter(tag_parent_tag=offers.offer_tag).order_by('?')
+    def get_form_kwargs(self):
+        """
+        Returns the keyword arguments for instantiating the form.
+        """
+        kwargs = {
+            'initial': self.get_initial(),
+            'prefix': self.get_prefix(),
+            'instance': self.object
+        }
 
-    return render (request, 'offer.html', args)
+        if self.request.method in ('POST', 'PUT'):
+            kwargs.update({
+                'data': self.request.POST,
+                'files': self.request.FILES,
+            })
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def form_invalid(self, form):
+        print(form.errors)
+        return super().form_invalid(form)
+
+    def get_template_names(self):
+        if self.request.is_ajax():
+            return self.ajax_template_name
+        return self.template_name
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        if not self.request.is_ajax():
+            ctx['hf'] = HeaderPhoto.objects.get(id=1)
+            ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0))
+
+            ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
+            ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag).order_by('?')
+
+        ctx['offer'] = self.object
+        if self.request.user.is_superuser and 'edit' in self.request.GET:
+            ctx['edit']=True
+        return ctx
 
 
 def catalog(request, cat_url='nothing'):
