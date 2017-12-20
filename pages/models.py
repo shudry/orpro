@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
+
+from urllib.parse import urlparse, urlsplit
+import os
+import requests
+
 from slugify import slugify_url
 
 
@@ -28,7 +35,33 @@ class Images(models.Model):
         verbose_name = 'Изображение'
         verbose_name_plural = 'Изображения'
 
-    images_url = models.URLField()
+    images_url = models.URLField(null=True, blank=True)
+    images_file = models.ImageField(upload_to='images', null=True, blank=True)
+    main = models.BooleanField(default=False)
+    offer = models.ForeignKey('Offers', related_name='images')
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+            self.get_remote_image(200, 200)
+            super().save(force_insert, force_update, using, update_fields)
+
+    def get_remote_image(self, max_width=0, max_height=0):
+        if self.images_url and not self.images_file:
+            r = requests.get(self.images_url)
+
+            if r.status_code == requests.codes.ok:
+                img_temp = NamedTemporaryFile(delete=True)
+                img_temp.write(r.content)
+                img_temp.flush()
+
+                img_filename = urlsplit(self.images_url).path[1:]
+
+                self.images_file.save(img_filename, File(img_temp), save=True)
+
+                return True
+
+        return False
+
 
 
 # Модель категории
@@ -126,7 +159,6 @@ class Offers(models.Model):
     offer_minorder_value = models.CharField(max_length=50, blank=True, verbose_name='Единица измерения минимального заказа')   # Еденица измерения товара
     offer_pre_text = models.TextField(blank=True, null=True, verbose_name='Краткое описание')                                  # Текст описания товара
     offer_text = models.TextField(verbose_name='Полное описание')                                      # Текст описания товара
-    offer_photo_url = models.ManyToManyField(Images, blank=True, verbose_name='Ссылки на изображения')         # Фото на страницу по ссылке
     offer_photo_alt = models.CharField(max_length=250, blank=True, verbose_name='Комментарий к изображению')
     offer_priority = models.BooleanField(default=False, verbose_name='Приоритетный товар')
     offer_urt_to_rubric = models.URLField(blank=True, verbose_name='Ссылка на рубрику')

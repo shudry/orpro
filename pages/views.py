@@ -3,11 +3,12 @@ import os
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 from django.views.generic import UpdateView, FormView
+from django.forms import modelformset_factory
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from .models import Reviews, Post, Tags, Category, Offers, Subtags, MainBaner, FBlocks, LBlocks, AboutCompany, \
-    TopOffers, Support, Personal, Footer, HeaderPhoto
-from .forms import ReviewsForm, OfferForm
+    TopOffers, Support, Personal, Footer, HeaderPhoto, Images
+from .forms import ReviewsForm, OfferForm, ImageForm, ImageFormSet
 
 
 
@@ -88,7 +89,6 @@ class OfferAjaxUpdateView(UpdateView):
     def post(self, request, *args, **kwargs):
         if request.user.is_superuser:
             return super().post(request, *args, **kwargs)
-            super().get_form()
         else:
             return HttpResponseForbidden()
 
@@ -110,11 +110,15 @@ class OfferAjaxUpdateView(UpdateView):
         return kwargs
 
     def form_valid(self, form):
+        context = self.get_context_data()
+        images = context['images']
         form.save()
+        if images.is_valid():
+            images.instance = self.object
+            images.save()
         return self.render_to_response(self.get_context_data(form=form))
 
     def form_invalid(self, form):
-        print(form.errors)
         return super().form_invalid(form)
 
     def get_template_names(self):
@@ -127,11 +131,15 @@ class OfferAjaxUpdateView(UpdateView):
         if not self.request.is_ajax():
             ctx['hf'] = HeaderPhoto.objects.get(id=1)
             ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0))
-
             ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
             ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag).order_by('?')
-
         ctx['offer'] = self.object
+
+        if self.request.POST:
+            ctx['images'] = ImageFormSet(self.request.POST, instance=self.object)
+        else:
+            ctx['images'] = ImageFormSet(instance=self.object)
+
         if self.request.user.is_superuser and 'edit' in self.request.GET:
             ctx['edit']=True
         return ctx
@@ -159,7 +167,6 @@ def catalog(request, cat_url='nothing'):
     args['offer'] = offers
     args['cat_title'] = mt
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
-
 
     return render (request, 'catalog.html', args)
 

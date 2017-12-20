@@ -29,7 +29,7 @@
               <div class="catalog" style="overflow: hidden">
                   <div style="max-height: 250px; overflow: hidden;">
               {% if p.offer_url != None %}
-                  {% with p.offer_photo_url.all|first as img %}
+                  {% with p.images.all|first as img %}
                       <img src="/media/{{ img.images_url }}"   alt="">
                   {% endwith %}
                   {% elif p.offer_photo != None %}

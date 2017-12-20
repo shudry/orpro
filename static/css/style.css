@@ -1176,7 +1176,8 @@ input, select {
   font-size: 14px;
 }
 .info input{
-  width: 70px;
+  width: 90px;
+  font-size: 16px;
 }
 
 .info button {

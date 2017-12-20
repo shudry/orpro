@@ -11,7 +11,7 @@ class TinyMCEAdmin(admin.ModelAdmin):
 admin.site.register(Post, TinyMCEAdmin)
 admin.site.register(Offers, TinyMCEAdmin)
 admin.site.register(AboutCompany, TinyMCEAdmin)
-admin.site.register(Category )
+admin.site.register(Category)
 admin.site.register(Subtags)
 admin.site.register(Tags)
 admin.site.register(MainBaner)

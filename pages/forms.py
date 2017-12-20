@@ -3,10 +3,11 @@ from django.core.urlresolvers import reverse
 from crispy_forms.bootstrap import Field, InlineRadios, TabHolder, Tab
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, Fieldset
+from djangoformsetjs.utils import formset_media_js
 
 from tinymce.widgets import TinyMCE
 
-from .models import Reviews, Offers
+from .models import Reviews, Offers, Images
 
 
 class ReviewsForm(forms.Form):
@@ -41,8 +42,31 @@ class OfferForm(forms.ModelForm):
                   'offer_article', 'offer_price', 'offer_price_from', 'offer_price_to', 'offer_text']
 
         widgets = {
-            'offer_text': TinyMCE(attrs={'rows': 50})
+            'offer_text': TinyMCE(attrs={'rows': 45}),
         }
+
 
     class Media:
         js = ('/static/js/tiny_mce/tiny_mce.js', '/static/js/tiny_mce/textareas.js',)
+
+
+class ImageForm(forms.ModelForm):
+
+    max_width = forms.IntegerField(label='Ширина', widget=forms.NumberInput(attrs={'style':'width:100px'}))
+    max_height = forms.IntegerField(label='Высота', widget=forms.NumberInput(attrs={'style':'width:100px'}))
+
+    class Meta:
+        model = Images
+        exclude = ('offer', 'id')
+
+        labels = {
+            'images_url': 'Ссылка на изображение',
+            'images_file': 'Загрузка файла',
+            'main': 'Главная',
+            'delete': 'Удалить'
+        }
+
+    class Media:
+        js = formset_media_js
+
+ImageFormSet = forms.inlineformset_factory(Offers, Images, ImageForm)

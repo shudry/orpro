@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'tinymce',
     'django_extensions',
     'crispy_forms',
+
     'pages',
 ]
 

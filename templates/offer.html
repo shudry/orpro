@@ -1,8 +1,9 @@
 {% extends "main.html" %}
-{% load static %} {% load staticfiles %}
+{% load staticfiles %}
 
 {% block additional_head %}
     {{ form.media }}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -50,6 +51,8 @@
 <script type="text/javascript" src="{% static "js/tiny_mce/tiny_mce.js" %}"></script>
 
 {% block additional_scripts %}
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    {{ images.management_form }}
     <script type="text/javascript">
 
         $(document).ready(function() {
