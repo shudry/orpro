@@ -24,3 +24,4 @@ six==1.10.0
 sorl-thumbnail==12.4.1
 Unidecode==0.4.20
 urllib3==1.22
+whitenoise==3.3.1
