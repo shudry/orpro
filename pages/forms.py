@@ -3,7 +3,6 @@ from django.core.urlresolvers import reverse
 from crispy_forms.bootstrap import Field, InlineRadios, TabHolder, Tab
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, Fieldset
-from djangoformsetjs.utils import formset_media_js
 
 from tinymce.widgets import TinyMCE
 
@@ -66,7 +65,5 @@ class ImageForm(forms.ModelForm):
             'delete': 'Удалить'
         }
 
-    class Media:
-        js = formset_media_js
 
 ImageFormSet = forms.inlineformset_factory(Offers, Images, ImageForm)
