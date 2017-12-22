@@ -176,13 +176,10 @@ class Offers(models.Model):
     @property
     def get_main_image(self):
         if self.images.filter(main=True):
-            print("main yes")
             return self.images.filter(main=True).first()
         elif self.images.all():
-            print("images yes")
             return self.images.first()
         elif self.offer_photo:
-            print("offer photo yes")
             return self.offer_photo
 
         return False
