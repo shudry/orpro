@@ -32,7 +32,7 @@
                       {% if p.get_main_image %}
                           <img src="{{ p.get_main_image.images_file.url}}"  alt="{{ p.offer_title }}">
                       {% else %}
-                          <img src="http://neskuchnij.net/nophoto.jpg" width="200px" height="auto" alt="">
+                          <img src="{% static 'images/nophoto.jpg' %}" width="200px" height="auto" alt="">
                       {% endif %}
                   </div>
 
