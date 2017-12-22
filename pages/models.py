@@ -173,6 +173,19 @@ class Offers(models.Model):
     offer_tag = models.ForeignKey(Tags, blank=True, verbose_name='Группа 1 уровня')                      # Ссылка на категорию
     offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='Группа 2 уровня')          # Ссылка на категорию
 
+    @property
+    def get_main_image(self):
+        if self.images.filter(main=True):
+            print("main yes")
+            return self.images.filter(main=True).first()
+        elif self.images.all():
+            print("images yes")
+            return self.images.first()
+        elif self.offer_photo:
+            print("offer photo yes")
+            return self.offer_photo
+
+        return False
     @models.permalink
     def get_admin_url(self):
         return "admin:%s_%s_change" % (self._meta.app_label, self._meta.model_name), (self.id, )
