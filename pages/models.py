@@ -42,10 +42,11 @@ class Images(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-            self.get_remote_image(200, 200)
+            self.get_remote_image()
             super().save(force_insert, force_update, using, update_fields)
 
     def get_remote_image(self, max_width=0, max_height=0):
+        print(self.images_file, 'Hello')
         if self.images_url and not self.images_file:
             r = requests.get(self.images_url)
 

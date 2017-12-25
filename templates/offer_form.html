@@ -1,7 +1,7 @@
 {% load staticfiles %}
 
 {% if request.user.is_superuser or edit %}
-    <form id="update_offer_form" method="{% if edit %}post{% else %}get{% endif %}">
+    <form id="update_offer_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data" >
 {% endif %}
 <section>
                  <div class="container  well1 ins2">
@@ -122,6 +122,7 @@
               {{ images.management_form }}
           </div>
           <div class="modal-footer">
+              <button type="button" class="btn" id="add_more">Add more</button>
             <button type="button" class="btn" data-dismiss="modal">Закрыть</button>
           </div>
         </div>

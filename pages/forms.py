@@ -51,8 +51,8 @@ class OfferForm(forms.ModelForm):
 
 class ImageForm(forms.ModelForm):
 
-    max_width = forms.IntegerField(label='Ширина', widget=forms.NumberInput(attrs={'style':'width:100px'}))
-    max_height = forms.IntegerField(label='Высота', widget=forms.NumberInput(attrs={'style':'width:100px'}))
+    max_width = forms.IntegerField(label='Ширина', widget=forms.NumberInput(attrs={'style':'width:100px'}), required=False)
+    max_height = forms.IntegerField(label='Высота', widget=forms.NumberInput(attrs={'style':'width:100px'}), required=False)
 
     class Meta:
         model = Images
