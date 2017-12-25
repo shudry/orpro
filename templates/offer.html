@@ -95,7 +95,7 @@
             $form = $(form);
             var url = $(this).attr("action");
             var method = $(this).attr("method");
-            var data = new FormData(form);
+            var data = $form.serialize();
 
             $.ajax({
                 url: form.action,
