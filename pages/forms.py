@@ -93,16 +93,18 @@ class ImageForm(forms.ModelForm):
                     'created' if self.instance._state.adding else 'changed',
                 )
             )
+        max_w = self.cleaned_data.get('max_width', 0)
+        max_h = self.cleaned_data.get('max_height', 0)
         if commit:
             # If committing, save the instance and the m2m data immediately.
-            max_w = self.cleaned_data.get('max_width', 0)
-            max_h = self.cleaned_data.get('max_height', 0)
+
             self.instance.save(max_width=max_w, max_height=max_h)
             self._save_m2m()
         else:
             # If not committing, add a method to the form to allow deferred
             # saving of m2m data.
             self.save_m2m = self._save_m2m
+            self.instance.save(max_width=max_w, max_height=max_h)
         return self.instance
 
 

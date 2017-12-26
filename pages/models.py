@@ -47,7 +47,7 @@ class Images(models.Model):
                      using=using, update_fields=update_fields)
 
     def get_remote_image(self, max_width=0, max_height=0):
-
+        print(max_width)
         if self.images_url and not self.images_file:
             r = requests.get(self.images_url)
 

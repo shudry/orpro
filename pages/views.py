@@ -145,22 +145,6 @@ class OfferAjaxUpdateView(UpdateView):
             ctx['edit']=True
         return ctx
 
-"""
-def offer_image_ajax_view(request, offer_url):
-    offer = get_object_or_404(Offers, offer_url=offer_url)
-    if request.POST and request.is_ajax():
-        form = ImageForm(request.POST)
-        if form.is_valid():
-            image = form.save(commit=False)
-            image.offer = offer
-            image.save()
-
-            return render(request, 'image_form.html', {'form': form})
-        else:
-            print('error')
-
-    return HttpResponse('Error')
-"""
 
 def catalog(request, cat_url='nothing'):
     if cat_url == 'nothing':
