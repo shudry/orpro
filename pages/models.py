@@ -60,7 +60,7 @@ class Images(models.Model):
 
                 self.images_file.save(img_filename, File(img_temp), save=True)
 
-        if (max_width or max_height) and self.images_file:
+        if (max_width or max_height) and self.images_file and (self.images_file.width > max_width or self.images_file.width > max_width):
             w = max_width if max_width else self.images_file.width
             h = max_height if max_height else self.images_file.height
             self.create_thumbnail(w, h)

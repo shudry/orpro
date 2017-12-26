@@ -11,7 +11,6 @@ from .models import Reviews, Post, Tags, Category, Offers, Subtags, MainBaner, F
 from .forms import ReviewsForm, OfferForm, ImageForm, ImageFormSet
 
 
-
 def review(request):
     args = {}
 
@@ -116,7 +115,7 @@ class OfferAjaxUpdateView(UpdateView):
         if images.is_valid():
             images.save()
         else:
-            return self.render_to_response(self.get_context_data(form=form, images=images, edit=True))
+            print(images.errors)
         return self.render_to_response(self.get_context_data(form=form))
 
     def form_invalid(self, form):

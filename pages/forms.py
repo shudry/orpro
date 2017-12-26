@@ -68,6 +68,21 @@ class ImageForm(forms.ModelForm):
             'delete': 'Удалить'
         }
 
+        widgets = {
+            'images_file': forms.FileInput()
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        r = kwargs.get('request')
+        if self.instance:
+            if self.instance.images_file:
+                self.fields['max_width'].initial = self.instance.images_file.width
+                self.fields['max_height'].initial = self.instance.images_file.height
+
+            if self.instance.images_file and not self.instance.images_url:
+                self.fields['images_url'].widget = forms.TextInput(attrs={'placeholder': self.instance.images_file.name})
+
     def clean(self):
         cleaned_data = super().clean()
         images_url = cleaned_data.get("images_url")
