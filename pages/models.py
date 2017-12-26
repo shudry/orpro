@@ -64,7 +64,6 @@ class Images(models.Model):
         return False
 
 
-
 # Модель категории
 class Category(models.Model):
 
@@ -184,6 +183,7 @@ class Offers(models.Model):
             return self.offer_photo
 
         return False
+
     @models.permalink
     def get_admin_url(self):
         return "admin:%s_%s_change" % (self._meta.app_label, self._meta.model_name), (self.id, )

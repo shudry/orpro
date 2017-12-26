@@ -1,5 +1,8 @@
 from django import forms
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
+
 from crispy_forms.bootstrap import Field, InlineRadios, TabHolder, Tab
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, Fieldset
@@ -64,6 +67,18 @@ class ImageForm(forms.ModelForm):
             'main': 'Главная',
             'delete': 'Удалить'
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        images_url = cleaned_data.get("images_url")
+        images_file = cleaned_data.get("images_file")
+
+        if not images_url and not images_file:
+            # Only do something if both fields are valid so far.
+
+            raise forms.ValidationError(
+                "One of the field images_url or images_file must be filled"
+            )
 
 
 ImageFormSet = forms.inlineformset_factory(Offers, Images, ImageForm)

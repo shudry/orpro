@@ -116,8 +116,7 @@ class OfferAjaxUpdateView(UpdateView):
         if images.is_valid():
             images.save()
         else:
-            print(images.errors)
-            return self.form_invalid(images)
+            return self.render_to_response(self.get_context_data(form=form, images=images, edit=True))
         return self.render_to_response(self.get_context_data(form=form))
 
     def form_invalid(self, form):
@@ -137,7 +136,7 @@ class OfferAjaxUpdateView(UpdateView):
             ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag).order_by('?')
         ctx['offer'] = self.object
 
-        if self.request.POST:
+        if self.request.POST and not 'images' in ctx:
             ctx['images'] = ImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
         else:
             ctx['images'] = ImageFormSet(instance=self.object)

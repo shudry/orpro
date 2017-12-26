@@ -1,7 +1,7 @@
 {% load staticfiles %}
 
 {% if request.user.is_superuser or edit %}
-    <form id="update_offer_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data" >
+    <form id="update_offer_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
 {% endif %}
 <section>
                  <div class="container  well1 ins2">
@@ -92,6 +92,15 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           </div>
           <div class="modal-body">
+              {% if form.non_field_errors %}
+
+                  <div class="non-field-errors">
+                      {% for err in form.non_field_errors %}
+                          <p class="form-error">{{ err }}</p>
+                      {% endfor %}
+                  </div>
+
+              {% endif %}
               <table class="table" id="formset" data-formset-prefix="{{ formset.prefix }}">
 
                   {% for form in images.forms %}{% if forloop.first %}
@@ -104,6 +113,17 @@
                       </thead>
                   {% endif %}
                       <tr class="formset_row">
+                          {% if form.non_field_errors %}
+                              <td>
+
+                                  <div class="non-field-errors">
+                                      {% for err in form.non_field_errors %}
+                                          <p class="form-error">{{ err }}</p>
+                                      {% endfor %}
+                                  </div>
+
+                              </td>
+                          {% endif %}
                           {% for field in form.visible_fields %}
                               <td>
                                   {# Include the hidden fields in the form #}

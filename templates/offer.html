@@ -52,6 +52,8 @@
 
 {% block additional_scripts %}
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+
     {{ images.management_form }}
     <script type="text/javascript">
         function cloneMore(selector, type) {
@@ -72,8 +74,8 @@
             $(selector).after(newElement);
         }
 
-        $(document).ready(function() {
-            $('#imageGallery').lightSlider({
+        function init_data(){
+             $('#imageGallery').lightSlider({
                 gallery:true,
                 item:1,
                 loop:true,
@@ -81,51 +83,61 @@
                 slideMargin:0,
                 enableDrag: false,
                 currentPagerPosition:'left',
-                onSliderLoad: function(el) {
-                    el.lightGallery({
-                        selector: '#imageGallery .lslide'
-                    });
-                }
             });
+
+             tinyMCE.init({
+                 mode : "textareas",
+                 theme : "advanced"
+             });
+
+             $('#add_more').click(function() {
+                 cloneMore('.table:last tr:last', 'images');
+             });
+        }
+
+        init_data();
+
+       /*
+       $(document).on('submit', 'form', function(e)  {
+            e.preventDefault();
+            var form = e.target;
+            $form = $(form);
+
+            var data =  $form.serialize();
+            if(window.FormData) {
+                data = new FormData($(this)[0]);
+            }
+            var url = $(this).attr("action");
+            var method = $(this).attr("method");
+
+            $.ajax({
+                url: form.action,
+                method: form.method,
+                data: $form.serializeArray(),
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    $form.replaceWith($.parseHTML(data));
+                    init_data();
+                }
+            })
         });
+        */
 
        $(document).on('submit', 'form', function(e)  {
             e.preventDefault();
             var form = e.target;
             $form = $(form);
-            var url = $(this).attr("action");
-            var method = $(this).attr("method");
-            var data = $form.serialize();
 
-            $.ajax({
+            $form.ajaxSubmit({
                 url: form.action,
                 method: form.method,
-                data: data,
                 success: function (data) {
                     $form.replaceWith($.parseHTML(data));
-                    $('#imageGallery').lightSlider({
-                        gallery:true,
-                        item:1,
-                        loop:true,
-                        thumbItem:9,
-                        slideMargin:0,
-                        enableDrag: false,
-                        currentPagerPosition:'left',
-                        onSliderLoad: function(el) {
-                            el.lightGallery({
-                                selector: '#imageGallery .lslide'
-                            });
-                        }
-                    });
-                    tinyMCE.init({
-                        mode : "textareas",
-                        theme : "advanced"
-                    });
-                    $('#add_more').click(function() {
-                cloneMore('.table:last tr:last', 'images');
-            });
+                    init_data();
                 }
-            })
+            });
         });
 
        $(document).on('click', '.cancel', function(evt) {
