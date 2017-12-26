@@ -3,6 +3,7 @@
 
 {% block additional_head %}
     {{ form.media }}
+    <link rel="stylesheet" href="{% static 'css/preloader.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 {% endblock %}
 
@@ -53,7 +54,7 @@
 {% block additional_scripts %}
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
-
+    <script type="text/javascript" src="{% static 'js/jquery.preloader.min.js' %}"></script>
     {{ images.management_form }}
     <script type="text/javascript">
         function cloneMore(selector, type) {
@@ -127,6 +128,7 @@
 
        $(document).on('submit', 'form', function(e)  {
             e.preventDefault();
+            $('#update_offer_form').preloader({setRelative: false});
             var form = e.target;
             $form = $(form);
 
@@ -136,9 +138,11 @@
                 success: function (data) {
                     $form.replaceWith($.parseHTML(data));
                     init_data();
+                    $('#update_offer_form').preloader('remove');
                 },
                 error: function (xhr, textStatus, error) {
-                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!')
+                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
+                    $('#update_offer_form').preloader('remove');
                 }
             });
         });
