@@ -107,6 +107,9 @@
                       <thead>
                       <tr>
                           {% for field in form.visible_fields %}
+                              {% if field.name == 'images_file' %}
+                                  <th>Превью</th>
+                              {% endif %}
                               <th>{{ field.label|capfirst }}</th>
                           {% endfor %}
                       </tr>
