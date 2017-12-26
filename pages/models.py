@@ -41,11 +41,13 @@ class Images(models.Model):
     offer = models.ForeignKey('Offers', related_name='images')
 
     def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-            self.get_remote_image(200, 200)
-            super().save(force_insert, force_update, using, update_fields)
+             update_fields=None, max_width=0, max_height=0):
+        self.get_remote_image(max_width, max_height)
+        super().save(force_insert=force_insert, force_update=force_update,
+                     using=using, update_fields=update_fields)
 
     def get_remote_image(self, max_width=0, max_height=0):
+
         if self.images_url and not self.images_file:
             r = requests.get(self.images_url)
 
@@ -58,11 +60,35 @@ class Images(models.Model):
 
                 self.images_file.save(img_filename, File(img_temp), save=True)
 
-                return True
+        if (max_width or max_height) and self.images_file:
+            w = max_width if max_width else self.images_file.width
+            h = max_height if max_height else self.images_file.height
+            self.create_thumbnail(w, h)
 
         return False
 
+    def create_thumbnail(self, w, h):
+        if not self.images_file:
+            return
+        from PIL import Image
+        from io import BytesIO, StringIO
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        import os
+        THUMBNAIL_SIZE = (w, h)
 
+        if 'jpg' in self.images_file.name or 'jpeg' in self.images_file.name:
+            PIL_TYPE = 'jpeg'
+            FILE_EXTENSION = 'jpg'
+        elif 'png' in self.images_file.name:
+            PIL_TYPE = 'png'
+            FILE_EXTENSION = 'png'
+
+        image = Image.open(BytesIO(self.images_file.read()))
+        image.thumbnail(THUMBNAIL_SIZE, Image.ANTIALIAS)
+        temp_handle = BytesIO()
+        image.save(temp_handle, PIL_TYPE)
+        temp_handle.seek(0)
+        self.images_file.save(self.images_file.name, File(temp_handle), save=False)
 
 # Модель категории
 class Category(models.Model):
@@ -172,6 +198,17 @@ class Offers(models.Model):
     offer_photo = models.ImageField(blank=True, null=True, verbose_name='Фото на страницу')                          # Фото на страницу ( если нету ссылки на фото)
     offer_tag = models.ForeignKey(Tags, blank=True, verbose_name='Группа 1 уровня')                      # Ссылка на категорию
     offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='Группа 2 уровня')          # Ссылка на категорию
+
+    @property
+    def get_main_image(self):
+        if self.images.filter(main=True):
+            return self.images.filter(main=True).first()
+        elif self.images.all():
+            return self.images.first()
+        elif self.offer_photo:
+            return self.offer_photo
+
+        return False
 
     @models.permalink
     def get_admin_url(self):

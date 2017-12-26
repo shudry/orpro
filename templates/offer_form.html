@@ -1,7 +1,7 @@
 {% load staticfiles %}
 
 {% if request.user.is_superuser or edit %}
-    <form id="update_offer_form" method="{% if edit %}post{% else %}get{% endif %}">
+    <form id="update_offer_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
 {% endif %}
 <section>
                  <div class="container  well1 ins2">
@@ -15,13 +15,8 @@
                          </h2>
                          <div class="grid_3">
                              <div class="of_photo">
-                                 {% if offer.offer_photo or offer.offer_url%}
+                                 {% if offer.offer_photo or offer.images.all %}
                                      <ul id="imageGallery">
-                                         {% if offer.offer_photo %}
-                                             <li data-thumb="/media/{{ offer.offer_photo }}" data-src="/media/{{ offer.offer_photo }}">
-                                                 <a href="/media/{{ offer.offer_photo }}" data-lightbox="roadtrip"><img src="/media/{{ offer.offer_photo }}" width="220px"/></a>
-                                             </li>
-                                         {% endif %}
                                          {% if offer.images %}
                                              {% for img in offer.images.all %}
                                                  {% if img.images_file %}
@@ -30,10 +25,14 @@
                                                      </li>
                                                  {% endif %}
                                              {% endfor %}
+                                         {% elif offer.offer_photo %}
+                                             <li data-thumb="{{ offer.offer_photo.url }}" data-src="{{ offer.offer_photo.ur. }}">
+                                                 <a href="{{ offer.offer_photo.url }}" data-lightbox="roadtrip"><img src="/media/{{ offer.offer_photo }}" width="220px"/></a>
+                                             </li>
                                          {% endif %}
                                      </ul>
                                  {% else %}
-                                     <img src="http://neskuchnij.net/nophoto.jpg" width="200px" height="200px" alt="">
+                                     <img src="{% static 'images/nophoto.jpg' %}" width="200px" height="200px" alt="">
                                  {% endif %}
                              </div>
                          </div>
@@ -92,6 +91,15 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           </div>
           <div class="modal-body">
+              {% if form.non_field_errors %}
+
+                  <div class="non-field-errors">
+                      {% for err in form.non_field_errors %}
+                          <p class="form-error">{{ err }}</p>
+                      {% endfor %}
+                  </div>
+
+              {% endif %}
               <table class="table" id="formset" data-formset-prefix="{{ formset.prefix }}">
 
                   {% for form in images.forms %}{% if forloop.first %}
@@ -104,6 +112,17 @@
                       </thead>
                   {% endif %}
                       <tr class="formset_row">
+                          {% if form.non_field_errors %}
+                              <td>
+
+                                  <div class="non-field-errors">
+                                      {% for err in form.non_field_errors %}
+                                          <p class="form-error">{{ err }}</p>
+                                      {% endfor %}
+                                  </div>
+
+                              </td>
+                          {% endif %}
                           {% for field in form.visible_fields %}
                               <td>
                                   {# Include the hidden fields in the form #}
@@ -114,6 +133,7 @@
                                   {% endif %}
                                   {{ field.errors.as_ul }}
                                   {{ field }}
+                                  {% if field.name == 'images_file' %}{{ field.value.width }}x{{ field.value.height }}{% endif %}
                               </td>
                           {% endfor %}
                       </tr>
@@ -122,6 +142,7 @@
               {{ images.management_form }}
           </div>
           <div class="modal-footer">
+              <button type="button" class="btn" id="add_more">Добавить</button>
             <button type="button" class="btn" data-dismiss="modal">Закрыть</button>
           </div>
         </div>

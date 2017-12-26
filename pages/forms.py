@@ -1,5 +1,8 @@
 from django import forms
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
+
 from crispy_forms.bootstrap import Field, InlineRadios, TabHolder, Tab
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, Fieldset
@@ -51,8 +54,8 @@ class OfferForm(forms.ModelForm):
 
 class ImageForm(forms.ModelForm):
 
-    max_width = forms.IntegerField(label='Ширина', widget=forms.NumberInput(attrs={'style':'width:100px'}))
-    max_height = forms.IntegerField(label='Высота', widget=forms.NumberInput(attrs={'style':'width:100px'}))
+    max_width = forms.IntegerField(label='Ширина', widget=forms.NumberInput(attrs={'style':'width:100px'}), required=False)
+    max_height = forms.IntegerField(label='Высота', widget=forms.NumberInput(attrs={'style':'width:100px'}), required=False)
 
     class Meta:
         model = Images
@@ -64,6 +67,45 @@ class ImageForm(forms.ModelForm):
             'main': 'Главная',
             'delete': 'Удалить'
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        images_url = cleaned_data.get("images_url")
+        images_file = cleaned_data.get("images_file")
+
+        if not images_url and not images_file:
+            # Only do something if both fields are valid so far.
+
+            raise forms.ValidationError(
+                "One of the field images_url or images_file must be filled"
+            )
+
+    def save(self, commit=True):
+        """
+                Save this form's self.instance object if commit=True. Otherwise, add
+                a save_m2m() method to the form which can be called after the instance
+                is saved manually at a later time. Return the model instance.
+                """
+        if self.errors:
+            raise ValueError(
+                "The %s could not be %s because the data didn't validate." % (
+                    self.instance._meta.object_name,
+                    'created' if self.instance._state.adding else 'changed',
+                )
+            )
+        if commit:
+            # If committing, save the instance and the m2m data immediately.
+            max_w = self.cleaned_data.get('max_width', 0)
+            max_h = self.cleaned_data.get('max_height', 0)
+            self.instance.save(max_width=max_w, max_height=max_h)
+            self._save_m2m()
+        else:
+            # If not committing, add a method to the form to allow deferred
+            # saving of m2m data.
+            self.save_m2m = self._save_m2m
+        return self.instance
+
+
 
 
 ImageFormSet = forms.inlineformset_factory(Offers, Images, ImageForm)

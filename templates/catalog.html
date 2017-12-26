@@ -28,15 +28,12 @@
               <div class="grid_3  bg1">
               <div class="catalog" style="overflow: hidden">
                   <div style="max-height: 250px; overflow: hidden;">
-              {% if p.offer_url != None %}
-                  {% with p.images.all|first as img %}
-                      <img src="/media/{{ img.images_url }}"   alt="">
-                  {% endwith %}
-                  {% elif p.offer_photo != None %}
-                  <img src="/media/{{ p.offer_photo }}"  alt="">
-              {% else %}
-                  <img src="http://neskuchnij.net/nophoto.jpg" width="200px" height="auto" alt="">
-              {% endif %}
+
+                      {% if p.get_main_image %}
+                          <img src="{{ p.get_main_image.images_file.url}}"  alt="{{ p.offer_title }}">
+                      {% else %}
+                          <img src="{% static 'images/nophoto.jpg' %}" width="200px" height="auto" alt="">
+                      {% endif %}
                   </div>
 
                   <h3>{{ p.offer_title }}</h3>

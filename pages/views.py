@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
-from django.views.generic import UpdateView, FormView
-from django.forms import modelformset_factory
+from django.views.generic import UpdateView
+
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from .models import Reviews, Post, Tags, Category, Offers, Subtags, MainBaner, FBlocks, LBlocks, AboutCompany, \
@@ -114,8 +114,9 @@ class OfferAjaxUpdateView(UpdateView):
         images = context['images']
         form.save()
         if images.is_valid():
-            images.instance = self.object
             images.save()
+        else:
+            return self.render_to_response(self.get_context_data(form=form, images=images, edit=True))
         return self.render_to_response(self.get_context_data(form=form))
 
     def form_invalid(self, form):
@@ -135,8 +136,8 @@ class OfferAjaxUpdateView(UpdateView):
             ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag).order_by('?')
         ctx['offer'] = self.object
 
-        if self.request.POST:
-            ctx['images'] = ImageFormSet(self.request.POST, instance=self.object)
+        if self.request.POST and not 'images' in ctx:
+            ctx['images'] = ImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
         else:
             ctx['images'] = ImageFormSet(instance=self.object)
 
@@ -144,6 +145,22 @@ class OfferAjaxUpdateView(UpdateView):
             ctx['edit']=True
         return ctx
 
+"""
+def offer_image_ajax_view(request, offer_url):
+    offer = get_object_or_404(Offers, offer_url=offer_url)
+    if request.POST and request.is_ajax():
+        form = ImageForm(request.POST)
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.offer = offer
+            image.save()
+
+            return render(request, 'image_form.html', {'form': form})
+        else:
+            print('error')
+
+    return HttpResponse('Error')
+"""
 
 def catalog(request, cat_url='nothing'):
     if cat_url == 'nothing':
