@@ -136,6 +136,9 @@
                 success: function (data) {
                     $form.replaceWith($.parseHTML(data));
                     init_data();
+                },
+                error: function (xhr, textStatus, error) {
+                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!')
                 }
             });
         });

@@ -134,6 +134,7 @@
                                   {% endif %}
                                   {{ field.errors.as_ul }}
                                   {{ field }}
+                                  {% if field.name == 'images_file' %}{{ field.value.width }}x{{ field.value.height }}{% endif %}
                               </td>
                           {% endfor %}
                       </tr>

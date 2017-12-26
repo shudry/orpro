@@ -41,12 +41,13 @@ class Images(models.Model):
     offer = models.ForeignKey('Offers', related_name='images')
 
     def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-            self.get_remote_image()
-            super().save(force_insert, force_update, using, update_fields)
+             update_fields=None, max_width=0, max_height=0):
+        self.get_remote_image(max_width, max_height)
+        super().save(force_insert=force_insert, force_update=force_update,
+                     using=using, update_fields=update_fields)
 
     def get_remote_image(self, max_width=0, max_height=0):
-        print(self.images_file, 'Hello')
+
         if self.images_url and not self.images_file:
             r = requests.get(self.images_url)
 
@@ -59,10 +60,35 @@ class Images(models.Model):
 
                 self.images_file.save(img_filename, File(img_temp), save=True)
 
-                return True
+        if (max_width or max_height) and self.images_file:
+            w = max_width if max_width else self.images_file.width
+            h = max_height if max_height else self.images_file.height
+            self.create_thumbnail(w, h)
 
         return False
 
+    def create_thumbnail(self, w, h):
+        if not self.images_file:
+            return
+        from PIL import Image
+        from io import BytesIO, StringIO
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        import os
+        THUMBNAIL_SIZE = (w, h)
+
+        if 'jpg' in self.images_file.name or 'jpeg' in self.images_file.name:
+            PIL_TYPE = 'jpeg'
+            FILE_EXTENSION = 'jpg'
+        elif 'png' in self.images_file.name:
+            PIL_TYPE = 'png'
+            FILE_EXTENSION = 'png'
+
+        image = Image.open(BytesIO(self.images_file.read()))
+        image.thumbnail(THUMBNAIL_SIZE, Image.ANTIALIAS)
+        temp_handle = BytesIO()
+        image.save(temp_handle, PIL_TYPE)
+        temp_handle.seek(0)
+        self.images_file.save(self.images_file.name, File(temp_handle), save=False)
 
 # Модель категории
 class Category(models.Model):
