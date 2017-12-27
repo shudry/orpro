@@ -2,7 +2,7 @@
 import os
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, FormView
 
 from django.db.models import Q
 from django.core.urlresolvers import reverse
@@ -14,7 +14,7 @@ from .forms import ReviewsForm, OfferForm, ImageForm, ImageFormSet
 def review(request):
     args = {}
 
-    form = ReviewsForm ()
+    form = ReviewsForm()
     args['form'] = form
     if 'submit' in request.POST:
         form = ReviewsForm (request.POST)
@@ -118,9 +118,6 @@ class OfferAjaxUpdateView(UpdateView):
             print(images.errors)
         return self.render_to_response(self.get_context_data(form=form))
 
-    def form_invalid(self, form):
-        return super().form_invalid(form)
-
     def get_template_names(self):
         if self.request.is_ajax():
             return self.ajax_template_name
@@ -133,16 +130,47 @@ class OfferAjaxUpdateView(UpdateView):
             ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0))
             ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
             ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag).order_by('?')
+
         ctx['offer'] = self.object
 
-        if self.request.POST and not 'images' in ctx:
-            ctx['images'] = ImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
-        else:
+        if self.request.user.is_superuser:
             ctx['images'] = ImageFormSet(instance=self.object)
-
-        if self.request.user.is_superuser and 'edit' in self.request.GET:
-            ctx['edit']=True
+            if 'edit' in self.request.GET:
+                ctx['edit'] = True
         return ctx
+
+
+class OfferImagesAjaxUpdateView(FormView):
+    http_method_names = ['post', 'get']
+    form_class = ImageFormSet
+    slug_field = "off_url"
+    template_name = 'images_inline_form.html'
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return super().post(request, *args, **kwargs)
+        return HttpResponseForbidden()
+
+    def dispatch(self, request, *args, **kwargs):
+        slug = kwargs.get(self.slug_field)
+        self.object = get_object_or_404(Offers, offer_url=slug)
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.save()
+        return self.render_to_response(self.get_context_data(images=self.form_class(instance=self.object)))
+
+    def get_form_kwargs(self):
+        """
+        Returns the keyword arguments for instanciating the form.
+        """
+        kwargs = {'initial': self.get_initial(), 'instance': self.object}
+        if self.request.method in ('POST', 'PUT'):
+            kwargs.update({
+                'data': self.request.POST,
+                'files': self.request.FILES,
+            })
+        return kwargs
 
 
 def catalog(request, cat_url='nothing'):

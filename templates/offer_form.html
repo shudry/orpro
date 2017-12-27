@@ -16,7 +16,7 @@
                          </h2>
                          <div class="grid_3">
                              <div class="of_photo">
-                                 {% if request.user.is_authenticated and edit %}
+                                 {% if request.user.is_superuser %}
                                      <span type="button" data-toggle="modal" data-target="#imageModal"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></span>
                                  {% endif %}
                                  {% if offer.offer_photo or offer.images.all %}
@@ -30,7 +30,7 @@
                                                  {% endif %}
                                              {% endfor %}
                                          {% elif offer.offer_photo %}
-                                             <li data-thumb="{{ offer.offer_photo.url }}" data-src="{{ offer.offer_photo.ur. }}">
+                                             <li data-thumb="{{ offer.offer_photo.url }}" data-src="{{ offer.offer_photo.url }}">
                                                  <a href="{{ offer.offer_photo.url }}" data-lightbox="roadtrip"><img src="/media/{{ offer.offer_photo }}" width="220px"/></a>
                                              </li>
                                          {% endif %}
@@ -84,83 +84,7 @@
                  </div>
              </section>
 
-{% if edit %}
-    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          </div>
-          <div class="modal-body">
-              {% if form.non_field_errors %}
 
-                  <div class="non-field-errors">
-                      {% for err in form.non_field_errors %}
-                          <p class="form-error">{{ err }}</p>
-                      {% endfor %}
-                  </div>
-
-              {% endif %}
-              <table class="table" id="formset" data-formset-prefix="{{ formset.prefix }}">
-
-                  {% for form in images.forms %}{% if forloop.first %}
-                      <thead>
-                      <tr>
-                          {% for field in form.visible_fields %}
-                              {% if field.name == 'images_file' %}
-                                  <th>Превью</th>
-                              {% endif %}
-                              <th>{{ field.label|capfirst }}</th>
-                          {% endfor %}
-                      </tr>
-                      </thead>
-                  {% endif %}
-                      <tr class="formset_row">
-                          {% if form.non_field_errors %}
-                              <td>
-
-                                  <div class="non-field-errors">
-                                      {% for err in form.non_field_errors %}
-                                          <p class="form-error">{{ err }}</p>
-                                      {% endfor %}
-                                  </div>
-
-                              </td>
-                          {% endif %}
-                          {% for field in form.visible_fields %}
-                              {% if field.name == 'images_file' %}
-                                <td>
-                                  {% if field.value.path %}
-                                      {% thumbnail field.value '50x50' crop='center' as img %}
-                                          <img src="{{ img.url }}">
-                                      {% endthumbnail %}
-                                  {% endif %}
-                                </td>
-                              {% endif %}
-                              <td>
-                                  {# Include the hidden fields in the form #}
-                                  {% if forloop.first %}
-                                      {% for hidden in form.hidden_fields %}
-                                          {{ hidden }}
-                                      {% endfor %}
-                                  {% endif %}
-                                  {{ field.errors.as_ul }}
-                                  {{ field }}
-                              </td>
-                          {% endfor %}
-                      </tr>
-                  {% endfor %}
-              </table>
-              {{ images.management_form }}
-              <div style="text-align: right"><span style="color:gray; font-size: 18px;" type="button" id="add_more" class="glyphicon glyphicon-plus" aria-hidden="true"></span></div>
-          </div>
-          <div class="modal-footer">
-            <button style="width: auto;" type="button" class="btn" data-dismiss="modal">Применить изменения и закрыть окно</button>
-          </div>
-        </div>
-      </div>
-    </div>
-{% endif %}
 {% if request.user.is_superuser or edit %}
 
     </form>

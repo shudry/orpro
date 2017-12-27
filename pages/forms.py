@@ -54,8 +54,20 @@ class OfferForm(forms.ModelForm):
 
 class ImageForm(forms.ModelForm):
 
-    max_width = forms.IntegerField(label='Ширина', widget=forms.NumberInput(attrs={'style':'width:100px'}), required=False)
-    max_height = forms.IntegerField(label='Высота', widget=forms.NumberInput(attrs={'style':'width:100px'}), required=False)
+    max_width = forms.IntegerField(
+        label='Ширина',
+        widget=forms.NumberInput(attrs={'style': 'width:100px'}),
+        required=False,
+        min_value=1,
+        help_text='измените один из размеров'
+    )
+    max_height = forms.IntegerField(
+        label='Высота',
+        widget=forms.NumberInput(attrs={'style': 'width:100px'}),
+        required=False,
+        min_value=1,
+        help_text='измените один из размеров'
+    )
 
     class Meta:
         model = Images
@@ -78,7 +90,10 @@ class ImageForm(forms.ModelForm):
         if self.instance:
             if self.instance.images_file:
                 self.fields['max_width'].initial = self.instance.images_file.width
+                self.fields['max_width'].widget = forms.NumberInput(attrs={'min': 1, 'max':self.instance.images_file.width, 'style': 'width:100px'})
+
                 self.fields['max_height'].initial = self.instance.images_file.height
+                self.fields['max_height'].widget = forms.NumberInput(attrs={'min': 1, 'max': self.instance.images_file.height, 'style': 'width:100px'})
 
             if self.instance.images_file and not self.instance.images_url:
                 self.fields['images_url'].widget = forms.TextInput(attrs={'placeholder': self.instance.images_file.name})
@@ -87,7 +102,7 @@ class ImageForm(forms.ModelForm):
         cleaned_data = super().clean()
         images_url = cleaned_data.get("images_url")
         images_file = cleaned_data.get("images_file")
-
+        print(images_file)
         if not images_url and not images_file:
             # Only do something if both fields are valid so far.
 
@@ -108,18 +123,17 @@ class ImageForm(forms.ModelForm):
                     'created' if self.instance._state.adding else 'changed',
                 )
             )
-        max_w = self.cleaned_data.get('max_width', 0)
-        max_h = self.cleaned_data.get('max_height', 0)
+        max_w = self.cleaned_data.get('max_width', 0) if self.cleaned_data.get('max_width') else 0
+        max_h = self.cleaned_data.get('max_height', 0) if self.cleaned_data.get('max_height', 0) else 0
         if commit:
             # If committing, save the instance and the m2m data immediately.
-
-            self.instance.save(max_width=max_w, max_height=max_h)
             self._save_m2m()
         else:
             # If not committing, add a method to the form to allow deferred
             # saving of m2m data.
             self.save_m2m = self._save_m2m
-            self.instance.save(max_width=max_w, max_height=max_h)
+
+        self.instance.save(max_width=max_w, max_height=max_h)
         return self.instance
 
 

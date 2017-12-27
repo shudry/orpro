@@ -42,12 +42,12 @@ class Images(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None, max_width=0, max_height=0):
-        self.get_remote_image(max_width, max_height)
+        self.get_remote_image()
+        self.make_thumbnail(max_width, max_height)
         super().save(force_insert=force_insert, force_update=force_update,
                      using=using, update_fields=update_fields)
 
-    def get_remote_image(self, max_width=0, max_height=0):
-        print(max_width)
+    def get_remote_image(self):
         if self.images_url and not self.images_file:
             r = requests.get(self.images_url)
 
@@ -60,20 +60,33 @@ class Images(models.Model):
 
                 self.images_file.save(img_filename, File(img_temp), save=True)
 
-        if (max_width or max_height) and self.images_file and (self.images_file.width > max_width or self.images_file.width > max_width):
-            w = max_width if max_width else self.images_file.width
-            h = max_height if max_height else self.images_file.height
-            self.create_thumbnail(w, h)
+                return True
+        return False
 
+    def make_thumbnail(self, w=0, h=0):
+        img_w = self.images_file.width
+        img_h = self.images_file.height
+
+        if w > 600 or (not w and img_w > 600):
+            w = 600
+        if h > 600 or (not h and img_h > 600):
+            h = 600
+
+        if (w or h) and self.images_file and (img_w > w or img_h > h):
+            width = w if w else img_w
+            height = h if h else img_h
+            self.create_thumbnail(width, height)
+
+            return True
         return False
 
     def create_thumbnail(self, w, h):
+
         if not self.images_file:
             return
         from PIL import Image
-        from io import BytesIO, StringIO
-        from django.core.files.uploadedfile import SimpleUploadedFile
-        import os
+        from io import BytesIO
+
         THUMBNAIL_SIZE = (w, h)
 
         if 'jpg' in self.images_file.name or 'jpeg' in self.images_file.name:
@@ -83,12 +96,14 @@ class Images(models.Model):
             PIL_TYPE = 'png'
             FILE_EXTENSION = 'png'
 
+        self.images_file.open()
         image = Image.open(BytesIO(self.images_file.read()))
         image.thumbnail(THUMBNAIL_SIZE, Image.ANTIALIAS)
         temp_handle = BytesIO()
         image.save(temp_handle, PIL_TYPE)
         temp_handle.seek(0)
         self.images_file.save(self.images_file.name, File(temp_handle), save=False)
+        print(self.images_file, self.images_file.width)
 
 # Модель категории
 class Category(models.Model):

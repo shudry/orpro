@@ -3442,6 +3442,13 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   z-index: 1040;
   background-color: #000000;
 }
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    height: 400px;
+    overflow-y: auto;
+}
 .modal-backdrop.fade {
   opacity: 0;
   filter: alpha(opacity=0);

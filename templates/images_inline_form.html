@@ -1,0 +1,68 @@
+{% load thumbnail %}
+
+{{ images.management_form }}
+{% if form.non_field_errors %}
+
+    <div class="non-field-errors">
+        {% for err in form.non_field_errors %}
+            <p class="form-error">{{ err }}</p>
+        {% endfor %}
+    </div>
+
+{% endif %}
+<table class="table" id="formset" data-formset-prefix="{{ formset.prefix }}">
+
+    {% for form in images.forms %}{% if forloop.first %}
+        <thead>
+        <tr>
+            {% for field in form.visible_fields %}
+                {% if field.name == 'images_file' %}
+                    <th>Превью</th>
+                {% endif %}
+                <th>{{ field.label|capfirst }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+    {% endif %}
+        <tr class="formset_row">
+            {% if form.non_field_errors %}
+                <td>
+                    <div class="non-field-errors">
+                        {% for err in form.non_field_errors %}
+                            <p class="form-error">{{ err }}</p>
+                        {% endfor %}
+                    </div>
+                </td>
+            {% endif %}
+            {% for field in form.visible_fields %}
+                {% if field.name == 'images_file' %}
+                    <td>
+                        {% if field.value.path %}
+                            {% thumbnail field.value '50x50' crop='center' as img %}
+                                <img src="{{ img.url }}">
+                            {% endthumbnail %}
+                        {% endif %}
+                    </td>
+                {% endif %}
+                <td>
+                    {# Include the hidden fields in the form #}
+                    {% if forloop.first %}
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                    {% endif %}
+                    {{ field.errors.as_ul }}
+                    {% if field.name == 'images_url' and form.images_file.value %}
+                        <p>{{ request.get_host }}{{ form.images_file.value.url }}</p>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+{% csrf_token %}
+<div style="text-align: right">
+    <span style="color:gray; font-size: 18px;" type="button" id="add_more" class="glyphicon glyphicon-plus" aria-hidden="true" title="добавить еще строку"></span>
+</div>

@@ -4,7 +4,8 @@ from .views import *
 
 
 urlpatterns = [
-url(r'^goods/(?P<off_url>[A-Za-z0-9_-]+)', OfferAjaxUpdateView.as_view(), name='offer'),
+url(r'^goods/(?P<off_url>[A-Za-z0-9_-]+)/$', OfferAjaxUpdateView.as_view(), name='offer'),
+url(r'^goods/(?P<off_url>[A-Za-z0-9_-]+)/images/$', OfferImagesAjaxUpdateView.as_view(), name='offer_images'),
 url(r'^1g$', pars_cat),
 url(r'^2g$', pars_goods),
 url(r'^catalog/(?P<cat_url>[A-Za-z0-9_-]+)$', catalog, name='catalog'),
