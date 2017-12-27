@@ -81,7 +81,8 @@ class ImageForm(forms.ModelForm):
         }
 
         widgets = {
-            'images_file': forms.FileInput()
+            'images_file': forms.FileInput(),
+            'main': forms.CheckboxInput(attrs={'class': 'main-check'})
         }
 
     def __init__(self, *args, **kwargs):

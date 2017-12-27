@@ -143,6 +143,9 @@
        $('#add_more').click(function() {
            cloneMore('.table:last tr:last', 'images');
        });
+       $('.main-check').on('change', function() {
+           $('.main-check').not(this).prop('checked', false);
+       });
        $(document).on('submit', '#update_offer_form', function(e)  {
             e.preventDefault();
             $('#update_offer_form').preloader({setRelative: false});
@@ -179,6 +182,9 @@
                     $('#images_form').preloader('remove');
                     $('#add_more').click(function() {
                         cloneMore('.table:last tr:last', 'images');
+                    });
+                    $('.main-check').on('change', function() {
+                        $('.main-check').not(this).prop('checked', false);
                     });
                 },
                 error: function (xhr, textStatus, error) {
