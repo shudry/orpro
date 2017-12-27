@@ -56,14 +56,14 @@ class ImageForm(forms.ModelForm):
 
     max_width = forms.IntegerField(
         label='Ширина',
-        widget=forms.NumberInput(attrs={'style': 'width:100px'}),
+        widget=forms.NumberInput(attrs={'style': 'width:100px', 'data-toggle':'tooltip', 'data-placement':'top'}),
         required=False,
         min_value=1,
         help_text='измените один из размеров'
     )
     max_height = forms.IntegerField(
         label='Высота',
-        widget=forms.NumberInput(attrs={'style': 'width:100px'}),
+        widget=forms.NumberInput(attrs={'style': 'width:100px', 'data-toggle':'tooltip', 'data-placement':'top'}),
         required=False,
         min_value=1,
         help_text='измените один из размеров'
@@ -90,11 +90,15 @@ class ImageForm(forms.ModelForm):
         r = kwargs.get('request')
         if self.instance:
             if self.instance.images_file:
+                base_attrs = {'min': 1, 'max': '', 'style': 'width:100px', 'data-toggle':'tooltip', 'data-placement':'top', 'title': 'измените один из размеров'}
+
                 self.fields['max_width'].initial = self.instance.images_file.width
-                self.fields['max_width'].widget = forms.NumberInput(attrs={'min': 1, 'max':self.instance.images_file.width, 'style': 'width:100px'})
+                base_attrs['max'] = self.instance.images_file.width
+                self.fields['max_width'].widget = forms.NumberInput(attrs=base_attrs)
 
                 self.fields['max_height'].initial = self.instance.images_file.height
-                self.fields['max_height'].widget = forms.NumberInput(attrs={'min': 1, 'max': self.instance.images_file.height, 'style': 'width:100px'})
+                base_attrs['max'] = self.instance.images_file.height
+                self.fields['max_height'].widget = forms.NumberInput(attrs=base_attrs)
 
             if self.instance.images_file and not self.instance.images_url:
                 self.fields['images_url'].widget = forms.TextInput(attrs={'placeholder': self.instance.images_file.name})

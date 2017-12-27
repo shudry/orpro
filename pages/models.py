@@ -103,7 +103,6 @@ class Images(models.Model):
         image.save(temp_handle, PIL_TYPE)
         temp_handle.seek(0)
         self.images_file.save(self.images_file.name, File(temp_handle), save=False)
-        print(self.images_file, self.images_file.width)
 
 # Модель категории
 class Category(models.Model):

@@ -24,16 +24,7 @@
         </tr>
         </thead>
     {% endif %}
-        <tr class="formset_row">
-            {% if form.non_field_errors %}
-                <td>
-                    <div class="non-field-errors">
-                        {% for err in form.non_field_errors %}
-                            <p class="form-error">{{ err }}</p>
-                        {% endfor %}
-                    </div>
-                </td>
-            {% endif %}
+        <tr class="formset_row" {% if form.non_field_errors %}style="background: rgb(255, 154, 142);" {% endif %}>
             {% for field in form.visible_fields %}
                 {% if field.name == 'images_file' %}
                     <td>
@@ -53,7 +44,7 @@
                     {% endif %}
                     {{ field.errors.as_ul }}
                     {% if field.name == 'images_url' and form.images_file.value %}
-                        <p>{{ request.get_host }}{{ form.images_file.value.url }}</p>
+                        <a href="{{ request.scheme }}://{{ request.get_host }}{{ form.images_file.value.url }}">{{ form.images_file.value.name }}</a>
                     {% else %}
                         {{ field }}
                     {% endif %}
@@ -64,5 +55,5 @@
 </table>
 {% csrf_token %}
 <div style="text-align: right">
-    <span style="color:gray; font-size: 18px;" type="button" id="add_more" class="glyphicon glyphicon-plus" aria-hidden="true" title="добавить еще строку"></span>
+    <span data-toggle="tooltip" data-placement="top" style="color:gray; font-size: 18px;" type="button" id="add_more" class="glyphicon glyphicon-plus" aria-hidden="true" title="добавить еще строку"></span>
 </div>

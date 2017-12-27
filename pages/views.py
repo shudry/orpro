@@ -160,6 +160,9 @@ class OfferImagesAjaxUpdateView(FormView):
         form.save()
         return self.render_to_response(self.get_context_data(images=self.form_class(instance=self.object)))
 
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(images=form))
+
     def get_form_kwargs(self):
         """
         Returns the keyword arguments for instanciating the form.
