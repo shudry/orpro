@@ -39,9 +39,9 @@
              <div class="modal-content">
                  <form method="post" action="{% url 'offer_images' offer.offer_url %}" id="images_form">
                      <div class="modal-header">
-                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                          <button style="width: auto; float: right; margin-top:0;" type="submit" class="btn">Применить изменения</button>
-                         <button data-dismiss="modal" id="without_save" style="width: auto; float: right; margin-top:0; margin-right: 10px;" class="btn">Закрыть без применения</button>
+                         <button data-dismiss="modal" id="without_save" style="width: auto; float: right; margin-top:0; margin-right: 10px;" class="btn">Закрыть без применения изменений</button>
+                         <button style="margin-top: 0px;" type="button" class="btn" data-dismiss="modal" aria-label="Close">Закрыть окно</button>
                      </div>
                     <div class="modal-body">
                         {% include 'images_inline_form.html' %}
