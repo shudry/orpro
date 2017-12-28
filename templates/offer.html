@@ -113,8 +113,16 @@
        $('#add_more').click(function() {
            cloneMore('.table:last tr:last', 'images');
        });
+       if(!($('.main-check:checked').length)){
+
+           $('.main-check:first').prop('checked', true);
+       }
        $('.main-check').on('change', function() {
            $('.main-check').not(this).prop('checked', false);
+
+           if(!($('.main-check:checked').length)){
+               $('.main-check:first').prop('checked', true);
+           }
        });
        $('[data-toggle="tooltip"]').tooltip();
        $(document).on('submit', '#update_offer_form', function(e)  {
@@ -154,8 +162,17 @@
                     $('#add_more').click(function() {
                         cloneMore('.table:last tr:last', 'images');
                     });
+                    if(!($('.main-check:checked').length)){
+
+                        $('.main-check:first').prop('checked', true);
+                    }
                     $('.main-check').on('change', function() {
                         $('.main-check').not(this).prop('checked', false);
+                        if(!($('.main-check:checked').length)){
+
+                            $('.main-check:first').prop('checked', true);
+                        }
+                        console.log(document.querySelectorAll('.main-check:checked'));
                     });
                     $('[data-toggle="tooltip"]').tooltip();
                 },
