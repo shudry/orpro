@@ -86,10 +86,12 @@ class ImageForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        import os
+
         super().__init__(*args, **kwargs)
         r = kwargs.get('request')
         if self.instance:
-            if self.instance.images_file:
+            if self.instance.images_file and(os.path.isfile(self.instance.images_file.path)):
                 base_attrs = {'min': 1, 'max': '', 'style': 'width:100px', 'data-toggle':'tooltip', 'data-placement':'top', 'title': 'измените один из размеров'}
 
                 self.fields['max_width'].initial = self.instance.images_file.width
