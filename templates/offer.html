@@ -40,7 +40,8 @@
                  <form method="post" action="{% url 'offer_images' offer.offer_url %}" id="images_form">
                      <div class="modal-header">
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                         <button style="width: auto; float: right; margin:0;" type="submit" class="btn">Применить изменения и закрыть окно</button>
+                         <button style="width: auto; float: right; margin-top:0;" type="submit" class="btn">Применить изменения</button>
+                         <button data-dismiss="modal" id="without_save" style="width: auto; float: right; margin-top:0; margin-right: 10px;" class="btn">Закрыть без применения</button>
                      </div>
                     <div class="modal-body">
                         {% include 'images_inline_form.html' %}
@@ -178,6 +179,43 @@
                 },
                 error: function (xhr, textStatus, error) {
                     $('#images_form').preloader('remove');
+                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
+                }
+            });
+        });
+
+       $('#without_save').on('click', function(e)  {
+           e.preventDefault();
+           $form = $('#images_form');
+           $form.preloader({setRelative: false});
+           console.log($form.attr('action'));
+           $.ajax({
+                url: $form.attr('action'),
+                method: 'get',
+                success: function (data) {
+                    console.log(data);
+                    $form.find(".modal-body").html($.parseHTML(data));
+                    console.log('Hello');
+                    $form.preloader('remove');
+                    $('#add_more').click(function() {
+                        cloneMore('.table:last tr:last', 'images');
+                    });
+                    if(!($('.main-check:checked').length)){
+
+                        $('.main-check:first').prop('checked', true);
+                    }
+                    $('.main-check').on('change', function() {
+                        $('.main-check').not(this).prop('checked', false);
+                        if(!($('.main-check:checked').length)){
+
+                            $('.main-check:first').prop('checked', true);
+                        }
+                        console.log(document.querySelectorAll('.main-check:checked'));
+                    });
+                    $('[data-toggle="tooltip"]').tooltip();
+                },
+                error: function (xhr, textStatus, error) {
+                    $form.preloader('remove');
                     alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
                 }
             });

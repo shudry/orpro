@@ -94,13 +94,13 @@ class ImageForm(forms.ModelForm):
             if self.instance.images_file and(os.path.isfile(self.instance.images_file.path)):
                 base_attrs = {'min': 1, 'max': '', 'style': 'width:100px', 'data-toggle':'tooltip', 'data-placement':'top', 'title': 'измените один из размеров'}
 
-                self.fields['max_width'].initial = self.instance.images_file.width
                 base_attrs['max'] = self.instance.images_file.width
                 self.fields['max_width'].widget = forms.NumberInput(attrs=base_attrs)
+                self.fields['max_width'].initial = self.instance.images_file.width
 
-                self.fields['max_height'].initial = self.instance.images_file.height
                 base_attrs['max'] = self.instance.images_file.height
                 self.fields['max_height'].widget = forms.NumberInput(attrs=base_attrs)
+                self.fields['max_height'].initial = self.instance.images_file.height
 
             if self.instance.images_file and not self.instance.images_url:
                 self.fields['images_url'].widget = forms.TextInput(attrs={'placeholder': self.instance.images_file.name})

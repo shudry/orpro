@@ -64,24 +64,26 @@ class Images(models.Model):
         return False
 
     def make_thumbnail(self, w=0, h=0):
-        img_w = self.images_file.width
-        img_h = self.images_file.height
+        import os
+        if os.path.isfile(self.images_file.path):
+            img_w = self.images_file.width
+            img_h = self.images_file.height
 
-        if w > 600 or (not w and img_w > 600):
-            w = 600
-        if h > 600 or (not h and img_h > 600):
-            h = 600
+            if w > 600 or (not w and img_w > 600):
+                w = 600
+            if h > 600 or (not h and img_h > 600):
+                h = 600
 
-        if (w or h) and self.images_file and (img_w > w or img_h > h):
-            width = w if w else img_w
-            height = h if h else img_h
-            self.create_thumbnail(width, height)
+            if (w or h) and self.images_file and (img_w > w or img_h > h):
+                width = w if w else img_w
+                height = h if h else img_h
+                self.create_thumbnail(width, height)
 
-            return True
+                return True
         return False
 
     def create_thumbnail(self, w, h):
-
+        import os
         if not self.images_file:
             return
         from PIL import Image
@@ -102,7 +104,7 @@ class Images(models.Model):
         temp_handle = BytesIO()
         image.save(temp_handle, PIL_TYPE)
         temp_handle.seek(0)
-        self.images_file.save(self.images_file.name, File(temp_handle), save=False)
+        self.images_file.save(os.path.basename(self.images_file.name), File(temp_handle), save=False)
 
 # Модель категории
 class Category(models.Model):

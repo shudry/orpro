@@ -158,10 +158,15 @@ class OfferImagesAjaxUpdateView(FormView):
 
     def form_valid(self, form):
         form.save()
-        return self.render_to_response(self.get_context_data(images=self.form_class(instance=self.object)))
+        return self.render_to_response(self.get_context_data(form=self.form_class(instance=self.object)))
 
     def form_invalid(self, form):
-        return self.render_to_response(self.get_context_data(images=form))
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['images'] = ctx['form']
+        return ctx
 
     def get_form_kwargs(self):
         """
