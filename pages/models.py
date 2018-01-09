@@ -8,7 +8,7 @@ import os
 import requests
 
 from slugify import slugify_url
-
+from django.conf import settings
 
 class Availability(models.Model):
 
@@ -29,14 +29,14 @@ class Publish(models.Model):
 class Images(models.Model):
 
     def __str__(self):
-        return self.images_url
+        return self.images_url if self.images_url else self.images_file.name
 
     class Meta:
         verbose_name = 'Изображение'
         verbose_name_plural = 'Изображения'
 
     images_url = models.URLField(null=True, blank=True)
-    images_file = models.ImageField(upload_to='images', null=True, blank=True)
+    images_file = models.ImageField(upload_to='.', null=True, blank=True)
     main = models.BooleanField(default=False)
     offer = models.ForeignKey('Offers', related_name='images')
 
@@ -217,14 +217,17 @@ class Offers(models.Model):
 
     @property
     def get_main_image(self):
-        if self.images.filter(main=True):
-            return self.images.filter(main=True).first()
-        elif self.images.all():
-            return self.images.first()
+        img = False
+        if self.images.filter(main=True).first():
+            img = self.images.filter(main=True).first()
+        elif self.images.first():
+            img = self.images.first()
         elif self.offer_photo:
-            return self.offer_photo
-
-        return False
+            img = self.offer_photo.path
+        if isinstance(img, str) and not os.path.exists(os.path.join(settings.MEDIA_ROOT, img)):
+            # TODO: maybe need remove empty image?
+            return False
+        return img
 
     @models.permalink
     def get_admin_url(self):
