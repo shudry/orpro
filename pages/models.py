@@ -223,15 +223,21 @@ class Offers(models.Model):
         elif self.images.first():
             img = self.images.first()
         elif self.offer_photo:
-            img = self.offer_photo.path
-        if isinstance(img, str) and not os.path.exists(os.path.join(settings.MEDIA_ROOT, img)):
-            # TODO: maybe need remove empty image?
-            return False
+            img = self.offer_photo
         return img
+
+    def get_main_image_url(self):
+        name = str(self.get_main_image)
+        if name:
+            if os.path.exists(os.path.join(settings.MEDIA_ROOT, name)):
+                return (settings.MEDIA_URL+name)
+        return (settings.STATIC_URL+'images/nophoto.jpg')
+
 
     @models.permalink
     def get_admin_url(self):
         return "admin:%s_%s_change" % (self._meta.app_label, self._meta.model_name), (self.id, )
+
 
 # Банер на главной
 class MainBaner(models.Model):
