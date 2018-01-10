@@ -8,8 +8,12 @@ class TinyMCEAdmin(admin.ModelAdmin):
         js = ('/static/js/tiny_mce/tiny_mce.js', '/static/js/tiny_mce/textareas.js',)
 
 
+class OfferAdmin(TinyMCEAdmin):
+    search_fields = ('offer_title', )
+    list_display = ('offer_title', 'get_main_image')
+
 admin.site.register(Post, TinyMCEAdmin)
-admin.site.register(Offers, TinyMCEAdmin)
+admin.site.register(Offers, OfferAdmin)
 admin.site.register(AboutCompany, TinyMCEAdmin)
 admin.site.register(Category)
 admin.site.register(Subtags)
