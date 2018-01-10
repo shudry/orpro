@@ -228,10 +228,9 @@ class Offers(models.Model):
 
     def get_main_image_url(self):
         name = str(self.get_main_image)
-        if name:
-            if os.path.exists(os.path.join(settings.MEDIA_ROOT, name)):
-                return (settings.MEDIA_URL+name)
-        return (settings.STATIC_URL+'images/nophoto.jpg')
+        if name and os.path.exists(os.path.join(settings.MEDIA_ROOT, name)):
+            return settings.MEDIA_URL + name
+        return settings.STATIC_URL + 'images/nophoto.jpg'
 
 
     @models.permalink
