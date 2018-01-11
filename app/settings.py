@@ -154,7 +154,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # Local settings
 
-try:
-    from .local_settings import *
-except ImportError:
-    pass
+#try:
+#   from .local_settings import *
+#except ImportError:
+#    pass
