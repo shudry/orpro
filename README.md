@@ -1,1 +1,1 @@
-View [website](https://orpro-dev.herokuapp.com.herokuapp.com/)
+View [website](https://orpro-dev.herokuapp.com/)
