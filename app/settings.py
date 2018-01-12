@@ -151,10 +151,3 @@ MEDIA_URL = '/media/'
 MEDIA_DIRS = (os.path.join(BASE_DIR, "media"),'/media/')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-
-# Local settings
-
-#try:
-#   from .local_settings import *
-#except ImportError:
-#    pass
