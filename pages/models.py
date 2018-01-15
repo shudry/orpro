@@ -240,12 +240,15 @@ class Offers(models.Model):
         elif self.offer_photo:
             img = self.offer_photo
         return img
-
+    #fix offer img_main
     def get_main_image_url(self):
         name = str(self.get_main_image)
         if name:
-            if storage.exists(name):
-                return (settings.MEDIA_URL+name)
+            try:
+                if storage.open(name):
+                    return (settings.MEDIA_URL+name)
+            except OSError as err:
+                print(err)
         return (settings.STATIC_URL+'images/nophoto.jpg')
 
 
