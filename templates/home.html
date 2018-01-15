@@ -14,7 +14,7 @@
         <section class="camera_container">
             <div id="camera" class="camera_wrap">
                 {% for i in baner %}123
-                    <div data-src=/media/{{ i.baner_img }} >
+                    <div data-src={{ i.baner_img.url }} >
                         <div class="camera_caption fadeIn">
                             <div class="container">
                                 <div class="row"><a href="{{ i.baner_url }}" style="display: block"></a>
@@ -141,7 +141,7 @@
                             <div class="item">
                                 <blockquote class="box">
                                     <div class="box_aside"><img
-                                            src="/media/{{ p.p_photo }}"
+                                            src="{{ p.p_photo.url }}"
                                             alt=""></div>
                                     <div class="box_cnt__no-flow">
                                         <p>

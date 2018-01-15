@@ -6,9 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 from crispy_forms.bootstrap import Field, InlineRadios, TabHolder, Tab
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, Fieldset
-
+from django.core.files.storage import default_storage as storage
 from tinymce.widgets import TinyMCE
-
+import boto3
 from .models import Reviews, Offers, Images
 
 
@@ -91,25 +91,27 @@ class ImageForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         r = kwargs.get('request')
         if self.instance:
-            if self.instance.images_file and(os.path.isfile(self.instance.images_file.path)):
-                base_attrs = {'min': 1, 'max': '', 'style': 'width:100px', 'data-toggle':'tooltip', 'data-placement':'top', 'title': 'измените один из размеров'}
+            try:
+                if self.instance.images_file and storage.open(self.instance.images_file.name):
+                    base_attrs = {'min': 1, 'max': '', 'style': 'width:100px', 'data-toggle':'tooltip', 'data-placement':'top', 'title': 'измените один из размеров'}
 
-                base_attrs['max'] = self.instance.images_file.width
-                self.fields['max_width'].widget = forms.NumberInput(attrs=base_attrs)
-                self.fields['max_width'].initial = self.instance.images_file.width
+                    base_attrs['max'] = self.instance.images_file.width
+                    self.fields['max_width'].widget = forms.NumberInput(attrs=base_attrs)
+                    self.fields['max_width'].initial = self.instance.images_file.width
 
-                base_attrs['max'] = self.instance.images_file.height
-                self.fields['max_height'].widget = forms.NumberInput(attrs=base_attrs)
-                self.fields['max_height'].initial = self.instance.images_file.height
+                    base_attrs['max'] = self.instance.images_file.height
+                    self.fields['max_height'].widget = forms.NumberInput(attrs=base_attrs)
+                    self.fields['max_height'].initial = self.instance.images_file.height
 
-            if self.instance.images_file and not self.instance.images_url:
-                self.fields['images_url'].widget = forms.TextInput(attrs={'placeholder': self.instance.images_file.name})
+                if self.instance.images_file and not self.instance.images_url:
+                    self.fields['images_url'].widget = forms.TextInput(attrs={'placeholder': self.instance.images_file.url})
+            except OSError as err:
+                    print(err)
 
     def clean(self):
         cleaned_data = super().clean()
         images_url = cleaned_data.get("images_url")
         images_file = cleaned_data.get("images_file")
-        print(images_file)
         if not images_url and not images_file:
             # Only do something if both fields are valid so far.
 
@@ -135,15 +137,13 @@ class ImageForm(forms.ModelForm):
         if commit:
             # If committing, save the instance and the m2m data immediately.
             self._save_m2m()
+            print(commit)
         else:
             # If not committing, add a method to the form to allow deferred
             # saving of m2m data.
             self.save_m2m = self._save_m2m
-
         self.instance.save(max_width=max_w, max_height=max_h)
         return self.instance
-
-
 
 
 ImageFormSet = forms.inlineformset_factory(Offers, Images, ImageForm)
