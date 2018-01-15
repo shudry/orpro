@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from .models import Reviews, Post, Tags, Category, Offers, Subtags, MainBaner, FBlocks, LBlocks, AboutCompany, \
     TopOffers, Support, Personal, Footer, HeaderPhoto, Images
 from .forms import ReviewsForm, OfferForm, ImageForm, ImageFormSet
-
+import boto3
 
 def review(request):
     args = {}

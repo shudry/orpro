@@ -31,7 +31,7 @@
                                              {% endfor %}
                                          {% elif offer.offer_photo %}
                                              <li data-thumb="{{ offer.offer_photo.url }}" data-src="{{ offer.offer_photo.url }}">
-                                                 <a href="{{ offer.offer_photo.url }}" data-lightbox="roadtrip"><img src="/media/{{ offer.offer_photo }}" width="220px"/></a>
+                                                 <a href="{{ offer.offer_photo.url }}" data-lightbox="roadtrip"><img src="{{ offer.offer_photo.url }}" width="220px"/></a>
                                              </li>
                                          {% endif %}
                                      </ul>

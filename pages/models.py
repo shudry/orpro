@@ -9,6 +9,8 @@ import requests
 
 from slugify import slugify_url
 from django.conf import settings
+from django.core.files.storage import default_storage as storage
+import boto3
 
 class Availability(models.Model):
 
@@ -36,7 +38,7 @@ class Images(models.Model):
         verbose_name_plural = 'Изображения'
 
     images_url = models.URLField(null=True, blank=True)
-    images_file = models.ImageField(upload_to='.', null=True, blank=True)
+    images_file = models.ImageField(null=True, blank=True)
     main = models.BooleanField(default=False)
     offer = models.ForeignKey('Offers', related_name='images')
 
@@ -46,6 +48,15 @@ class Images(models.Model):
         self.make_thumbnail(max_width, max_height)
         super().save(force_insert=force_insert, force_update=force_update,
                      using=using, update_fields=update_fields)
+
+    # def send_amazon(self):
+    #     client = boto3.resource('s3')
+    #     # data = 'media/{}'.format(str(self.images_file.name))
+    #     # key = str(self.images_file.name)[:len(self.images_file.name) - 3] + 'jpg'
+    #     data = '34a450172d8f784479c5dc5ac41a8948f2fed1c4a504fd068e3799e370a042f8_full.jpeg'
+    #     key = 'media/{}'.format('34a450172d8f784479c5dc5ac41a8948f2fed1c4a504fd068e3799e370a042f8_full.jpeg')
+    #     print("done  " + str(self.images_file.url))
+    #     client.Bucket('orpro-assets').put_object(Key=key, Body=data)
 
     def get_remote_image(self):
         if self.images_url and not self.images_file:
@@ -65,22 +76,25 @@ class Images(models.Model):
 
     def make_thumbnail(self, w=0, h=0):
         import os
-        if os.path.isfile(self.images_file.path):
-            img_w = self.images_file.width
-            img_h = self.images_file.height
+        try:
+            if storage.open(self.images_file.name):
+                img_w = self.images_file.width
+                img_h = self.images_file.height
 
-            if w > 600 or (not w and img_w > 600):
-                w = 600
-            if h > 600 or (not h and img_h > 600):
-                h = 600
+                if w > 600 or (not w and img_w > 600):
+                    w = 600
+                if h > 600 or (not h and img_h > 600):
+                    h = 600
 
-            if (w or h) and self.images_file and (img_w > w or img_h > h):
-                width = w if w else img_w
-                height = h if h else img_h
-                self.create_thumbnail(width, height)
+                if (w or h) and self.images_file and (img_w > w or img_h > h):
+                    width = w if w else img_w
+                    height = h if h else img_h
+                    self.create_thumbnail(width, height)
 
-                return True
-        return False
+                    return True
+            return False
+        except OSError as err:
+            print(err)
 
     def create_thumbnail(self, w, h):
         import os
@@ -104,7 +118,8 @@ class Images(models.Model):
         temp_handle = BytesIO()
         image.save(temp_handle, PIL_TYPE)
         temp_handle.seek(0)
-        self.images_file.save(os.path.basename(self.images_file.name), File(temp_handle), save=False)
+        self.images_file.save(storage.generate_filename(self.images_file.name), File(temp_handle), save=False)
+
 
 # Модель категории
 class Category(models.Model):
@@ -229,7 +244,7 @@ class Offers(models.Model):
     def get_main_image_url(self):
         name = str(self.get_main_image)
         if name:
-            if os.path.exists(os.path.join(settings.MEDIA_ROOT, name)):
+            if storage.exists(name):
                 return (settings.MEDIA_URL+name)
         return (settings.STATIC_URL+'images/nophoto.jpg')
 
