@@ -92,6 +92,9 @@ class ImageForm(forms.ModelForm):
         r = kwargs.get('request')
         if self.instance:
             try:
+                # Было (os.path.isfile(self.instance.images_file.path)), но для доступа к амазон мы используем storages
+                # метода isfile нет в пакете, пришлость использовать метод open и сразу отлавдивать ошибка OSerror
+                # в случае отсутствия файла. Если файл открываеться, применяются настройки к картинке ниже.
                 if self.instance.images_file and storage.open(self.instance.images_file.name):
                     base_attrs = {'min': 1, 'max': '', 'style': 'width:100px', 'data-toggle':'tooltip', 'data-placement':'top', 'title': 'измените один из размеров'}
 
