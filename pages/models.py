@@ -118,6 +118,8 @@ class Images(models.Model):
         temp_handle = BytesIO()
         image.save(temp_handle, PIL_TYPE)
         temp_handle.seek(0)
+        # Было os.path.basename(self.images_file.name), но для доступа к амазон мы используем storages
+        # метода basename нет в пакете, пришлость использовать аналог метода open generate_filename
         self.images_file.save(storage.generate_filename(self.images_file.name), File(temp_handle), save=False)
 
 
@@ -244,6 +246,10 @@ class Offers(models.Model):
     def get_main_image_url(self):
         name = str(self.get_main_image)
         if name:
+            # --Вывод Главного изображения товара--
+            # Было os.path.exists(os.path.join(settings.MEDIA_ROOT, name)):,
+            # метод exists в storage не работает по аналогие, пришлось
+            # опять взять метод open, отлавливать ошибку OSError
             try:
                 if storage.open(name):
                     return (settings.MEDIA_URL+name)
