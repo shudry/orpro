@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.db import models
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
@@ -184,7 +183,7 @@ class Subtags(models.Model):
 
     tag_url = models.CharField(max_length=250, unique=True)       # Ссылка на категорию
     tag_title = models.CharField(max_length=250)                  # Название категории
-    tag_parent_tag = models.ForeignKey(Tags, blank=True)                  # Parents category
+    tag_parent_tag = models.ForeignKey(Tags, blank=True)          # Parents category
 
     @classmethod
     def create(cls, tag_title):
@@ -192,6 +191,34 @@ class Subtags(models.Model):
         tag.save()
         # do something with the book
         return tag
+
+
+class Company(models.Model):
+
+    def __str__(self):
+        return self.address
+
+    class Meta:
+        verbose_name = 'Организация'
+        verbose_name_plural = 'Организации'
+
+    name = models.CharField(blank=True, null=True, max_length=150)
+    email = models.CharField(blank=True,null=True, max_length=100)
+    address = models.CharField(max_length=80)
+    skype = models.CharField(blank=True, max_length=80)
+    mob_phone = models.CharField(blank=True, max_length=80)
+    rob_phone = models.CharField(blank=True, max_length=80)
+    facebook_link = models.CharField(blank=True, max_length=80)
+    twitter_link = models.CharField(blank=True, max_length=80)
+
+    # Нужен для примера написания метода организации
+
+    # @classmethod
+    # def create(cls, tag_title):
+    #     tag = cls(tag_title=tag_title, tag_url=slugify_url(tag_title))
+    #     tag.save()
+    #     # do something with the book
+    #     return tag
 
 
 # Модель товара
@@ -362,20 +389,20 @@ class HeaderPhoto(models.Model):
     hp_photo = models.ImageField()
 
 
-class Footer(models.Model):
-    def __str__(self):
-        return self.f_adres
-
-    class Meta:
-        verbose_name = 'Элементы подвала'
-        verbose_name_plural = 'Элементы подвала'
-
-    f_adres = models.CharField(max_length=80)
-    f_skype = models.CharField(max_length=80)
-    f_mob_phone = models.CharField(max_length=80)
-    f_rob_phone = models.CharField(max_length=80)
-    f_facebook_link = models.CharField(max_length=80)
-    f_twitter_link = models.CharField(max_length=80)
+# class Footer(models.Model):
+#     def __str__(self):
+#         return self.f_adres
+#
+#     class Meta:
+#         verbose_name = 'Элементы подвала'
+#         verbose_name_plural = 'Элементы подвала'
+#
+#     f_adres = models.CharField(max_length=80)
+#     f_skype = models.CharField(max_length=80)
+#     f_mob_phone = models.CharField(max_length=80)
+#     f_rob_phone = models.CharField(max_length=80)
+#     f_facebook_link = models.CharField(max_length=80)
+#     f_twitter_link = models.CharField(max_length=80)
 
 
 class Reviews(models.Model):
