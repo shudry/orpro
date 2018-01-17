@@ -193,6 +193,7 @@ class Subtags(models.Model):
         return tag
 
 
+# модель Организации
 class Company(models.Model):
 
     def __str__(self):

@@ -7,7 +7,7 @@ from django.views.generic import UpdateView, FormView
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from .models import Reviews, Post, Tags, Category, Offers, Subtags, MainBaner, FBlocks, LBlocks, AboutCompany, \
-    TopOffers, Support, Personal, Footer, HeaderPhoto, Images
+    TopOffers, Support, Personal, Company, HeaderPhoto, Images
 from .forms import ReviewsForm, OfferForm, ImageForm, ImageFormSet
 import boto3
 
@@ -48,17 +48,17 @@ def home(request):
     args['TO'] = TopOffers.objects.all ()
     args['sup'] = Support.objects.all()[0]
     args['personal'] = Personal.objects.all ().order_by('-id')
-    args['fb1'] = FBlocks.objects.get (id=1)
-    args['fb2'] = FBlocks.objects.get (id=2)
-    args['fb3'] = FBlocks.objects.get (id=3)
-    args['fb4'] = FBlocks.objects.get (id=4)
-    args['lb1'] = LBlocks.objects.get (id=1)
-    args['lb2'] = LBlocks.objects.get (id=2)
-    args['lb3'] = LBlocks.objects.get (id=3)
-    args['lb4'] = LBlocks.objects.get (id=4)
-    args['ac1'] = AboutCompany.objects.get (id=1)
-    args['hf'] = HeaderPhoto.objects.get (id=1)
-    args['footer'] = Footer.objects.get (id=1)
+    args['fb1'] = FBlocks.objects.get(id=1)
+    args['fb2'] = FBlocks.objects.get(id=2)
+    args['fb3'] = FBlocks.objects.get(id=3)
+    args['fb4'] = FBlocks.objects.get(id=4)
+    args['lb1'] = LBlocks.objects.get(id=1)
+    args['lb2'] = LBlocks.objects.get(id=2)
+    args['lb3'] = LBlocks.objects.get(id=3)
+    args['lb4'] = LBlocks.objects.get(id=4)
+    args['ac1'] = AboutCompany.objects.get(id=1)
+    args['hf'] = HeaderPhoto.objects.get(id=1)
+    args['company'] = Company.objects.get(id=1)
 
     args['topmenu_category'] = Post.objects.filter (~Q (post_cat_level=0))
 
