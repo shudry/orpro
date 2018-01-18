@@ -2,14 +2,13 @@ from django.db import models
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 
-from urllib.parse import urlparse, urlsplit
-import os
+from urllib.parse import urlsplit
 import requests
 
 from slugify import slugify_url
 from django.conf import settings
 from django.core.files.storage import default_storage as storage
-import boto3
+
 
 class Availability(models.Model):
 
@@ -45,8 +44,10 @@ class Images(models.Model):
              update_fields=None, max_width=0, max_height=0):
         self.get_remote_image()
         self.make_thumbnail(max_width, max_height)
-        super().save(force_insert=force_insert, force_update=force_update,
-                     using=using, update_fields=update_fields)
+        super().save(force_insert=force_insert,
+                     force_update=force_update,
+                     using=using,
+                     update_fields=update_fields)
 
     # def send_amazon(self):
     #     client = boto3.resource('s3')
@@ -74,7 +75,6 @@ class Images(models.Model):
         return False
 
     def make_thumbnail(self, w=0, h=0):
-        import os
         try:
             if storage.open(self.images_file.name):
                 img_w = self.images_file.width
@@ -93,10 +93,9 @@ class Images(models.Model):
                     return True
             return False
         except OSError as err:
-            print(err)
+            return err
 
     def create_thumbnail(self, w, h):
-        import os
         if not self.images_file:
             return
         from PIL import Image
@@ -117,8 +116,9 @@ class Images(models.Model):
         temp_handle = BytesIO()
         image.save(temp_handle, PIL_TYPE)
         temp_handle.seek(0)
-        # Было os.path.basename(self.images_file.name), но для доступа к амазон мы используем storages
-        # метода basename нет в пакете, пришлость использовать аналог метода open generate_filename
+        # Было os.path.basename(self.images_file.name),
+        # Для доступа к S3 AWS используем библиотеку django.core.files.storage
+        # Метод basename нет в пакете, использовуем аналог метода - open generate_filename
         self.images_file.save(storage.generate_filename(self.images_file.name), File(temp_handle), save=False)
 
 
@@ -131,7 +131,6 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
-
 
     category_title = models.CharField(max_length=250)
 
@@ -149,7 +148,7 @@ class Post(models.Model):
     post_title = models.CharField(max_length=250)            # <h1></h1>
     post_seourl = models.CharField(max_length=250)           # Ссылка на страницу ( мойсайт.ру/(эта ссылка) )
     post_photo = models.ImageField(blank=True)               # Фото на страницу
-    post_text = models.TextField()                          # Текст страници
+    post_text = models.TextField()                           # Текст страници
     post_category = models.ForeignKey(Category, blank=True, null=True)
     post_cat_level = models.IntegerField(default=0)
     # post_submenu = models.BooleanField(default=False)
@@ -167,10 +166,9 @@ class Tags(models.Model):
         verbose_name_plural = 'Основные теги'
 
     tag_url = models.CharField(max_length=250, unique=True)     # Ссылка на категорию
-    tag_title = models.CharField(max_length=250)               # Название категории
+    tag_title = models.CharField(max_length=250)                # Название категории
     tag_publish = models.BooleanField(blank=True)
     tag_priority = models.IntegerField(blank=True)
-
 
 
 # Модель категории товара
@@ -235,7 +233,7 @@ class Offers(models.Model):
         verbose_name_plural = 'Товары'
 
     offer_title = models.CharField(max_length=250, verbose_name='Название')                       # Название товара
-    offer_price = models.FloatField(default=0, verbose_name='Цена')                           # Price
+    offer_price = models.FloatField(default=0, verbose_name='Цена')                               # Price
     offer_price_discount = models.FloatField(blank=True, default=0, verbose_name='Цена со скидкой', null=True)
     offer_discount_term = models.DateTimeField(blank=True, null=True, verbose_name='Срок действия скидки')
     offer_price_from = models.FloatField(blank=True, default=0, verbose_name='Цена от')
@@ -270,21 +268,21 @@ class Offers(models.Model):
         elif self.offer_photo:
             img = self.offer_photo
         return img
+
     #fix offer img_main
     def get_main_image_url(self):
         name = str(self.get_main_image)
         if name:
             # --Вывод Главного изображения товара--
             # Было os.path.exists(os.path.join(settings.MEDIA_ROOT, name)):,
-            # метод exists в storage не работает по аналогие, пришлось
-            # опять взять метод open, отлавливать ошибку OSError
+            # метод exists в storage не работает по аналогии с кодом выше,
+            # берется метод open и отлавливается ошибка OSError
             try:
                 if storage.open(name):
-                    return (settings.MEDIA_URL+name)
+                    return (settings.MEDIA_URL + name)
             except OSError as err:
-                print(err)
-        return (settings.STATIC_URL+'images/nophoto.jpg')
-
+                return err
+        return (settings.STATIC_URL + 'images/nophoto.jpg')
 
     @models.permalink
     def get_admin_url(self):
@@ -394,22 +392,6 @@ class HeaderPhoto(models.Model):
 
     hp_name= models.CharField(max_length=80)
     hp_photo = models.ImageField()
-
-
-# class Footer(models.Model):
-#     def __str__(self):
-#         return self.f_adres
-#
-#     class Meta:
-#         verbose_name = 'Элементы подвала'
-#         verbose_name_plural = 'Элементы подвала'
-#
-#     f_adres = models.CharField(max_length=80)
-#     f_skype = models.CharField(max_length=80)
-#     f_mob_phone = models.CharField(max_length=80)
-#     f_rob_phone = models.CharField(max_length=80)
-#     f_facebook_link = models.CharField(max_length=80)
-#     f_twitter_link = models.CharField(max_length=80)
 
 
 class Reviews(models.Model):

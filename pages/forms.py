@@ -8,7 +8,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, Fieldset
 from django.core.files.storage import default_storage as storage
 from tinymce.widgets import TinyMCE
-import boto3
+
 from .models import Reviews, Offers, Images
 
 
@@ -28,28 +28,30 @@ class ReviewsForm(forms.Form):
         self.helper.form_action = reverse ('review')
         self.helper.add_input (Submit ('submit', 'Добавить', css_class='btn-success '))
         self.helper.form_class = 'form-horizontal'
-        self.helper.layout = Layout (
-            Fieldset ('',
-                      Field ('name', placeholder=''),
-                      Field ('email', placeholder=''),
-                      Field ('number', placeholder=''),
-                      Field ('text', placeholder=''),
-                      ))
+        self.helper.layout = Layout(
+            Fieldset('',
+                    Field ('name', placeholder=''),
+                    Field ('email', placeholder=''),
+                    Field ('number', placeholder=''),
+                    Field ('text', placeholder=''),
+                    ))
 
 
 class OfferForm(forms.ModelForm):
+
     class Meta:
         model = Offers
-        fields = ['offer_title', 'offer_minorder', 'offer_minorder_value', 'offer_availability',
-                  'offer_article', 'offer_price', 'offer_price_from', 'offer_price_to', 'offer_text']
+        fields = ['offer_title', 'offer_minorder', 'offer_minorder_value',
+                  'offer_availability', 'offer_article', 'offer_price',
+                  'offer_price_from', 'offer_price_to', 'offer_text']
 
         widgets = {
             'offer_text': TinyMCE(attrs={'rows': 45}),
         }
 
-
     class Media:
-        js = ('/static/js/tiny_mce/tiny_mce.js', '/static/js/tiny_mce/textareas.js',)
+        js = ('/static/js/tiny_mce/tiny_mce.js',
+              '/static/js/tiny_mce/textareas.js',)
 
 
 class ImageForm(forms.ModelForm):
@@ -86,15 +88,16 @@ class ImageForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        import os
 
         super().__init__(*args, **kwargs)
-        r = kwargs.get('request')
+        #r = kwargs.get('request')
         if self.instance:
             try:
-                # Было (os.path.isfile(self.instance.images_file.path)), но для доступа к амазон мы используем storages
-                # метода isfile нет в пакете, пришлость использовать метод open и сразу отлавдивать ошибка OSerror
-                # в случае отсутствия файла. Если файл открываеться, применяются настройки к картинке ниже.
+                # Было (os.path.isfile(self.instance.images_file.path))
+                # Для доступа к S3 AWS используется storages
+                # - метода isfile нет в пакете, используется метод open;
+                # - отлавдивается ошибка OSerror, если файл отсутсвует;
+                # - если файл открываеться, применяются настройки к картинке ниже.
                 if self.instance.images_file and storage.open(self.instance.images_file.name):
                     base_attrs = {'min': 1, 'max': '', 'style': 'width:100px', 'data-toggle':'tooltip', 'data-placement':'top', 'title': 'измените один из размеров'}
 
@@ -109,7 +112,7 @@ class ImageForm(forms.ModelForm):
                 if self.instance.images_file and not self.instance.images_url:
                     self.fields['images_url'].widget = forms.TextInput(attrs={'placeholder': self.instance.images_file.url})
             except OSError as err:
-                    print(err)
+                raise forms.ValidationError('File missing')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -124,10 +127,10 @@ class ImageForm(forms.ModelForm):
 
     def save(self, commit=True):
         """
-                Save this form's self.instance object if commit=True. Otherwise, add
-                a save_m2m() method to the form which can be called after the instance
-                is saved manually at a later time. Return the model instance.
-                """
+        Save this form's self.instance object if commit=True. Otherwise, add
+        a save_m2m() method to the form which can be called after the instance
+        is saved manually at a later time. Return the model instance.
+        """
         if self.errors:
             raise ValueError(
                 "The %s could not be %s because the data didn't validate." % (
@@ -140,7 +143,7 @@ class ImageForm(forms.ModelForm):
         if commit:
             # If committing, save the instance and the m2m data immediately.
             self._save_m2m()
-            print(commit)
+            raise commit
         else:
             # If not committing, add a method to the form to allow deferred
             # saving of m2m data.
