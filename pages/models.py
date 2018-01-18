@@ -197,13 +197,13 @@ class Subtags(models.Model):
 class Company(models.Model):
 
     def __str__(self):
-        return self.address
+        return self.name
 
     class Meta:
         verbose_name = 'Организация'
         verbose_name_plural = 'Организации'
 
-    name = models.CharField(blank=True, null=True, max_length=150)
+    name = models.CharField(null=True, max_length=150)
     email = models.CharField(blank=True,null=True, max_length=100)
     address = models.CharField(blank=True,max_length=150)
     skype = models.CharField(blank=True, max_length=80)
