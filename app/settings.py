@@ -143,8 +143,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATICFILES_DIRS = (os.path.join (BASE_DIR, "static"),)
+# Подключение Амазона(основные настройки),
+# ставим через pip - boto3(для доступа и отправки файло на Амазон),django-storages(Управление файлами)
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+# Название основной папки на Амазоне
 AWS_STORAGE_BUCKET_NAME = 'orpro-assets'
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {
@@ -153,9 +156,12 @@ AWS_S3_OBJECT_PARAMETERS = {
 REGION_NAME = 'us-east-1'
 AWS_LOCATION = 'static'
 AWS_MEDIA = 'media'
+# Через boto3 настраиваем статику
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 AWS_PUBLIC_MEDIA_LOCATION = 'media'
+# Через boto3 настраиваем медиа
 MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA)
+# Создаем внешнийф файл storage_backends.py, в котором укажем путь для сохранения файлов
 DEFAULT_FILE_STORAGE = 'app.storage_backends.MediaStorage'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
