@@ -205,11 +205,11 @@ class Company(models.Model):
 
     name = models.CharField(blank=True, null=True, max_length=150)
     email = models.CharField(blank=True,null=True, max_length=100)
-    address = models.CharField(max_length=80)
+    address = models.CharField(blank=True,max_length=150)
     skype = models.CharField(blank=True, max_length=80)
     mob_phone = models.CharField(blank=True, max_length=80)
     rob_phone = models.CharField(blank=True, max_length=80)
-    facebook_link = models.CharField(blank=True, max_length=80)
+    facebook_link = models.CharField(blank=True, max_length=200)
     twitter_link = models.CharField(blank=True, max_length=80)
 
     # Нужен для примера написания метода организации
@@ -352,6 +352,7 @@ class TopOffers(models.Model):
         verbose_name_plural = 'Самые продаваемые товары'
 
     to_title = models.CharField(max_length=80)  # Текст на банере
+    to_link = models.CharField(max_length=250)
     to_link = models.CharField(max_length=250)
 
 
