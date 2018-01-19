@@ -12,10 +12,10 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 import sys
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'cg#p$g+j9tax!#a3cup@1$8obt2_+&
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
+DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
 
 ALLOWED_HOSTS = ['*']
@@ -81,12 +81,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-
-import dj_database_url
-
 
 DATABASES = {
     'default': {
@@ -143,9 +139,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATICFILES_DIRS = (os.path.join (BASE_DIR, "static"),)
+# Подключение Амазона(основные настройки),
+# устанавливаем через pip - boto3(для доступа и отправки файлов на Амазон),django-storages(для управления файлами)
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'orpro-assets'
+AWS_STORAGE_BUCKET_NAME = 'orpro-assets'                                # Название основной папки на Амазоне
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
@@ -153,9 +151,12 @@ AWS_S3_OBJECT_PARAMETERS = {
 REGION_NAME = 'us-east-1'
 AWS_LOCATION = 'static'
 AWS_MEDIA = 'media'
+# Через boto3 настраиваем сохранение статических файлов (css, js)
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 AWS_PUBLIC_MEDIA_LOCATION = 'media'
+# Через boto3 настраиваем сохранение медиа файлов (img, mov)
 MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA)
+# Создаем внешнийф файл storage_backends.py, в котором укажем путь для сохранения файлов
 DEFAULT_FILE_STORAGE = 'app.storage_backends.MediaStorage'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
