@@ -9,10 +9,15 @@ from crispy_forms.layout import Submit, Layout, Div, Fieldset
 from django.core.files.storage import default_storage as storage
 from tinymce.widgets import TinyMCE
 
+from captcha.fields import CaptchaField
+
 from .models import Reviews, Offers, Images
 
 
 class ReviewsForm(forms.Form):
+
+    captcha = CaptchaField()
+
     class Meta:
         model = Reviews
 
