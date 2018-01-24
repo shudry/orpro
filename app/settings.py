@@ -87,10 +87,10 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
                 'ENGINE': 'django.db.backends.postgresql',
-                'NAME': '**************',
-                'USER': '**************',
-                'PASSWORD': '*****************************************',
-                'HOST': 'ec2-54-247-187-134.eu-west-1.compute.amazonaws.com',
+                'NAME': '',
+                'USER': '',
+                'PASSWORD': '',
+                'HOST': '',
                 'PORT': '5432',
         #'OPTIONS': {
         #    'init_command': 'SET innodb_strict_mode=1',
@@ -161,3 +161,5 @@ MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA)
 # Создаем внешнийф файл storage_backends.py, в котором укажем путь для сохранения файлов
 DEFAULT_FILE_STORAGE = 'app.storage_backends.MediaStorage'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+RECAPTCHA_SECRET_KEY = os.environ.get('RECAPTCHA_SECRET_KEY')
