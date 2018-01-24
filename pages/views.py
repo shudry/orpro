@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
+import json
+import urllib
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 from django.views.generic import UpdateView, FormView
-
+from django.conf import settings
+from django.contrib import messages
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from .models import Reviews, Post, Tags, Category, Offers, Subtags, MainBaner, FBlocks, LBlocks, AboutCompany, \
@@ -17,37 +20,58 @@ def review(request):
     form = ReviewsForm()
     args['form'] = form
     if 'submit' in request.POST:
-        form = ReviewsForm (request.POST)
+        form = ReviewsForm(request.POST)
         print('POST')
-        print(request.POST)
-        if form.is_valid ():
+        if form.is_valid():
             print('valid')
+            recaptcha_response = request.POST.get('g-recaptcha-response') # запрос на передачу данных серверу recaptcha
+            url = 'https://www.google.com/recaptcha/api/siteverify'
+            # данные для передачи на сервер
+            values_responce = {
+                'secret': settings.RECAPTCHA_SECRET_KEY,
+                'response': recaptcha_response
+            }
+            # декодирование данных для передачи
+            data = urllib.parse.urlencode(values_responce).encode()
+            # запрос от сервера после передачи данных
+            req = urllib.request.Request(url, data=data)
+            # декодирование результата запроса req
+            response = urllib.request.urlopen(req)
+            result = json.loads(response.read().decode())
             cd = form.cleaned_data
             name = cd['name']
             email = cd['email']
             text = cd['text']
             g = Reviews(name=name, email=email, text=text, publish=True)
-            g.save()
-            args['message'] = 'GOOD'
 
+            if result['success']:
+                g.save()
+                args['message'] = 'GOOD'
+                messages.success(request,
+                                 'New comment added with success!')
+            else:
+                messages.error(request,
+                               'Invalid reCAPTCHA. Please try again')
+                args['message'] = 'BAD'
     else:
-        form = ReviewsForm ()
+        form = ReviewsForm()
 
-    args['hf'] = HeaderPhoto.objects.get (id=1)
+    args['hf'] = HeaderPhoto.objects.get(id=1)
 
-    args['topmenu_category'] = Post.objects.filter (~Q (post_cat_level=0))
-    args['reviews'] = Reviews.objects.filter (publish=True)
-    args['tags'] = Subtags.objects.all ().order_by ('?')[0:100]
-    return render (request, 'reviews.html', args)
+    args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0))
+    args['reviews'] = Reviews.objects.filter(publish=True)
+    args['tags'] = Subtags.objects.all().order_by('?')[0:100]
+    print(args)
+    return render(request, 'reviews.html', args)
 
 
 def home(request):
     args = {}
 
-    args['baner'] = MainBaner.objects.all ()
-    args['TO'] = TopOffers.objects.all ()
+    args['baner'] = MainBaner.objects.all()
+    args['TO'] = TopOffers.objects.all()
     args['sup'] = Support.objects.all()[0]
-    args['personal'] = Personal.objects.all ().order_by('-id')
+    args['personal'] = Personal.objects.all().order_by('-id')
     args['fb1'] = FBlocks.objects.get(id=1)
     args['fb2'] = FBlocks.objects.get(id=2)
     args['fb3'] = FBlocks.objects.get(id=3)
@@ -60,21 +84,21 @@ def home(request):
     args['hf'] = HeaderPhoto.objects.get(id=1)
     args['company'] = Company.objects.get(id=1)
 
-    args['topmenu_category'] = Post.objects.filter (~Q (post_cat_level=0))
+    args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0))
 
-    return render (request, 'home.html', args)
+    return render(request, 'home.html', args)
 
 
 def singlepage(request, post_seourl):
     args = {}
 
-    args['hf'] = HeaderPhoto.objects.get (id=1)
+    args['hf'] = HeaderPhoto.objects.get(id=1)
 
-    args['topmenu_category'] = Post.objects.filter (~Q (post_cat_level=0))
-    args['post'] = Post.objects.get (post_seourl=post_seourl)
-    args['tags'] = Subtags.objects.all ().order_by('?')[0:100]
+    args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0))
+    args['post'] = Post.objects.get(post_seourl=post_seourl)
+    args['tags'] = Subtags.objects.all().order_by('?')[0:100]
 
-    return render (request, 'singlpage.html', args)
+    return render(request, 'singlpage.html', args)
 
 
 class OfferAjaxUpdateView(UpdateView):
