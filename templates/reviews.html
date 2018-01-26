@@ -33,9 +33,11 @@
                      <h2>Ваш отзыв</h2>
                      <form enctype="multipart/form-data" method="post" action="{% url 'review' %}">
                          {% csrf_token %}
+                         {{ form|crispy }}
                          <script src='https://www.google.com/recaptcha/api.js'></script>
                          <div class="g-recaptcha" data-sitekey="6Lcn_EEUAAAAAPXcH-onQT9rJwlu9npydCzx2Q3I"></div>
-                         {% crispy form form.helper%}
+
+                         <input class="btn btn-primary btn-success " type="submit" name="submit" value="Добавить" id="submit-id-submit"/>
                          {{ form.errors }}
 
                      </form>
