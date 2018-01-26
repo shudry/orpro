@@ -35,7 +35,7 @@
                          {% csrf_token %}
                          <script src='https://www.google.com/recaptcha/api.js'></script>
                          <div class="g-recaptcha" data-sitekey="6Lcn_EEUAAAAAPXcH-onQT9rJwlu9npydCzx2Q3I"></div>
-                         {% crispy form %}
+                         {% crispy form form.helper%}
                          {{ form.errors }}
 
                      </form>
