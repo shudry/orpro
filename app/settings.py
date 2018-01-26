@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-from decouple import config
+from decouple import config, UndefinedValueError
 import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -84,23 +84,26 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-                'ENGINE': 'django.db.backends.postgresql_psycopg2',
-                'NAME': config('DB_NAME'),
-                'USER': config('DB_USER'),
-                'PASSWORD': config('DB_PASSWORD'),
-                'HOST': config('DB_HOST'),
-                'PORT': '5432',
-        #'OPTIONS': {
-        #    'init_command': 'SET innodb_strict_mode=1',
-        #    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        #},
-    }
-}
+DATABASES = {}
 
-db_from_env = dj_database_url.config()
-DATABASES['default'].update(db_from_env)
+try:
+    DATABASES = {
+        'default': {
+                    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+                    'NAME': config('DB_NAME'),
+                    'USER': config('DB_USER'),
+                    'PASSWORD': config('DB_PASSWORD'),
+                    'HOST': config('DB_HOST'),
+                    'PORT': '5432',
+            #'OPTIONS': {
+            #    'init_command': 'SET innodb_strict_mode=1',
+            #    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            #},
+        }
+    }
+except UndefinedValueError:
+    db_from_env = dj_database_url.config()
+    DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
