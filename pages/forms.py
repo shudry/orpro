@@ -13,6 +13,7 @@ from .models import Reviews, Offers, Images
 
 
 class ReviewsForm(forms.Form):
+
     class Meta:
         model = Reviews
 
@@ -22,19 +23,19 @@ class ReviewsForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(ReviewsForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper ()
+        self.helper = FormHelper()
         self.helper.form_id = 'id-personal-data-form'
         self.helper.form_method = 'post'
-        self.helper.form_action = reverse ('review')
-        self.helper.add_input (Submit ('submit', 'Добавить', css_class='btn-success '))
+        self.helper.form_action = reverse('review')
+        self.helper.add_input(Submit('submit', 'Добавить', css_class='btn-success '))
         self.helper.form_class = 'form-horizontal'
         self.helper.layout = Layout(
             Fieldset('',
-                    Field ('name', placeholder=''),
-                    Field ('email', placeholder=''),
-                    Field ('number', placeholder=''),
-                    Field ('text', placeholder=''),
-                    ))
+                     Field('name', placeholder=''),
+                     Field('email', placeholder=''),
+                     Field('number', placeholder=''),
+                     Field('text', placeholder=''),
+                     ))
 
 
 class OfferForm(forms.ModelForm):

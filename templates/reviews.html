@@ -4,64 +4,65 @@
 {% block content %}
  <div class="container hr well1 ins2">
      <div class="row">
-
          <div class="grid_9">
-         <div>
-             <h1 style="margin-bottom: 20px">Отзывы</h1>
-             {% for review in reviews %}
-             <div class="review">
-             <article class="row">
-              <div class="panel panel-default arrow left">
-                <div class="panel-body">
-                  <div class="text-left">
-                      <div class="comment-user" style='font-size: large'>
-                          <i class="fa fa-user"></i>
-                          <b>{% if review.name %}{{ review.name }}{% else %}Аноним{% endif %}</b>
-                      </div>
-                    <time class="comment-date" datetime="16-12-2014 13:05"><i class="fa fa-clock-o"></i> {{ review.date|date:'Y-m-d H:i' }}</time>
-                  </div>
-                  <div class="comment-post">
-                    <p>
-                        {{ review.text }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-          </article>
+             <div>
+                 <h1 style="margin-bottom: 20px">Отзывы</h1>
+                 {% for review in reviews %}
+                 <div class="review">
+                     <article class="row">
+                         <div class="panel panel-default arrow left">
+                             <div class="panel-body">
+                                 <div class="text-left">
+                                     <div class="comment-user" style='font-size: large'>
+                                         <i class="fa fa-user"></i>
+                                         <b>{% if review.name %}{{ review.name }}{% else %}Аноним{% endif %}</b>
+                                     </div>
+                                     <time class="comment-date" datetime="16-12-2014 13:05"><i class="fa fa-clock-o"></i> {{ review.date|date:'Y-m-d H:i' }}</time>
+                                 </div>
+                                 <div class="comment-post">
+                                     <p>
+                                         {{ review.text }}
+                                     </p>
+                                 </div>
+                             </div>
+                         </div>
+                     </article>
+                 </div>
+                 {% endfor %}
+                 <div class="form">
+                     <h2>Ваш отзыв</h2>
+                     <form enctype="multipart/form-data" method="post" action="{% url 'review' %}">
+                         {% csrf_token %}
+                         <script src='https://www.google.com/recaptcha/api.js'></script>
+                         <div class="g-recaptcha" data-sitekey="6Lcn_EEUAAAAAPXcH-onQT9rJwlu9npydCzx2Q3I"></div>
+                         {% crispy form %}
+                         {{ form.errors }}
+
+                     </form>
+                 </div>
              </div>
-             {% endfor %}
-
-<div class="form">
-    <h2>Ваш отзыв</h2>
-<form enctype="multipart/form-data" method="post" action="{% url 'review' %}">
-    {% csrf_token %}
-
-{% crispy form %}
-    {{ form.errors }}
-</form>
-             </div>
-         </div>
-
          </div>
          <div class="grid_3">
-    <ul class="cloud">
-        {% for tag in tags %}
-            <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
-        {% endfor %}
-    </ul>
-</div>
-
+             <ul class="cloud">
+                 {% for tag in tags %}
+                 <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
+                 {% endfor %}
+             </ul>
+         </div>
      </div>
  </div>
 {% endblock %}
 
-{% block footer %}<footer>
-<div class="container">
-            <div class="copyright">© Профсистемы-Крым 2016 г.
-г. Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89
-Время работы:
-пн-вс 8:00-18:00, без перерыва
-            </div>
-          </div>
+{% block footer %}
+<footer>
+    <div class="container">
+        <div class="copyright">
+            <p>
+                © Профсистемы-Крым 2016 г.
+                г. Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89
+                Время работы:пн-вс 8:00-18:00, без перерыва
+            </p>
+        </div>
+    </div>
 </footer>
 {% endblock %}
