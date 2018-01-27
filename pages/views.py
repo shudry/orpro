@@ -47,10 +47,10 @@ def review(request):
             if result['success']:
                 g.save()
                 args['message'] = 'GOOD'
-                messages.success(request,
+                messages.get_messages(request, messages.SUCCESS,
                                  'New comment added with success!')
             else:
-                messages.error(request,
+                messages.get_messages(request, messages.ERROR,
                                'Invalid reCAPTCHA. Please try again')
                 args['message'] = 'BAD'
     else:

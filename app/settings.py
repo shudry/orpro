@@ -89,7 +89,7 @@ DATABASES = {'default': {}}
 try:
     DATABASES = {
         'default': {
-                    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+                    'ENGINE': config('DB_ENGINE'),
                     'NAME': config('DB_NAME'),
                     'USER': config('DB_USER'),
                     'PASSWORD': config('DB_PASSWORD'),
@@ -152,6 +152,7 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
+
 REGION_NAME = 'us-east-1'
 AWS_LOCATION = 'static'
 AWS_MEDIA = 'media'

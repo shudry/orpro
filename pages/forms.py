@@ -33,7 +33,6 @@ class ReviewsForm(forms.Form):
             Fieldset('',
                      Field('name', placeholder=''),
                      Field('email', placeholder=''),
-                     Field('number', placeholder=''),
                      Field('text', placeholder=''),
                      ))
 
