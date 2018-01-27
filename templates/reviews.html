@@ -6,6 +6,28 @@
      <div class="row">
          <div class="grid_9">
              <div>
+                 <div class="form">
+                     <h2>Ваш отзыв</h2>
+                     <form enctype="multipart/form-data" method="post" action="{% url 'review' %}">
+                         {% csrf_token %}
+                         {{ form|crispy }}
+                         <div class="alert alert-danger" role="alert" style="color: LightCoral">
+                             <strong>{{ message }}</strong>
+                         </div>
+                         <script src='https://www.google.com/recaptcha/api.js'></script>
+                         <div class="g-recaptcha" data-sitekey="6Lcn_EEUAAAAAPXcH-onQT9rJwlu9npydCzx2Q3I"></div>
+
+                         <input class="btn btn-primary btn-success " type="submit" name="submit" value="Добавить" id="submit-id-submit"/>
+
+                         <!-- {% if messages %}
+                             <div class="messages">
+                                 <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                                 {{ message }}
+                                 </div>
+                             </div>
+                         {% endif %} -->
+                     </form>
+                 </div>
                  <h1 style="margin-bottom: 20px">Отзывы</h1>
                  {% for review in reviews %}
                  <div class="review">
@@ -29,24 +51,6 @@
                      </article>
                  </div>
                  {% endfor %}
-                 <div class="form">
-                     <h2>Ваш отзыв</h2>
-                     <form enctype="multipart/form-data" method="post" action="{% url 'review' %}">
-                         {% csrf_token %}
-                         {{ form|crispy }}
-                         <script src='https://www.google.com/recaptcha/api.js'></script>
-                         <div class="g-recaptcha" data-sitekey="6Lcn_EEUAAAAAPXcH-onQT9rJwlu9npydCzx2Q3I"></div>
-
-                         <input class="btn btn-primary btn-success " type="submit" name="submit" value="Добавить" id="submit-id-submit"/>
-                         {% if messages %}
-                             <ul class="messages">
-                                 {% for message in messages %}
-                                 <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}></li>
-                                 {% endfor %}
-                             </ul>
-                         {% endif %}
-                     </form>
-                 </div>
              </div>
          </div>
          <div class="grid_3">

@@ -46,13 +46,9 @@ def review(request):
 
             if result['success']:
                 g.save()
-                args['message'] = 'GOOD'
-                messages.get_messages(request, messages.SUCCESS,
-                                 'New comment added with success!')
+                # args['message'] = 'Спасибо за отзыв'
             else:
-                messages.get_messages(request, messages.ERROR,
-                               'Invalid reCAPTCHA. Please try again')
-                args['message'] = 'BAD'
+                args['message'] = 'Отметьте флажок с фразой "Я не робот"'
     else:
         form = ReviewsForm()
 
