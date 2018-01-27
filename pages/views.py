@@ -55,7 +55,7 @@ def review(request):
     args['hf'] = HeaderPhoto.objects.get(id=1)
 
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0))
-    args['reviews'] = Reviews.objects.filter(publish=True)
+    args['reviews'] = Reviews.objects.filter(publish=True).order_by('-date')
     args['tags'] = Subtags.objects.all().order_by('?')[0:100]
     print(args)
     return render(request, 'reviews.html', args)
