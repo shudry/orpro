@@ -102,3 +102,6 @@ ENV/
 
 .idea/
 
+.DS_Store
+Pipfile
+os.path.join(BASE_DIR, 'db.sqlite3')
