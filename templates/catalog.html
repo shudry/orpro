@@ -18,8 +18,10 @@
 </div>
          <div class="grid_6">
 
-
-            <h2 style="font-size: 22px">{{ pre }}: {{ cat_title.tag_title }}</h2>
+            {% if request.user.is_superuser %}
+            <a href="/api-import"><i class="fas fa-upload"></i></a>
+             {% endif %}
+             <h2 style="font-size: 22px">{{ pre }}: {{ cat_title.tag_title }}</h2>
 
          <div class="row off2">
               {%   for p in offer %}

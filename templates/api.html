@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Import</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body style="background-color: #ececec">
+<div class="container">
+    <div class="row">
+    {% if request.user.is_superuser %}
+        <div class="text-center" style="width:100%;margin-top: 20px">
+        <a href="/" style="margin-top: 20px;"><h3>На главную</h3></a>
+            <h3>Загрузка товара</h3>
+            <form method="post" action="" enctype="multipart/form-data">{% csrf_token %}
+            <div class="form-group">
+                    <input type="file" name="file">
+                <p>
+                <label for="file_format_select" style="margin-top: 10px;">Тип файла: </label>
+                    <select name="file_format" id="file_format_select">
+                        <optgroup label="Формат">
+                            <option value="xls" class="option" name="format">xls</option>
+                            <option value="xlsx" class="option" name="format">xlsx</option>
+                            <option value="json" class="option" name="format">json</option>
+                        </optgroup>
+                    </select>
+                </p>
+            </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Загрузить файл</button>
+                </div>
+            </form>
+            <form method="post">{% csrf_token %}
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary" name="upload">Загрузить фото</button>
+                </div>
+            </form>
+            <p style="margin-top: 10px">
+                Доступные поля:
+            {{ field }}
+            </p>
+        </div>
+        {% for message in messages %}
+          <div class="alert {{ message.tags }} alert-dismissible text-center col-md-12" role="alert" style="margin: 0 auto;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" id="close_btn">
+              <span aria-hidden="true" style="bottom: 2px;position: relative;">&times;</span>
+            </button>
+            {{ message }}
+          </div>
+        {% endfor %}
+                 <div class="pagination" style="margin-top: 20px; float: left">
+    <span class="step-links">
+        {% if offers.has_previous %}
+            <a href="?page={{ offers.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ offers.number }} of {{ offers.paginator.num_pages }}.
+        </span>
+
+        {% if offers.has_next %}
+            <a href="?page={{ offers.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+        <table border="1" style="width:100%; margin-top: 20px;text-align: center">
+            <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Цена</th>
+                        <th>Валюта</th>
+                        <th>Единица измерения</th>
+                        <th>Минимальный размер заказа</th>
+                        <th>Единица измерения минимального заказа</th>
+                        <th>Краткое описание</th>
+                        <th>Описание</th>
+                        <th>Наличие</th>
+                        <th>Публикуемость</th>
+                        <th>Ссылка</th>
+                        <th>Фото на страницу</th>
+                        <th>Ссылка на картинку</th>
+                        <th>Группа 1 уровня</th>
+                        <th>Группа 2 уровня</th>
+                    </tr>
+                </thead>
+            <tbody>
+                {% for offer in offers %}
+                    <tr>
+                        <td>{{ offer.offer_title }}</td>
+                        <td>{{ offer.offer_price }}</td>
+                        <td>{{ offer.offer_valuta }}</td>
+                        <td>{{ offer.offer_value }}</td>
+                        <td>{{ offer.offer_minorder }}</td>
+                        <td>{{ offer.offer_minorder_value }}</td>
+                        <td>{{ offer.offer_pre_text }}</td>
+                        <td>{{ offer.offer_text }}</td>
+                        <td>{{ offer.offer_availability }}</td>
+                        <td>{{ offer.offer_publish }}</td>
+                        <td>{{ offer.offer_url }}</td>
+                    {% if  offer.offer_photo %}
+                        <td>{{ offer.offer_photo.url }}</td>
+                    {% else %}
+                        <td>None</td>
+                    {% endif %}
+                        <td>{{ offer.offer_image_url }}</td>
+                        <td>{{ offer.offer_tag }}</td>
+                        <td>{% for title in offer.offer_subtags.all %}
+                            {{ title }},
+                            {% endfor %}
+                            </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+    <div class="text-center col-md-12">
+        <h2 style="margin-top: 20px">У вас недастаточно прав!</h2>
+        <a href="/" style="margin-top: 20px;"><h3>На главную</h3></a>
+    </div>
+{% endif %}
+    </div>
+</div>
+</body>
+<script>
+    $("#close_btn").click(function() {
+      $('.alert').hide( "slow", function() {
+      });
+});
+</script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</html>

@@ -246,17 +246,18 @@ class Offers(models.Model):
     offer_text = models.TextField(verbose_name='Полное описание')                                      # Текст описания товара
     offer_photo_alt = models.CharField(max_length=250, blank=True, verbose_name='Комментарий к изображению')
     offer_priority = models.BooleanField(default=False, verbose_name='Приоритетный товар')
-    offer_urt_to_rubric = models.URLField(blank=True, verbose_name='Ссылка на рубрику')
+    offer_urt_to_rubric = models.URLField(blank=True, verbose_name='Ссылка на рубрику', null=True)
     offer_characteristics = models.TextField(blank=True, verbose_name='Характеристики')
     offer_availability = models.ForeignKey(Availability, verbose_name='Наличие')
-    offer_article = models.CharField(max_length=50, blank=True, verbose_name='Артикул')
-    offer_id_on_site = models.IntegerField(blank=True, verbose_name='ID товара на сайте www.pulscen.ru')
-    offer_code = models.CharField(max_length=50, blank=True, verbose_name='Код товара в вашем каталоге')
+    offer_article = models.CharField(max_length=50, blank=True, verbose_name='Артикул', null=True)
+    offer_id_on_site = models.IntegerField(blank=True, verbose_name='ID товара на сайте www.pulscen.ru', null=True)
+    offer_code = models.CharField(max_length=50, blank=True, verbose_name='Код товара в вашем каталоге', null=True)
     offer_publish = models.ForeignKey(Publish, verbose_name='Публикуемость')
     offer_url = models.CharField(max_length=250, verbose_name='Ссылка на товар на нашем сайте')                         # Ссылка на товар на нашем сайте
     offer_photo = models.ImageField(blank=True, null=True, verbose_name='Фото на страницу')                          # Фото на страницу ( если нету ссылки на фото)
+    offer_image_url = models.URLField(null=True, blank=True, verbose_name="Ссылка на картинку")
     offer_tag = models.ForeignKey(Tags, blank=True, verbose_name='Группа 1 уровня')                      # Ссылка на категорию
-    offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='Группа 2 уровня')          # Ссылка на категорию
+    offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='pr')          # Ссылка на категорию
 
     @property
     def get_main_image(self):
@@ -287,7 +288,6 @@ class Offers(models.Model):
     @models.permalink
     def get_admin_url(self):
         return "admin:%s_%s_change" % (self._meta.app_label, self._meta.model_name), (self.id, )
-
 
 # Банер на главной
 class MainBaner(models.Model):
