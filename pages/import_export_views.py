@@ -136,8 +136,9 @@ class UploadingProducts(object):
                     d["offer_minorder_value"] = x[i]["offer_minorder_value"]
                     d["offer_pre_text"] = x[i]["offer_pre_text"]
                     d["offer_text"] = x[i]["offer_text"]
-                    d["offer_publish"] = Publish.objects.get_or_create(publish_title=x[i]["offer_minorder_value"])
-                    d["offer_minorder_value"] = x[i]["offer_minorder_value"]
+                    d["offer_availability"], created = Availability.objects.get_or_create(
+                        availability_title=x[i]["offer_availability"])
+                    d["offer_publish"], created = Publish.objects.get_or_create(publish_title=x[i]["offer_publish"])
                     try:
                         d["offer_tag"] = Tags.objects.get(tag_title=x[i]["offer_tag"])
                     except ObjectDoesNotExist:
