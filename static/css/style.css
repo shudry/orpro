@@ -2204,3 +2204,7 @@ footer .copyright a:hover {
 .width-large {
     width: 250px !important;
 }
+
+.cl-label {
+    font-weight: bold;
+}
