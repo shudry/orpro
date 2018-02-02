@@ -2212,3 +2212,7 @@ footer .copyright a:hover {
 .cl-content a {
     color: #0c623b;
 }
+
+div#camera {
+    height: 383px !important;
+}
