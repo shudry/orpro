@@ -264,6 +264,7 @@ class Offers(models.Model):
         img = False
         if self.images.filter(main=True).first():
             img = self.images.filter(main=True).first()
+            img = img.images_file.url
         elif self.images.first():
             img = self.images.first()
         elif self.offer_photo:
