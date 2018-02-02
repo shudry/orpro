@@ -47,7 +47,7 @@ def api_import(request):
                         img_temp.flush()
                         img_filename = urlsplit(i.offer_image_url).path[1:]
                         i.offer_photo.save(img_filename, File(img_temp), save=True)
-                        Images.objects.create(images_url=i.offer_image_url, main=True, offer_id=i.offer_title.id)
+                        Images.objects.create(images_url=i.offer_image_url, main=True, offer_id=i.id)
                     continue
             messages.success(request, "Фото загружено")
             return render(request, 'api.html', locals())
