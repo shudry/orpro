@@ -1550,12 +1550,12 @@ footer .copyright a:hover {
 .catalog {
     margin: 0;
 
-    height: 400px;
+    height: 450px;
     box-sizing: border-box;
 
-    padding-right: 0px;
+    padding-right: 15px;
 
-    padding-left: 0px;
+    padding-left: 15px;
 
 }
 
@@ -1565,7 +1565,6 @@ footer .copyright a:hover {
     max-height: 235px;
     max-width: 235px;
     height: auto;
-    margin-left: 7%;
     margin-top: 3%;
     overflow: hidden;
 }
