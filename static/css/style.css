@@ -2208,3 +2208,7 @@ footer .copyright a:hover {
 .cl-label {
     font-weight: bold;
 }
+
+.cl-content a {
+    color: #0c623b;
+}
