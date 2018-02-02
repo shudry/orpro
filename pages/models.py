@@ -63,7 +63,7 @@ class Images(models.Model):
             r = requests.get(self.images_url)
 
             if r.status_code == requests.codes.ok:
-                img_temp = NamedTemporaryFile(delete=True)
+                img_temp = NamedTemporaryFile()
                 img_temp.write(r.content)
                 img_temp.flush()
 
@@ -268,11 +268,13 @@ class Offers(models.Model):
             img = self.images.first()
         elif self.offer_photo:
             img = self.offer_photo
+            print(img)
         return img
 
     #fix offer img_main
     def get_main_image_url(self):
         name = str(self.get_main_image)
+        print(name)
         if name:
             # --Вывод Главного изображения товара--
             # Было os.path.exists(os.path.join(settings.MEDIA_ROOT, name)):,
