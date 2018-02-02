@@ -40,8 +40,10 @@ def api_import(request):
         if "upload" in request.POST:
             for i in offers_list:
                 if i.offer_image_url and not i.offer_photo:
-                        Images.objects.create(images_url=i.offer_image_url, main=True, offer_id=i.id)
-                    continue
+                    r = requests.get(i.offer_image_url, verify=False)
+                    if r.status_code == requests.codes.ok:
+                       Images.objects.create(images_url=i.offer_image_url, main=True, offer_id=i.id)
+                continue
             messages.success(request, "Фото загружено")
             return render(request, 'api.html', locals())
         else:
