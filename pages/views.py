@@ -17,7 +17,7 @@ from .models import *
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
-
+from django.shortcuts import get_object_or_404
 from urllib.parse import urlsplit
 import requests
 from pages.import_export_views import *
@@ -47,7 +47,7 @@ def api_import(request):
                         img_temp.flush()
                         img_filename = urlsplit(i.offer_image_url).path[1:]
                         i.offer_photo.save(img_filename, File(img_temp), save=True)
-                        Images.objects.create(images_url=i.offer_image_url, main=True, offer=i.offer_title)
+                        Images.objects.create(images_url=i.offer_image_url, main=True, offer_id=i.offer_title.id)
                     continue
             messages.success(request, "Фото загружено")
             return render(request, 'api.html', locals())
