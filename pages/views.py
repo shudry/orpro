@@ -40,13 +40,6 @@ def api_import(request):
         if "upload" in request.POST:
             for i in offers_list:
                 if i.offer_image_url and not i.offer_photo:
-                    r = requests.get(i.offer_image_url, verify=False)
-                    if r.status_code == requests.codes.ok:
-                        img_temp = NamedTemporaryFile()
-                        img_temp.write(r.content)
-                        img_temp.flush()
-                        img_filename = urlsplit(i.offer_image_url).path[1:]
-                        i.offer_photo.save(img_filename, File(img_temp), save=True)
                         Images.objects.create(images_url=i.offer_image_url, main=True, offer_id=i.id)
                     continue
             messages.success(request, "Фото загружено")
