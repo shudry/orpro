@@ -41,3 +41,4 @@ toml==0.9.4
 Unidecode==0.4.20
 urllib3==1.22
 whitenoise==3.3.1
+django-import-export
