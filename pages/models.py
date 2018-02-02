@@ -264,11 +264,13 @@ class Offers(models.Model):
         img = False
         if self.images.filter(main=True).first():
             img = self.images.filter(main=True).first()
+            img = img.images_file.url
         elif self.images.first():
             img = self.images.first()
+            img = img.url
         elif self.offer_photo:
             img = self.offer_photo
-            print(img)
+            img = img.url
         return img
 
     #fix offer img_main
