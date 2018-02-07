@@ -170,13 +170,16 @@ def stag_post(request):
 
 def hp_post(request):
     if request.user.is_superuser:
-        if request.method == 'POST':
+        if request.method == 'POST' and :
             response_data = {}
             post_text = request.POST
             post_file = request.FILES
             print(post_text)
             f = HeaderPhoto.objects.get(id=post_text.get("edit")).id
-            HeaderPhoto.objects.filter(id=f).update(hp_name=post_text["hp_name"], hp_photo=post_file["hp_photo"])
+            if request.FILES:
+                HeaderPhoto.objects.filter(id=f).update(hp_name=post_text["hp_name"], hp_photo=post_file["hp_photo"])
+            else:
+                HeaderPhoto.objects.filter(id=f).update(hp_name=post_text["hp_name"])
             response_data['hp_name'] = HeaderPhoto.objects.get(id=f).hp_name
             response_data['hp_photo'] = HeaderPhoto.objects.get(id=f).hp_photo.url
             response_data['id'] = f
