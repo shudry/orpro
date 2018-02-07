@@ -9,14 +9,28 @@
      <div class="row">
 
 
-             <div class="grid_3">
+                 <div class="grid_3">
           <div class="scrol-right-menu" >
               <h2>Каталог</h2>
          <ul class="marked-list">
-                         {% include 'catalog_form.html' %}
-                         {% for i in tags %}
-                         <li><a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a></li>
-                         {% endfor %}
+             {% for i in tags %}
+                 {% if request.user.is_superuser or edit %}
+                                    <form action="/tag_post" id="tag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                {% endif %}
+            <span class="tag_form_{{ i.id }}">
+                  <li><a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a></li>
+            </span>
+                 {% if request.user.is_superuser %}
+                                            <span class="super_user">
+                                                 <input type="hidden" name="edit" value="{{i.id}}">
+                                                 <button type="submit" class="fast-set">Изменить</button>
+                                                                 </span>
+                                {% endif %}
+                                        {% csrf_token %}
+                                        {% if request.user.is_superuser or edit %}
+                                            </form>
+                                        {% endif %}
+             {% endfor %}
 
                 </ul>
          </div>
@@ -69,10 +83,10 @@
     <ul class="cloud">
         {% for tag in subtags %}
             {% if request.user.is_superuser or edit %}
-                                    <form action="stag_post" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                    <form action="/stag_post" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                                 {% endif %}
             <span class="stag_form_{{ tag.id }}">
-            <li><a href="{%  url 'tags' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
+            <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
             </span>
             {% if request.user.is_superuser %}
                                             <span class="super_user">
@@ -106,22 +120,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
     <script type="text/javascript" src="{% static 'js/jquery.preloader.min.js' %}"></script>
     <script>
-    $(document).on('submit', '#tags_form', function(e)  {
+   $(document).on('submit', '#tag_form', function(e)  {
             e.preventDefault();
-            $('#tags_form').preloader({setRelative: false});
+            $('#tag_form').preloader({setRelative: false});
             var form = e.target;
             $form = $(form);
-
             $form.ajaxSubmit({
                 url: form.action,
                 method: form.method,
                 success: function (data) {
-                    $form.replaceWith($.parseHTML(data));
-                    $('#tags_form').preloader('remove');
+
+                    try{
+                    if( data.indexOf('<span style="display: none">') > -1 ) {
+                        console.log(data.slice(data.indexOf('none">')+6, data.indexOf('</span>')));
+                        $(".tag_form_"+data.slice(data.indexOf('none">')+6, data.indexOf('</span>'))).html(data);
+                        $form.attr("method", "post");
+                        $(".fast-set").css("display","none");
+                        $('#tag_form').preloader('remove');
+                    }}
+                    catch (TypeError){
+                         $form.attr("method", "get");
+                        $(".fast-set").css("display","block");
+                        $(".tag_form_"+data.id).html(
+                            '<li>'+'<a href="/catalog/'+data.tag_url+'">'+data.tag_title+'</a>'+'</li>'
+                        );
+                        $('.super_user').html();
+                    };
+                    $('#tag_form').preloader('remove');
+{#                    $('#fb_form').preloader('remove');#}
                 },
                 error: function (xhr, textStatus, error) {
                     alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-                    $('#tags_form').preloader('remove');
+                    $('#tag_form').preloader('remove');
                 }
             });
         });

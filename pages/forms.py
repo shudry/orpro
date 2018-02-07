@@ -166,6 +166,12 @@ class SubtagsForm(forms.ModelForm):
         fields = ['tag_url', 'tag_title', 'tag_parent_tag']
 
 
+class TagsForm(forms.ModelForm):
+    class Meta:
+        model = Tags
+        fields = ['tag_url', 'tag_title', 'tag_publish', 'tag_priority']
+
+
 class SinglePageForm(forms.ModelForm):
     class Meta:
         model = Post

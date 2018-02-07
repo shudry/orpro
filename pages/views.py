@@ -356,6 +356,32 @@ def p_post(request):
     return HttpResponseForbidden()
 
 
+def tag_post(request):
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            response_data = {}
+            post_text = request.POST
+            f = Tags.objects.get(id=post_text.get("edit")).id
+            Tags.objects.filter(id=f).update(tag_url=post_text["tag_url"], tag_title=post_text["tag_title"], tag_priority=post_text["tag_priority"])
+            response_data['tag_url'] = Tags.objects.get(id=f).tag_url
+            response_data['tag_title'] = Tags.objects.get(id=f).tag_title
+            response_data['tag_publish'] = Tags.objects.get(id=f).tag_publish
+            response_data['tag_priority'] = Tags.objects.get(id=f).tag_priority
+            response_data['id'] = f
+            print(response_data)
+            return JsonResponse(response_data)
+        else:
+            args = {}
+            if 'edit' in request.GET:
+                print(request.GET["edit"])
+                args['edit'] = True
+                id_edit = request.GET["edit"]
+            tag_initial = Tags.objects.get(id=id_edit)
+            form = TagsForm(initial={'tag_url': tag_initial.tag_url, 'tag_title': tag_initial.tag_title, 'tag_priority': tag_initial.tag_priority})
+            return render(request, 'tag_form.html', locals())
+    return HttpResponseForbidden()
+
+
 def company_post(request):
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -588,71 +614,32 @@ class OfferImagesAjaxUpdateView(FormView):
             })
         return kwargs
 
+def catalog(request, cat_url='nothing'):
+    if cat_url == 'nothing':
+        cat_url = Tags.objects.filter(tag_publish=True).order_by('tag_priority')[0].tag_url
+    args = {}
+    try:
+        args['pre'] = 'КАТЕГОРИЯ'
+        mt = Tags.objects.get(tag_url=cat_url)
+        offers = Offers.objects.filter (offer_tag=mt)
+        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by ('?')
+    except Exception:
+        args['pre'] = 'КЛЮЧЕВОЕ СЛОВО'
+        print(cat_url)
+        mt = Subtags.objects.get (tag_url=cat_url)
+        offers = Offers.objects.filter(offer_subtags = mt)
+        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by ('?')
 
-class TagsAjaxUpdateView(UpdateView):
-    queryset = Tags.objects.all()
-    form_class = TagsForm
-    slug_field = "tag_url"
-    slug_url_kwarg = "cat_url"
-    template_name = "catalog.html"
-    ajax_template_name = "catalog_form.html"
 
-    def get_object(self):
-        return get_object_or_404(Tags, tag_url=Tags.objects.filter(tag_publish=True).order_by('tag_priority')[0].tag_url)
+    args['hf'] = HeaderPhoto.objects.get(id=1)
 
-    def post(self, request, *args, **kwargs):
-        if request.user.is_superuser:
-            return super().post(request, *args, **kwargs)
-        else:
-            return HttpResponseForbidden()
+    args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0))
+    args['offer'] = offers
+    args['cat_title'] = mt
+    args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
 
-    def get_form_kwargs(self):
-        """
-        Returns the keyword arguments for instantiating the form.
-        """
-        kwargs = {'initial': self.get_initial(), 'instance': self.object}
+    return render (request, 'catalog.html', args)
 
-        if self.request.method in 'POST':
-            kwargs.update({
-                'data': self.request.POST,
-            })
-            print(kwargs)
-        return kwargs
-
-    def form_valid(self, form):
-        form.save()
-        return self.render_to_response(self.get_context_data(form=self.form_class(instance=self.object)))
-
-    def get_template_names(self):
-        if self.request.is_ajax():
-            return self.ajax_template_name
-        return self.template_name
-
-    def get_context_data(self, *args, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        if not self.request.is_ajax():
-            try:
-                ctx['pre'] = 'КАТЕГОРИЯ'
-                mt = Tags.objects.get(tag_url=self.object.tag_url)
-                offers = Offers.objects.filter(offer_tag=mt)
-                ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('?')
-            except Exception:
-                ctx['pre'] = 'КЛЮЧЕВОЕ СЛОВО'
-                mt = Subtags.objects.get(tag_url=self.object.tag_url)
-                offers = Offers.objects.filter(offer_subtags=mt)
-                ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by('?')
-
-            ctx['hf'] = HeaderPhoto.objects.get(id=1)
-
-            ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0))
-            ctx['offer'] = offers
-            ctx['cat_title'] = mt
-            ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
-        ctx['tags_list'] = self.object
-        if self.request.user.is_superuser:
-            if 'edit' in self.request.GET:
-                ctx['edit'] = True
-        return ctx
 
 def pars_cat(request):
     rr = {
