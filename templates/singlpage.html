@@ -91,6 +91,7 @@
             e.preventDefault();
             $('#singlpage_form').preloader({setRelative: false});
             var form = e.target;
+            console.log(e.target);
             $form = $(form);
 
             $form.ajaxSubmit({
@@ -125,7 +126,6 @@
                 url: form.action,
                 method: form.method,
                 success: function (data) {
-
                     try{
                     if( data.indexOf('<span style="display: none">') > -1 ) {
                         console.log(data.slice(data.indexOf('none">')+6, data.indexOf('</span>')));
