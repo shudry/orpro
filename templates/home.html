@@ -433,132 +433,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
     <script type="text/javascript" src="{% static 'js/jquery.preloader.min.js' %}"></script>
     <script>
-    $(document).on('submit', '#fb_form', function(e)  {
-            e.preventDefault();
-            $('#fb_form').preloader({setRelative: false});
-            var form = e.target;
-            $form = $(form);
-            console.log($(".fast-set").attr("id"));
-            $form.ajaxSubmit({
-                url: form.action,
-                method: form.method,
-                success: function (data) {
-                    try{
-                    if( data.indexOf('<span style="display: none">') > -1 ) {
-                        $(".form-fb-"+data[28]).html(data);
-                        $form.attr("method", "post");
-                        $(".fast-set").css("display","none");
-                        $("#url_fb_"+data[28]).attr("href", "javascript:");
-{#                        init_data();#}
-                        $('#fb_form').preloader('remove');
-                    }}
-                    catch (TypeError){
-                         $form.attr("method", "get");
-                        $(".fast-set").css("display","block");
-                        $(".form-fb-"+data.id).html(
-                            '<h3>' + data.fb_title + '</h3>' +
-                            '<p>' + data.fb_text + '</p>'
-                        );
-                        $('.super_user').html();
-                        $("#url_fb_"+data.id).attr("href", data.fb_url);
-                    };
-                    $('#fb_form').preloader('remove');
-{#                    $('#fb_form').preloader('remove');#}
-                },
-                error: function (xhr, textStatus, error) {
-                    console.log(data);
-                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-                    $('#fb_form').preloader('remove');
-                }
-            });
-        });
-    function init_data(){
-             tinyMCE.init({
-                 mode : "textareas",
-                 theme : "advanced",
-                 width : "300"
-             });
-
-        }
-        init_data();
-    $(document).on('submit', '#lb_form', function(e)  {
-            e.preventDefault();
-            $('#lb_form').preloader({setRelative: false});
-            var form = e.target;
-            $form = $(form);
-            $form.ajaxSubmit({
-                url: form.action,
-                method: form.method,
-                success: function (data) {
-                    console.log(data);
-                    try{
-                    if( data.indexOf('<span style="display: none">') > -1 ) {
-                        $(".form_lb_"+data[28]).html(data);
-                        $form.attr("method", "post");
-                        $(".fast-set").css("display","none");
-                        $("#url_lb_"+data[28]).attr("href", "javascript:");
-                        init_data();
-                        $('#lb_form').preloader('remove');
-                    }}
-                    catch (TypeError){
-                         $form.attr("method", "get");
-                        $(".fast-set").css("display","block");
-                        $(".form_lb_"+data.id).html(
-                            '<div class="box_aside">'+'<div class="icon' + data.lb_icon + '">'+'</div>'+ '</div>'+ '<div class="box_cnt__no-flow">'+'<h3>'
-                            +'<a href="'+ data.lb_link + '"'+ 'id="url_lb_'+data.id+'">'+data.lb_title+'</a>'+'</h3>'
-                                +'<p>'+data.lb_text+'</p>'+
-                            '</div>'
-                        );
-                        $('.super_user').html();
-                        $("#url_fb_"+data.id).attr("href", data.lb_link);
-                    };
-                    $('#lb_form').preloader('remove');
-{#                    $('#fb_form').preloader('remove');#}
-                },
-                error: function (xhr, textStatus, error) {
-                    console.log(data);
-                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-                    $('#lb_form').preloader('remove');
-                }
-            });
-        });
-    $(document).on('submit', '#ac_form', function(e)  {
-            e.preventDefault();
-            $('#ac_form').preloader({setRelative: false});
-            var form = e.target;
-            $form = $(form);
-            $form.ajaxSubmit({
-                url: form.action,
-                method: form.method,
-                success: function (data) {
-                    console.log(data);
-                    try{
-                    if( data.indexOf('<span style="display: none">') > -1 ) {
-                        $(".ac_form_"+data[28]).html(data);
-                        $form.attr("method", "post");
-                        $(".fast-set").css("display","none");
-                        init_data();
-                        $('#ac_form').preloader('remove');
-                    }}
-                    catch (TypeError){
-                         $form.attr("method", "get");
-                        $(".fast-set").css("display","block");
-                        $(".ac_form_1").html(
-                            '<h2>'+data.ac_title+'</h2>'+
-                        '<p>'+data.ac_text+'</p>'
-                        );
-                        $('.super_user').html();
-                    };
-                    $('#ac_form').preloader('remove');
-{#                    $('#fb_form').preloader('remove');#}
-                },
-                error: function (xhr, textStatus, error) {
-                    console.log(data);
-                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-                    $('#ac_form').preloader('remove');
-                }
-            });
-        });
     $(document).on('submit', '#sup_form', function(e)  {
             e.preventDefault();
             $('#sup_form').preloader({setRelative: false});
@@ -787,5 +661,132 @@
                 }
             });
         });
+    $(document).on('submit', '#fb_form', function(e)  {
+            e.preventDefault();
+            $('#fb_form').preloader({setRelative: false});
+            var form = e.target;
+            $form = $(form);
+            console.log($(".fast-set").attr("id"));
+            $form.ajaxSubmit({
+                url: form.action,
+                method: form.method,
+                success: function (data) {
+                    try{
+                    if( data.indexOf('<span style="display: none">') > -1 ) {
+                        $(".form-fb-"+data[28]).html(data);
+                        $form.attr("method", "post");
+                        $(".fast-set").css("display","none");
+                        $("#url_fb_"+data[28]).attr("href", "javascript:");
+{#                        init_data();#}
+                        $('#fb_form').preloader('remove');
+                    }}
+                    catch (TypeError){
+                         $form.attr("method", "get");
+                        $(".fast-set").css("display","block");
+                        $(".form-fb-"+data.id).html(
+                            '<h3>' + data.fb_title + '</h3>' +
+                            '<p>' + data.fb_text + '</p>'
+                        );
+                        $('.super_user').html();
+                        $("#url_fb_"+data.id).attr("href", data.fb_url);
+                    };
+                    $('#fb_form').preloader('remove');
+{#                    $('#fb_form').preloader('remove');#}
+                },
+                error: function (xhr, textStatus, error) {
+                    console.log(data);
+                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
+                    $('#fb_form').preloader('remove');
+                }
+            });
+        });
+    function init_data(){
+             tinyMCE.init({
+                 mode : "textareas",
+                 theme : "advanced",
+                 width : "300"
+             });
+
+        }
+        init_data();
+    $(document).on('submit', '#lb_form', function(e)  {
+            e.preventDefault();
+            $('#lb_form').preloader({setRelative: false});
+            var form = e.target;
+            $form = $(form);
+            $form.ajaxSubmit({
+                url: form.action,
+                method: form.method,
+                success: function (data) {
+                    console.log(data);
+                    try{
+                    if( data.indexOf('<span style="display: none">') > -1 ) {
+                        $(".form_lb_"+data[28]).html(data);
+                        $form.attr("method", "post");
+                        $(".fast-set").css("display","none");
+                        $("#url_lb_"+data[28]).attr("href", "javascript:");
+                        init_data();
+                        $('#lb_form').preloader('remove');
+                    }}
+                    catch (TypeError){
+                         $form.attr("method", "get");
+                        $(".fast-set").css("display","block");
+                        $(".form_lb_"+data.id).html(
+                            '<div class="box_aside">'+'<div class="icon' + data.lb_icon + '">'+'</div>'+ '</div>'+ '<div class="box_cnt__no-flow">'+'<h3>'
+                            +'<a href="'+ data.lb_link + '"'+ 'id="url_lb_'+data.id+'">'+data.lb_title+'</a>'+'</h3>'
+                                +'<p>'+data.lb_text+'</p>'+
+                            '</div>'
+                        );
+                        $('.super_user').html();
+                        $("#url_fb_"+data.id).attr("href", data.lb_link);
+                    };
+                    $('#lb_form').preloader('remove');
+{#                    $('#fb_form').preloader('remove');#}
+                },
+                error: function (xhr, textStatus, error) {
+                    console.log(data);
+                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
+                    $('#lb_form').preloader('remove');
+                }
+            });
+        });
+    $(document).on('submit', '#ac_form', function(e)  {
+            e.preventDefault();
+            $('#ac_form').preloader({setRelative: false});
+            var form = e.target;
+            $form = $(form);
+            $form.ajaxSubmit({
+                url: form.action,
+                method: form.method,
+                success: function (data) {
+                    console.log(data);
+                    try{
+                    if( data.indexOf('<span style="display: none">') > -1 ) {
+                        $(".ac_form_"+data[28]).html(data);
+                        $form.attr("method", "post");
+                        $(".fast-set").css("display","none");
+                        init_data();
+                        $('#ac_form').preloader('remove');
+                    }}
+                    catch (TypeError){
+                         $form.attr("method", "get");
+                        $(".fast-set").css("display","block");
+                        $(".ac_form_1").html(
+                            '<h2>'+data.ac_title+'</h2>'+
+                        '<p>'+data.ac_text+'</p>'
+                        );
+                        $('.super_user').html();
+                    };
+                    $('#ac_form').preloader('remove');
+{#                    $('#fb_form').preloader('remove');#}
+                },
+                error: function (xhr, textStatus, error) {
+                    console.log(data);
+                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
+                    $('#ac_form').preloader('remove');
+                }
+            });
+        });
+
     </script>
 {% endblock %}
