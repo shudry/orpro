@@ -1,6 +1,8 @@
 {% extends "main.html" %}
 {% load static %} {% load staticfiles %}
 {% block additional_head %}
+     <link rel="stylesheet" href="{% static 'css/preloader.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 {% endblock %}
 
 
@@ -33,7 +35,7 @@
             <div class="container banner_wr">
                 <ul class="banner">
                     {% if request.user.is_superuser or edit %}
-                        <form action="fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                     {% endif %}
                                              <li><a href="{{ fb1.fb_url }}" id="url_fb_1">
                                                 <div class="fa-globe yel"></div>
@@ -55,7 +57,7 @@
                             </form>
                         {% endif %}
                 {% if request.user.is_superuser or edit %}
-                        <form action="fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                     {% endif %}
                     <li><a href="{{ fb2.fb_url }}"  id="url_fb_2">
                         <div class="fa-lightbulb-o"></div>
@@ -74,7 +76,7 @@
                             </form>
                         {% endif %}
                 {% if request.user.is_superuser or edit %}
-                        <form action="fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                     {% endif %}
                     <li><a href="{{ fb3.fb_url }}"  id="url_fb_3">
                         <div class="fa-cog"></div>
@@ -94,7 +96,7 @@
                             </form>
                         {% endif %}
                 {% if request.user.is_superuser or edit %}
-                        <form action="fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                     {% endif %}
                     <li><a href="{{ fb4.fb_url }}"  id="url_fb_4">
                         <div class="fa-briefcase"></div>
@@ -123,7 +125,7 @@
                     <li class="grid_6">
                         <div class="box wow fadeInRight wp">
                             {% if request.user.is_superuser or edit %}
-                        <form action="lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                     {% endif %}
                         <span class="form_lb_1">
                             <div class="box_aside">
@@ -148,7 +150,7 @@
                         <hr>
                         <div data-wow-delay="0.2s" class="box wow fadeInRight wp">
                              {% if request.user.is_superuser or edit %}
-                        <form action="lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                     {% endif %}
                         <span class="form_lb_2">
                             <div class="box_aside">
@@ -174,7 +176,7 @@
                     <li class="grid_6">
                         <div data-wow-delay="0.3s" class="box wow fadeInRight wp">
                              {% if request.user.is_superuser or edit %}
-                        <form action="lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                     {% endif %}
                         <span class="form_lb_3">
                             <div class="box_aside">
@@ -199,7 +201,7 @@
                         <hr>
                         <div data-wow-delay="0.4s" class="box wow fadeInRight wp">
                              {% if request.user.is_superuser or edit %}
-                        <form action="lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                     {% endif %}
                         <span class="form_lb_4">
                             <div class="box_aside">
@@ -231,7 +233,7 @@
                 <div class="row">
                     <div class="grid_4">
                         {% if request.user.is_superuser or edit %}
-                        <form action="ac_post" id="ac_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <form action="/ac_post" id="ac_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                     {% endif %}
                     <span class="ac_form_1">
                         <h2>{{ ac1.ac_title }}</h2>
@@ -255,7 +257,7 @@
                         <ul class="marked-list">
                             {% for i in TO %}
                                 {% if request.user.is_superuser or edit %}
-                                    <form action="to_post" id="to_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                    <form action="/to_post" id="to_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                                 {% endif %}
                                 <span class="to_form_{{i.id}}">
                             <li><a href="/goods/{{i.to_link}}">{{ i.to_title }}</a></li>
@@ -277,7 +279,7 @@
                     <div class="grid_4">
                         <div class="info-box">
                             {% if request.user.is_superuser or edit %}
-                                    <form action="sup_post" id="sup_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                    <form action="/sup_post" id="sup_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                                 {% endif %}
                         <span class="sup_form">
                             <h2 class="fa-comment">{{ sup.sup_title  }}</h2>
@@ -307,7 +309,7 @@
                             <div class="item">
                                 <blockquote class="box">
                                     {% if request.user.is_superuser or edit %}
-                                    <form action="p_post" id="p_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                    <form action="/p_post" id="p_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                                 {% endif %}
                                 <span class="p_form_{{p.id}}">
                                     <div class="box_aside"><img
@@ -355,7 +357,7 @@
             <div class="container">
                 <ul class="row contact-list">
                     {% if request.user.is_superuser or edit %}
-                                    <form action="company_post" id="company_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                    <form action="/company_post" id="company_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                                 {% endif %}
                 <span class="company_form_id">
                     <li class="grid_4">
@@ -428,6 +430,10 @@
     </footer>
 {% endblock %}
 {% block additional_scripts %}
+    script type="text/javascript" src="{% static "js/tiny_mce/tiny_mce.js" %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.preloader.min.js' %}"></script>
     <script>
     $(document).ready(function() {
         $(document).on('submit', '#fb_form', function (e) {
