@@ -81,7 +81,7 @@
     {% if request.user.is_superuser %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="1">
-                                                 <button type="submit" class="fast-set" style="color: white;font-size: 20px;position: relative;bottom:65px;">Редактирование шапка</button>
+                                                 <button type="submit" class="fast-set" style="color: white;font-size: 20px;position: relative;bottom:65px;"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                     {% endif %}
                     {% csrf_token %}

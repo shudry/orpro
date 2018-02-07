@@ -20,7 +20,7 @@
                                                  <button type="submit">Сохранить</button>
                                              {% else %}
                                                  <input type="hidden" name="edit" value="1">
-                                                 <button type="submit">Быстрое редактирование</button>
+                                                 <button type="submit"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                              {% endif %}
                                          {% endif %}
 {% if request.user.is_superuser or edit %}

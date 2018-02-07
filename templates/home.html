@@ -49,7 +49,7 @@
                                                  {% if request.user.is_superuser %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="1">
-                                                 <button type="submit" class="fast-set">Быстрое редактирование</button>
+                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                 {% endif %}
                                              </li>
@@ -69,7 +69,7 @@
                     </a>{% if request.user.is_superuser %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="2">
-                                                 <button type="submit" class="fast-set" >Быстрое редактирование</button>
+                                                 <button type="submit" class="fast-set" ><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                 {% endif %}</li>
                 {% csrf_token %}
@@ -89,7 +89,7 @@
                     {% if request.user.is_superuser %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="3">
-                                                 <button type="submit" class="fast-set">Быстрое редактирование</button>
+                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                 {% endif %}</li>
                 {% csrf_token %}
@@ -109,7 +109,7 @@
                         {% if request.user.is_superuser %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="4">
-                                                 <button type="submit" class="fast-set">Быстрое редактирование</button>
+                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                 {% endif %}
                     </li>
@@ -140,7 +140,7 @@
                         {% if request.user.is_superuser %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="1">
-                                                 <button type="submit" class="fast-set">Быстрое редактирование</button>
+                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                 {% endif %}
                         {% csrf_token %}
@@ -165,7 +165,7 @@
                         {% if request.user.is_superuser %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="2">
-                                                 <button type="submit" class="fast-set">Быстрое редактирование</button>
+                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                 {% endif %}
                         {% csrf_token %}
@@ -191,7 +191,7 @@
                         {% if request.user.is_superuser %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="3">
-                                                 <button type="submit" class="fast-set">Быстрое редактирование</button>
+                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                 {% endif %}
                         {% csrf_token %}
@@ -216,7 +216,7 @@
                         {% if request.user.is_superuser %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="4">
-                                                 <button type="submit" class="fast-set">Быстрое редактирование</button>
+                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                 {% endif %}
                         {% csrf_token %}
@@ -244,7 +244,7 @@
                     {% if request.user.is_superuser %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="1">
-                                                 <button type="submit" class="fast-set">Быстрое редактирование</button>
+                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                 {% endif %}
                         {% csrf_token %}
@@ -266,7 +266,7 @@
                                 {% if request.user.is_superuser %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="{{i.id}}">
-                                                 <button type="submit" class="fast-set">Быстрое редактирование</button>
+                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                 {% endif %}
                         {% csrf_token %}
@@ -297,7 +297,7 @@
                             {% if request.user.is_superuser %}
                         <span class="super_user">
                              <input type="hidden" name="edit" value="1">
-                             <button type="submit" class="fast-set">Быстрое редактирование</button>
+                             <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                              </span>
                         {% endif %}
                         {% csrf_token %}
@@ -326,7 +326,7 @@
                                 {% if request.user.is_superuser %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="{{p.id}}">
-                                                 <button type="submit" class="fast-set">Быстрое редактирование</button>
+                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                                 {% endif %}
                                         {% csrf_token %}
@@ -409,7 +409,7 @@
                 {% if request.user.is_superuser %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="1">
-                                                 <button type="submit" class="fast-set">Быстрое редактирование</button>
+                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                                 {% endif %}
                                         {% csrf_token %}
