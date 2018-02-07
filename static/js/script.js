@@ -27,7 +27,6 @@
                         $("#url_fb_"+data.id).attr("href", data.fb_url);
                     };
                     $('#fb_form').preloader('remove');
-{#                    $('#fb_form').preloader('remove');#}
                 },
                 error: function (xhr, textStatus, error) {
                     console.log(data);
@@ -36,229 +35,16 @@
                 }
             });
         });
-    $(document).on('submit', '#sup_form', function(e)  {
-            e.preventDefault();
-            $('#sup_form').preloader({setRelative: false});
-            var form = e.target;
-            $form = $(form);
-            $form.ajaxSubmit({
-                url: form.action,
-                method: form.method,
-                success: function (data) {
-                    console.log(data);
-                    try{
-                    if( data.indexOf('input type="text" name="sup_title"') > -1 ) {
-                        $(".sup_form").html(data);
-                        $form.attr("method", "post");
-                        $(".fast-set").css("display","none");
-                        $('#sup_form').preloader('remove');
-                    }}
-                    catch (TypeError){
-                         $form.attr("method", "get");
-                        $(".fast-set").css("display","block");
-                        $(".sup_form").html(
-                            '<h2 class="fa-comment">'+data.sup_title+'</h2>'
-                            +'<hr>'
-                            +'<h3>'+ data.sup_slogan +'</h3>'
-                            +'<dl>'
-                            +'<dd>'+data.sup_time+'</dd>'
-                            +'</dl>'
-                            +'<p>'+data.sup_phone+'</p>'
-                        );
-                        $('.super_user').html();
-                    };
-                    $('#sup_form').preloader('remove');
-                },
-                error: function (xhr, textStatus, error) {
-                    console.log(data);
-                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-                    $('#sup_form').preloader('remove');
-                }
-            });
-        });
-     $(document).on('submit', '#p_form', function(e)  {
-            e.preventDefault();
-            $('#p_form').preloader({setRelative: false});
-            var form = e.target;
-            $form = $(form);
-            $form.ajaxSubmit({
-                url: form.action,
-                method: form.method,
-                success: function (data) {
-                    console.log(data);
-                    try{
-                    if( data.indexOf('input type="text" name="p_name"') > -1 ) {
-                        $(".p_form_"+data.slice(data.indexOf('none">')+6, data.indexOf('</span>'))).html(data);
-                        $form.attr("method", "post");
-                        $(".fast-set").css("display","none");
-                        $('#p_form').preloader('remove');
-                    }}
-                    catch (TypeError){
-                         $form.attr("method", "get");
-                        $(".fast-set").css("display","block");
-                        $(".p_form_"+data.id).html(
-                             '<div class="box_aside">'+'<img src="'+data.p_photo.url+'"alt="">'+
-                             '</div>'+'<div class="box_cnt__no-flow">'+'<p>'+
-                             '<q>'+data.p_doljnost +'</q>'+ '</p>'+
-                             '<cite>'+'<a href="/about">'+data.p_name+'</a>'+'</cite>'+
-                             '</div>'
-                        );
-                        $('.super_user').html();
-                    };
-                    $('#p_form').preloader('remove');
-                },
-                error: function (xhr, textStatus, error) {
-                    console.log(data);
-                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-                    $('#p_form').preloader('remove');
-                }
-            });
-        });
-      $(document).on('submit', '#company_form', function(e)  {
-            e.preventDefault();
-            $('#company_form').preloader({setRelative: false});
-            var form = e.target;
-            $form = $(form);
-            $form.ajaxSubmit({
-                url: form.action,
-                method: form.method,
-                success: function (data) {
-                    console.log(data);
-                    try{
-                    if( data.indexOf('<input type="text" name="name"') > -1 ) {
-                        $(".company_form_id").html(data);
-                        $form.attr("method", "post");
-                        $(".fast-set").css("display","none");
-                        $('#company_form').preloader('remove');
-                    }}
-                    catch (TypeError){
-                         $form.attr("method", "get");
-                        $(".fast-set").css("display","block");
-                        $(".company_form_id").html(
-                             '<li class="grid_4">'+
-                        '<div class="box">'+
-                            '<div class="box_aside">'+
-                                '<div class="icon2 fa-map-marker">'+'</div>'+
-                            '</div>'+
-                            '<div class="box_cnt__no-flow">'+
-                                '<address>'+data.address+'</address>'+
-                            '</div>'+
-                        '</div>'+
-                        '<div class="box">'+
-                            '<div class="box_aside">'+
-                                '<div class="icon2 fa-skype">'+'</div>'+
-                            '</div>'+
-                            '<div class="box_cnt__no-flow">'+data.skype+'</div>'+
-                        '</div>'+
-                    '</li>'+
-                    '<li class="grid_4">'+
-                        '<div class="box">'+
-                            '<div class="box_aside">'+
-                                '<div class="icon2 fa-phone">'+'</div>'+
-                            '</div>'+
-                            '<div class="box_cnt__no-flow">'+data.mob_phone+'</div>'+
-                        '</div>'+
-                        '<div class="box">'+
-                            '<div class="box_aside">'+
-                               ' <div class="icon2 fa-fax">'+'</div>'+
-                            '</div>'+
-                            '<div class="box_cnt__no-flow">'+data.rob_phone+'</div>'+
-                        '</div>'+
-                    '</li>'+
-                    '<li class="grid_4">'+
-                        '<div class="box">'+
-                            '<div class="box_aside">'+
-                                '<div class="icon2 fa-facebook">'+'</div>'+
-                            '</div>'+
-                            '<div class="box_cnt__no-flow">'+'<a href="'+data.facebook_link+'">'+'Мы в Фейсбуке'+'</a>'+'</div>'+
-                        '</div>'+
-                        '<div class="box">'+
-                            '<div class="box_aside">'+
-                               ' <div class="icon2 fa-twitter">'+'</div>'+
-                            '</div>'+
-                            '<div class="box_cnt__no-flow">'+'<a href="'+ data.twitter_link+'">'+'Мы в Твиттере'+'</a>'+'</div>'+
-                        '</div>'+
-                    '</li>'
-                        );
-                        $('.super_user').html();
-                    };
-                    $('#company_form').preloader('remove');
-                },
-                error: function (xhr, textStatus, error) {
-                    console.log(data);
-                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-                    $('#company_form').preloader('remove');
-                }
-            });
-        });
-     $(document).on('submit', '#hp_form', function(e)  {
-            e.preventDefault();
-            $('#hp_form').preloader({setRelative: false});
-            var form = e.target;
-            $form = $(form);
-            $form.ajaxSubmit({
-                url: form.action,
-                method: form.method,
-                success: function (data) {
-                    console.log(data);
-                    try{
-                    if( data.indexOf('span style="display: none"') > -1 ) {
-                        $(".hp_form_id").html(data);
-                        $form.attr("method", "post");
-                        $(".fast-set").css("display","none");
-                        $('#hp_form').preloader('remove');
-                    }}
-                    catch (TypeError){
-                         $form.attr("method", "get");
-                        $(".fast-set").css("display","block");
-                        $(".hp_form_id").html(''
-                        );
-                        $(".hp").css("background-image", 'url('+data.hp_photo+')');
-                        $('.super_user').html();
-                    };
-                    $('#hp_form').preloader('remove');
-                },
-                error: function (xhr, textStatus, error) {
-                    console.log(data);
-                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-                    $('#hp_form').preloader('remove');
-                }
-            });
-        });
-     $(document).on('submit', '#to_form', function(e)  {
-            e.preventDefault();
-            $('#to_form').preloader({setRelative: false});
-            var form = e.target;
-            $form = $(form);
-            $form.ajaxSubmit({
-                url: form.action,
-                method: form.method,
-                success: function (data) {
-                    console.log(data);
-                    try{
-                    if( data.indexOf('input type="text" name="to_title"') > -1 ) {
-                        $(".to_form_"+data[28]).html(data);
-                        $form.attr("method", "post");
-                        $(".fast-set").css("display","none");
-                        $('#to_form').preloader('remove');
-                    }}
-                    catch (TypeError){
-                         $form.attr("method", "get");
-                        $(".fast-set").css("display","block");
-                        $(".to_form_"+data.id).html(
-                            '<li>'+'<a href="/goods/'+data.to_link+'">'+data.to_title+'</a>'+'</li>'
-                        );
-                        $('.super_user').html();
-                    };
-                    $('#to_form').preloader('remove');
-                },
-                error: function (xhr, textStatus, error) {
-                    console.log(data);
-                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
-                    $('#to_form').preloader('remove');
-                }
-            });
-        });
+
+    function init_data(){
+             tinyMCE.init({
+                 mode : "textareas",
+                 theme : "advanced",
+                 width : "300"
+             });
+
+        }
+        init_data();
     $(document).on('submit', '#lb_form', function(e)  {
             e.preventDefault();
             $('#lb_form').preloader({setRelative: false});
@@ -271,11 +57,11 @@
                     console.log(data);
                     try{
                     if( data.indexOf('input type="text" name="lb_title"') > -1 ) {
-                        console.log("aaaaaaaaaaaaaa");
                         $(".form_lb_"+data[28]).html(data);
                         $form.attr("method", "post");
                         $(".fast-set").css("display","none");
                         $("#url_lb_"+data[28]).attr("href", "javascript:");
+                        init_data();
                         $('#lb_form').preloader('remove');
                     }}
                     catch (TypeError){
@@ -314,6 +100,7 @@
                         $(".ac_form_"+data[28]).html(data);
                         $form.attr("method", "post");
                         $(".fast-set").css("display","none");
+                        init_data();
                         $('#ac_form').preloader('remove');
                     }}
                     catch (TypeError){
@@ -326,7 +113,6 @@
                         $('.super_user').html();
                     };
                     $('#ac_form').preloader('remove');
-
                 },
                 error: function (xhr, textStatus, error) {
                     console.log(data);
