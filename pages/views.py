@@ -439,7 +439,7 @@ def home(request):
     args['hf'] = HeaderPhoto.objects.get(id=1)
     args['company'] = Company.objects.get(id=1)
 
-    args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0))
+    args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
 
 
     return render(request, 'home.html', args)
