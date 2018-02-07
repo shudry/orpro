@@ -163,7 +163,7 @@ def stag_post(request):
                 id_edit = request.GET["edit"]
             stag_initial = Subtags.objects.get(id=id_edit)
             form = SubtagsForm(
-                initial={'tag_title': stag_initial.tag_title, 'tag_url': stag_initial.tag_url, 'tag_parent_tag ': stag_initial.tag_parent_tag})
+                initial={'tag_title': stag_initial.tag_title, 'tag_url': stag_initial.tag_url, 'tag_parent_tag': stag_initial.tag_parent_tag})
             return render(request, 'stag_form.html', locals())
     return HttpResponseForbidden()
 
