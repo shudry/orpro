@@ -450,11 +450,15 @@
                     try{
                     if( data.indexOf('input type="text"') > -1 ) {
                         $(".form-fb-"+data[28]).html(data);
+                        console.log("1");
                         $form.attr("method", "post");
                         $(".fast-set").css("display","none");
+                        console.log("2");
                         $("#url_fb_"+data[28]).attr("href", "javascript:");
 {#                        init_data();#}
+                        console.log("3");
                         $('#fb_form').preloader('remove');
+                        debugger;
                     }}
                     catch (TypeError){
                          $form.attr("method", "get");
