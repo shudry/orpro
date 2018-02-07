@@ -170,7 +170,7 @@ def stag_post(request):
 
 def hp_post(request):
     if request.user.is_superuser:
-        if request.method == 'POST' and :
+        if request.method == 'POST':
             response_data = {}
             post_text = request.POST
             post_file = request.FILES
