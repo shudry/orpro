@@ -1,7 +1,12 @@
 {% extends "main.html" %}
 {% load static %} {% load staticfiles %}
 
+
 {% block content %}
+    {% block additional_head %}
+    <link rel="stylesheet" href="{% static 'css/preloader.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+{% endblock %}
  <div class="container hr well1 ins2">
      <div class="row">
 {% if post.post_seourl == 'price' %}
@@ -24,13 +29,13 @@
          </div>
 {% else %}
          <div class="grid_9">
-              {{ post.post_text|safe }}
+              {% include 'singlpage_form.html' %}
          </div>
          <div class="grid_3">
     <ul class="cloud">
         {% for tag in tags %}
             {% if forloop.counter < 100 %}
-            <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
+            <li><a href="{%  url 'tags' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
         {% endif %}
         {% endfor %}
     </ul>
@@ -41,7 +46,6 @@
      </div>
  </div>
 {% endblock %}
-
 {% block footer %}<footer>
 <div class="container">
             <div class="copyright">© Профсистемы-Крым 2016 г.
@@ -52,3 +56,51 @@
           </div>
 </footer>
 {% endblock %}
+{% block additional_scripts %}
+    <script type="text/javascript" src="{% static "js/tiny_mce/tiny_mce.js" %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.preloader.min.js' %}"></script>
+    <script>
+    function init_data(){
+             tinyMCE.init({
+                 mode : "textareas",
+                 theme : "advanced",
+                 height : "600",
+                 width: "100%"
+             });
+
+        }
+        init_data();
+    $(document).on('submit', '#singlpage_form', function(e)  {
+            e.preventDefault();
+            $('#singlpage_form').preloader({setRelative: false});
+            var form = e.target;
+            $form = $(form);
+
+            $form.ajaxSubmit({
+                url: form.action,
+                method: form.method,
+                success: function (data) {
+                    $form.replaceWith($.parseHTML(data));
+                    init_data();
+                    $('#singlpage_form').preloader('remove');
+                },
+                error: function (xhr, textStatus, error) {
+                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
+                    $('#singlpage_form').preloader('remove');
+                }
+            });
+        });
+       $(document).on('click', '.cancel', function(evt) {
+            evt.preventDefault();
+            $.ajax({
+                url: evt.href,
+                success: function(data){
+                    $(evt.target).closest('form').replaceWith($.parseHTML(data));
+                }
+            });
+       });
+    </script>
+    {% endblock %}
+

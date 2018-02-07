@@ -1,6 +1,10 @@
 {% extends "main.html" %}
 {% load static %} {% load staticfiles %}
 {% block content %}
+        {% block additional_head %}
+    <link rel="stylesheet" href="{% static 'css/preloader.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+{% endblock %}
  <div class="container hr well1 ins2">
      <div class="row">
 
@@ -9,9 +13,10 @@
           <div class="scrol-right-menu" >
               <h2>Каталог</h2>
          <ul class="marked-list">
-             {% for i in tags %}
-                  <li><a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a></li>
-             {% endfor %}
+                         {% include 'catalog_form.html' %}
+                         {% for i in tags %}
+                         <li><a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a></li>
+                         {% endfor %}
 
                 </ul>
          </div>
@@ -61,10 +66,24 @@
 
 
 </div>
-<div class="grid_3">
     <ul class="cloud">
         {% for tag in subtags %}
-            <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
+            {% if request.user.is_superuser or edit %}
+                                    <form action="stag_post" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                {% endif %}
+            <span class="stag_form_{{ tag.id }}">
+            <li><a href="{%  url 'tags' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
+            </span>
+            {% if request.user.is_superuser %}
+                                            <span class="super_user">
+                                                 <input type="hidden" name="edit" value="{{tag.id}}">
+                                                 <button type="submit" class="fast-set">Изменить</button>
+                                                                 </span>
+                                {% endif %}
+                                        {% csrf_token %}
+                                        {% if request.user.is_superuser or edit %}
+                                            </form>
+                                        {% endif %}
         {% endfor %}
     </ul>
 </div>
@@ -82,3 +101,74 @@
           </div>
 </footer>
 {% endblock %}
+{% block additional_scripts %}
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.preloader.min.js' %}"></script>
+    <script>
+    $(document).on('submit', '#tags_form', function(e)  {
+            e.preventDefault();
+            $('#tags_form').preloader({setRelative: false});
+            var form = e.target;
+            $form = $(form);
+
+            $form.ajaxSubmit({
+                url: form.action,
+                method: form.method,
+                success: function (data) {
+                    $form.replaceWith($.parseHTML(data));
+                    $('#tags_form').preloader('remove');
+                },
+                error: function (xhr, textStatus, error) {
+                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
+                    $('#tags_form').preloader('remove');
+                }
+            });
+        });
+       $(document).on('click', '.cancel', function(evt) {
+            evt.preventDefault();
+            $.ajax({
+                url: evt.href,
+                success: function(data){
+                    $(evt.target).closest('form').replaceWith($.parseHTML(data));
+                }
+            });
+       });
+       $(document).on('submit', '#stag_form', function(e)  {
+            e.preventDefault();
+            $('#stag_form').preloader({setRelative: false});
+            var form = e.target;
+            $form = $(form);
+            $form.ajaxSubmit({
+                url: form.action,
+                method: form.method,
+                success: function (data) {
+
+                    try{
+                    if( data.indexOf('<span style="display: none">') > -1 ) {
+                        console.log(data.slice(data.indexOf('none">')+6, data.indexOf('</span>')));
+                        $(".stag_form_"+data.slice(data.indexOf('none">')+6, data.indexOf('</span>'))).html(data);
+                        $form.attr("method", "post");
+                        $(".fast-set").css("display","none");
+                        $('#stag_form').preloader('remove');
+                    }}
+                    catch (TypeError){
+                         $form.attr("method", "get");
+                        $(".fast-set").css("display","block");
+                        $(".stag_form_"+data.id).html(
+                            '<li>'+'<a href="'+data.tag_url+'">'+ data.tag_title +'</a>'+'</li>'
+                        );
+                        $('.super_user').html();
+                    };
+                    $('#stag_form').preloader('remove');
+{#                    $('#fb_form').preloader('remove');#}
+                },
+                error: function (xhr, textStatus, error) {
+                    console.log(data);
+                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
+                    $('#stag_form').preloader('remove');
+                }
+            });
+        });
+    </script>
+    {% endblock %}
