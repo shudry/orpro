@@ -700,15 +700,6 @@
                 }
             });
         });
-    function init_data(){
-             tinyMCE.init({
-                 mode : "textareas",
-                 theme : "advanced",
-                 width : "300"
-             });
-
-        }
-        init_data();
     $(document).on('submit', '#lb_form', function(e)  {
             e.preventDefault();
             $('#lb_form').preloader({setRelative: false});
@@ -721,11 +712,11 @@
                     console.log(data);
                     try{
                     if( data.indexOf('input type="text" name="lb_title"') > -1 ) {
+                        console.log("aaaaaaaaaaaaaa");
                         $(".form_lb_"+data[28]).html(data);
                         $form.attr("method", "post");
                         $(".fast-set").css("display","none");
                         $("#url_lb_"+data[28]).attr("href", "javascript:");
-                        init_data();
                         $('#lb_form').preloader('remove');
                     }}
                     catch (TypeError){
@@ -765,7 +756,6 @@
                         $(".ac_form_"+data[28]).html(data);
                         $form.attr("method", "post");
                         $(".fast-set").css("display","none");
-                        init_data();
                         $('#ac_form').preloader('remove');
                     }}
                     catch (TypeError){
