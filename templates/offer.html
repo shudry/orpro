@@ -28,7 +28,6 @@
                                                  <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                                 {% endif %}
-                                        {% csrf_token %}
                                         {% if request.user.is_superuser or edit %}
                                             </form>
                                         {% endif %}
@@ -56,7 +55,6 @@
                                                  <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                                                                  </span>
                                 {% endif %}
-                                        {% csrf_token %}
                                         {% if request.user.is_superuser or edit %}
                                             </form>
                                         {% endif %}
