@@ -15,7 +15,7 @@
     ========================================================
     -->
     <main>
-        <section class="camera_container" style="margin-top: 28px;">
+        <section class="camera_container">
             <div id="camera" class="camera_wrap">
                 {% for i in baner %}
                     <div data-src={{ i.baner_img.url }} >
@@ -442,7 +442,6 @@
                 url: form.action,
                 method: form.method,
                 success: function (data) {
-                    console.log(data);
                     try{
                     if( data.indexOf('<span style="display: none">') > -1 ) {
                         $(".sup_form").html(data);
@@ -468,7 +467,6 @@
 {#                    $('#fb_form').preloader('remove');#}
                 },
                 error: function (xhr, textStatus, error) {
-                    console.log(data);
                     alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
                     $('#sup_form').preloader('remove');
                 }
@@ -483,7 +481,6 @@
                 url: form.action,
                 method: form.method,
                 success: function (data) {
-                    console.log(data);
                     try{
                     if( data.indexOf('<span style="display: none">') > -1 ) {
                         $(".p_form_"+data[28]).html(data);
@@ -507,7 +504,6 @@
 {#                    $('#fb_form').preloader('remove');#}
                 },
                 error: function (xhr, textStatus, error) {
-                    console.log(data);
                     alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
                     $('#p_form').preloader('remove');
                 }
@@ -522,7 +518,6 @@
                 url: form.action,
                 method: form.method,
                 success: function (data) {
-                    console.log(data);
                     try{
                     if( data.indexOf('<span style="display: none">') > -1 ) {
                         $(".company_form_id").html(data);
@@ -585,7 +580,6 @@
 {#                    $('#fb_form').preloader('remove');#}
                 },
                 error: function (xhr, textStatus, error) {
-                    console.log(data);
                     alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
                     $('#company_form').preloader('remove');
                 }
@@ -600,7 +594,6 @@
                 url: form.action,
                 method: form.method,
                 success: function (data) {
-                    console.log(data);
                     try{
                     if( data.indexOf('<span style="display: none">') > -1 ) {
                         $(".hp_form_id").html(data);
@@ -620,7 +613,6 @@
 {#                    $('#fb_form').preloader('remove');#}
                 },
                 error: function (xhr, textStatus, error) {
-                    console.log(data);
                     alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
                     $('#hp_form').preloader('remove');
                 }
@@ -635,7 +627,6 @@
                 url: form.action,
                 method: form.method,
                 success: function (data) {
-                    console.log(data);
                     try{
                     if( data.indexOf('<span style="display: none">') > -1 ) {
                         $(".to_form_"+data[28]).html(data);
@@ -655,7 +646,6 @@
 {#                    $('#fb_form').preloader('remove');#}
                 },
                 error: function (xhr, textStatus, error) {
-                    console.log(data);
                     alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
                     $('#to_form').preloader('remove');
                 }
@@ -666,7 +656,6 @@
             $('#fb_form').preloader({setRelative: false});
             var form = e.target;
             $form = $(form);
-            console.log($(".fast-set").attr("id"));
             $form.ajaxSubmit({
                 url: form.action,
                 method: form.method,
@@ -694,7 +683,6 @@
 {#                    $('#fb_form').preloader('remove');#}
                 },
                 error: function (xhr, textStatus, error) {
-                    console.log(data);
                     alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
                     $('#fb_form').preloader('remove');
                 }
@@ -718,7 +706,6 @@
                 url: form.action,
                 method: form.method,
                 success: function (data) {
-                    console.log(data);
                     try{
                     if( data.indexOf('<span style="display: none">') > -1 ) {
                         $(".form_lb_"+data[28]).html(data);
@@ -744,7 +731,6 @@
 {#                    $('#fb_form').preloader('remove');#}
                 },
                 error: function (xhr, textStatus, error) {
-                    console.log(data);
                     alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
                     $('#lb_form').preloader('remove');
                 }
@@ -759,7 +745,6 @@
                 url: form.action,
                 method: form.method,
                 success: function (data) {
-                    console.log(data);
                     try{
                     if( data.indexOf('<span style="display: none">') > -1 ) {
                         $(".ac_form_"+data[28]).html(data);
@@ -781,7 +766,6 @@
 {#                    $('#fb_form').preloader('remove');#}
                 },
                 error: function (xhr, textStatus, error) {
-                    console.log(data);
                     alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
                     $('#ac_form').preloader('remove');
                 }

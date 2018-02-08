@@ -132,7 +132,6 @@
 
                     try{
                     if( data.indexOf('<span style="display: none">') > -1 ) {
-                        console.log(data.slice(data.indexOf('none">')+6, data.indexOf('</span>')));
                         $(".tag_form_"+data.slice(data.indexOf('none">')+6, data.indexOf('</span>'))).html(data);
                         $form.attr("method", "post");
                         $(".fast-set").css("display","none");
@@ -176,7 +175,6 @@
 
                     try{
                     if( data.indexOf('<span style="display: none">') > -1 ) {
-                        console.log(data.slice(data.indexOf('none">')+6, data.indexOf('</span>')));
                         $(".stag_form_"+data.slice(data.indexOf('none">')+6, data.indexOf('</span>'))).html(data);
                         $form.attr("method", "post");
                         $(".fast-set").css("display","none");
@@ -194,7 +192,6 @@
 {#                    $('#fb_form').preloader('remove');#}
                 },
                 error: function (xhr, textStatus, error) {
-                    console.log(data);
                     alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
                     $('#stag_form').preloader('remove');
                 }

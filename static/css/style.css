@@ -1606,7 +1606,7 @@ footer .copyright a:hover {
 }
 
 .hp {
-
+    height: 235px;
 }
 
 @media (max-width: 1199px) {
