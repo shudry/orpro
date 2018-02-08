@@ -175,7 +175,6 @@ def comment_delete(request):
             data = request.POST
             Reviews.objects.get(id=data.get("id")).delete()
             response_data["id"] = data.get("id")
-            messages.success(request, "Удалено")
             return JsonResponse(response_data)
     return HttpResponseForbidden()
 
