@@ -168,6 +168,41 @@ def stag_post(request):
     return HttpResponseForbidden()
 
 
+def comment_delete(request):
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            response_data = {}
+            data = request.POST
+            Reviews.objects.get(id=data.get("id")).delete()
+            response_data["id"] = data.get("id")
+            messages.success(request, "Удалено")
+            return JsonResponse(response_data)
+    return HttpResponseForbidden()
+
+def comment_admin(request):
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            response_data = {}
+            post_text = request.POST
+            print(post_text)
+            f = Reviews.objects.get(id=post_text.get("edit")).id
+            Reviews.objects.filter(id=f).update(comment=post_text["comment"])
+            response_data['comment'] = Reviews.objects.get(id=f).comment
+            response_data['id'] = f
+            print(response_data)
+            return JsonResponse(response_data)
+        else:
+            args = {}
+            if 'edit' in request.GET:
+                print(request.GET["edit"])
+                args['edit'] = True
+                id_edit = request.GET["edit"]
+                comment_initial = Reviews.objects.get(id=id_edit)
+            form = CommentAdminForm(initial={'comment': comment_initial.comment})
+            return render(request, 'comment_admin_form.html', locals())
+    return HttpResponseForbidden()
+
+
 def hp_post(request):
     if request.user.is_superuser:
         if request.method == 'POST':

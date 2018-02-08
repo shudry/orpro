@@ -13,6 +13,15 @@ from tinymce.widgets import TinyMCE
 from .models import *
 
 
+class CommentAdminForm(forms.ModelForm):
+    class Meta:
+        model = Reviews
+        fields = ['comment']
+        widgets = {
+            'comment': TinyMCE(attrs={'rows': 10}),
+        }
+
+
 class ReviewsForm(forms.Form):
 
     class Meta:
