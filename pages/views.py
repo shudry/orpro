@@ -563,7 +563,7 @@ class OfferAjaxUpdateView(UpdateView):
         ctx = super().get_context_data(**kwargs)
         if not self.request.is_ajax():
             ctx['hf'] = HeaderPhoto.objects.get(id=1)
-            ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0))
+            ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
             ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
             ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag).order_by('?')
 
@@ -636,7 +636,7 @@ def catalog(request, cat_url='nothing'):
 
     args['hf'] = HeaderPhoto.objects.get(id=1)
 
-    args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0))
+    args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['offer'] = offers
     args['cat_title'] = mt
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
