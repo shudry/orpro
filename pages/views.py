@@ -656,7 +656,7 @@ def catalog(request, cat_url='nothing'):
         cat_url = Tags.objects.filter(tag_publish=True).order_by('tag_priority')[0].tag_url
     args = {}
     try:
-        args['pre'] = 'КАТЕГОРИЯ'
+        args['pre'] = 'Группа товаров'
         mt = Tags.objects.get(tag_url=cat_url)
         offers = Offers.objects.filter (offer_tag=mt)
         args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by ('?')
