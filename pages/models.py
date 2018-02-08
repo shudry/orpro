@@ -151,6 +151,7 @@ class Post(models.Model):
     post_text = models.TextField()                           # Текст страници
     post_category = models.ForeignKey(Category, blank=True, null=True)
     post_cat_level = models.IntegerField(default=0)
+    post_priority = models.IntegerField(default=1)
     # post_submenu = models.BooleanField(default=False)
     # post_mainmenu = models.BooleanField(default=False)
 
@@ -357,7 +358,6 @@ class TopOffers(models.Model):
 
     to_title = models.CharField(max_length=80)  # Текст на банере
     to_link = models.CharField(max_length=250)
-    to_link = models.CharField(max_length=250)
 
 
 class Support(models.Model):
@@ -395,7 +395,7 @@ class HeaderPhoto(models.Model):
         verbose_name = 'Картинка в шапку на главной'
         verbose_name_plural = 'Картинка в шапку на главной'
 
-    hp_name= models.CharField(max_length=80)
+    hp_name = models.CharField(max_length=80)
     hp_photo = models.ImageField()
 
 

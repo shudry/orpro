@@ -54,8 +54,12 @@
                                         {{ review.text }}
                                     </p>
                                 </div>
+                            {% if request.user.is_superuser or edit %}
+                         <div style="float: right;bottom: 70px;position: relative">X</div>
+                                    {% endif %}
                             </div>
                         </div>
+
                     </article>
                 </div>
                 {% endfor %}
