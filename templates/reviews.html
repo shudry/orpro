@@ -55,7 +55,7 @@
                                         <i class="fa fa-user"></i>
                                         <b>{% if review.name %}{{ review.name }}{% else %}Аноним{% endif %}</b>
                                      {% if request.user.is_superuser or edit %}
-                                    <div style="float: right;position: relative;margin-right: 25px" id="delete_comment" data-id="{{ review.id }}"><a href="javascript;">X</a></div>
+                                    <div style="float: right;position: relative;margin-right: 25px" id="delete_comment" data-id="{{ review.id }}"><a href="javascript;"><i class="fa fa-trash" aria-hidden="true"></i></a></div>
                                     {% endif %}
                                     </div>
                                     <time class="comment-date" datetime="16-12-2014 13:05"><i class="fa fa-clock-o"></i>
@@ -90,7 +90,7 @@
                             {% if request.user.is_superuser %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="{{ review.id }}">
-                                                 <button type="submit" class="fast-set" >Добавить</button>
+                                                 <button type="submit" class="fast-set" ><i class="fa-pencil" aria-hidden="true"></i></button>
                                                                  </span>
                             {% endif %}
                             {% csrf_token %}
@@ -222,6 +222,7 @@
 {#                    $('#fb_form').preloader('remove');#}
                 },
                 error: function (xhr, textStatus, error) {
+                    console.log(data);
                     alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
                     $('#comment_admin_form').preloader('remove');
                 }
