@@ -1,25 +1,46 @@
 {% extends "main.html" %}
 {% load static %} {% load staticfiles %}
 {% block content %}
+        {% block additional_head %}
+    <link rel="stylesheet" href="{% static 'css/preloader.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+{% endblock %}
  <div class="container hr well1 ins2">
      <div class="row">
 
 
-             <div class="grid_3">
+                 <div class="grid_3">
           <div class="scrol-right-menu" >
-              <h2>Каталог</h2>
-         <ul class="marked-list">
-             {% for i in tags %}
-                  <li><a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a></li>
-             {% endfor %}
+              <h2>Группа товаров</h2>
+                 <ul class="marked-list">
+                     {% for i in tags %}
+                         {% if request.user.is_superuser or edit %}
+                                            <form action="/tag_post" id="tag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                        {% endif %}
+                    <span class="tag_form_{{ i.id }}">
+                          <li><a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a></li>
+                    </span>
+                         {% if request.user.is_superuser %}
+                                                    <span class="super_user">
+                                                         <input type="hidden" name="edit" value="{{i.id}}">
+                                                         <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+                                                                         </span>
+                                        {% endif %}
+                                                {% csrf_token %}
+                                                {% if request.user.is_superuser or edit %}
+                                                    </form>
+                                                {% endif %}
+                     {% endfor %}
 
-                </ul>
+                        </ul>
          </div>
 </div>
          <div class="grid_6">
 
-
-            <h2 style="font-size: 22px">{{ pre }}: {{ cat_title.tag_title }}</h2>
+            {% if request.user.is_superuser %}
+            <a href="/api-import"><i class="fas fa-upload"></i></a>
+             {% endif %}
+             <h2 style="font-size: 22px">{{ pre }}: {{ cat_title.tag_title }}</h2>
 
          <div class="row off2">
               {%   for p in offer %}
@@ -27,9 +48,9 @@
               <div class="grid_3  bg1">
               <div class="catalog" style="overflow: hidden">
                   <div style="max-height: 250px; overflow: hidden;">
-                      <img src="{{ p.get_main_image_url }}"  alt="{{ p.offer_title }}">
+                      <img src="{{ p.get_main_image }}"  alt="{{ p.offer_title }}">
                   </div>
-
+                <div style="padding: 10px">
                   <h3>{{ p.offer_title }}</h3>
               {% if p.offer_price != 0 %}
                 <b style="font-weight: bold; font-size: 16px; color: green">{{ p.offer_price|stringformat:"i" }} руб.</b>
@@ -38,7 +59,8 @@
               {% else %}
                 <b>Нет в наличии</b>
               {% endif %}
-                <p style="">{{ p.offer_pre_text|safe|truncatewords:17 }}</p>
+                <p style="">{{ p.offer_pre_text|safe|truncatewords:12 }}</p>
+              </div>
               </div>
                   <div style="padding-top: 4px; margin-top: 20px">
               <a href="/goods/{{ p.offer_url }}" class="btn">Просмотреть</a>
@@ -59,10 +81,24 @@
 
 
 </div>
-<div class="grid_3">
-    <ul class="cloud">
+    <ul class="cloud" style="position: relative;left: 10px">
         {% for tag in subtags %}
+            {% if request.user.is_superuser or edit %}
+                                    <form action="/stag_post" style="display: flex;" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                {% endif %}
+            <span class="stag_form_{{ tag.id }} stag_form_stl">
             <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
+            </span>
+            {% if request.user.is_superuser %}
+                                            <span class="super_user">
+                                                 <input type="hidden" name="edit" value="{{tag.id}}">
+                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+                                                                 </span>
+                                {% endif %}
+                                        {% csrf_token %}
+                                        {% if request.user.is_superuser or edit %}
+                                            </form>
+                                        {% endif %}
         {% endfor %}
     </ul>
 </div>
@@ -80,3 +116,123 @@
           </div>
 </footer>
 {% endblock %}
+{% block additional_scripts %}
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.preloader.min.js' %}"></script>
+    <script>
+   $(document).on('submit', '#tag_form', function(e)  {
+            e.preventDefault();
+            $('#tag_form').preloader({setRelative: false});
+            var form = e.target;
+            $form = $(form);
+            $form.ajaxSubmit({
+                url: form.action,
+                method: form.method,
+                success: function (data) {
+                    try{
+                    if( data.indexOf('<span style="display: none">') > -1 ) {
+                        $(".tag_form_"+data.slice(data.indexOf('none">')+6, data.indexOf('</span>'))).html(data);
+                        $form.attr("method", "post");
+                        $(".fast-set").css("display","none");
+                        $('#tag_form').preloader('remove');
+                    }}
+                    catch (TypeError){
+                         $form.attr("method", "get");
+                        $(".fast-set").css("display","block");
+                        if (data.del){
+                             $(".tag_form_" + data.id).parent().remove();
+                        }
+                        else {
+                            $(".tag_form_" + data.id).html(
+                                '<li>' + '<a href="/catalog/' + data.tag_url + '">' + data.tag_title + '</a>' + '</li>'
+                            );
+                            $('.super_user').html();
+                        }
+                    }
+                    $('#tag_form').preloader('remove');
+{#                    $('#fb_form').preloader('remove');#}
+                },
+                error: function (xhr, textStatus, error) {
+                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
+                    $('#tag_form').preloader('remove');
+                }
+            });
+        });
+       $(document).on('click', '.cancel', function(evt) {
+            evt.preventDefault();
+            $.ajax({
+                url: evt.href,
+                success: function(data){
+                    $(evt.target).closest('form').replaceWith($.parseHTML(data));
+                }
+            });
+       });
+       $(document).on('submit', '#stag_form', function(e)  {
+            e.preventDefault();
+            $('#stag_form').preloader({setRelative: false});
+            var form = e.target;
+            $form = $(form);
+            $form.ajaxSubmit({
+                url: form.action,
+                method: form.method,
+                success: function (data) {
+
+                    try{
+                    if( data.indexOf('<span style="display: none">') > -1 ) {
+                        $(".stag_form_"+data.slice(data.indexOf('none">')+6, data.indexOf('</span>'))).html(data);
+                        $form.attr("method", "post");
+                        $(".fast-set").css("display","none");
+                        $('#stag_form').preloader('remove');
+                    }}
+                    catch (TypeError){
+                         $form.attr("method", "get");
+                        $(".fast-set").css("display","block");
+                        if (data.del){
+                             $(".stag_form_" + data.id).parent().remove();
+                        }
+                        else{
+                        $(".stag_form_"+data.id).html(
+                            '<li>'+'<a href="/catalog/'+data.tag_url+'">'+ data.tag_title +'</a>'+'</li>'
+                        );
+                        }
+                        $('.super_user').html();
+                    };
+                    $('#stag_form').preloader('remove');
+{#                    $('#fb_form').preloader('remove');#}
+                },
+                error: function (xhr, textStatus, error) {
+                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
+                    $('#stag_form').preloader('remove');
+                }
+            });
+        });
+    </script>
+    <style>
+    .cloud span > li {
+    list-style: none;
+    display: inline;
+}
+
+.cloud span:nth-of-type(3n + 1) > li {
+    font-size: 1.15em;
+    color: darkgreen!important;
+}
+
+.cloud span:nth-of-type(4n+3) > li {
+    font-size: 0.85em;
+    color: darkolivegreen!important;
+}
+
+.cloud span:nth-of-type(5n - 3) > li {
+    font-size: 1em;
+    color: green!important;
+
+}
+
+.cloud span:nth-of-type(4n - 3) > li {
+    font-size: 0.9em;
+    color: forestgreen!important;
+}
+    </style>
+    {% endblock %}

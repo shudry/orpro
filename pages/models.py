@@ -63,7 +63,7 @@ class Images(models.Model):
             r = requests.get(self.images_url)
 
             if r.status_code == requests.codes.ok:
-                img_temp = NamedTemporaryFile(delete=True)
+                img_temp = NamedTemporaryFile()
                 img_temp.write(r.content)
                 img_temp.flush()
 
@@ -129,8 +129,8 @@ class Category(models.Model):
        return self.category_title
 
     class Meta:
-        verbose_name = 'Категория'
-        verbose_name_plural = 'Категории'
+        verbose_name = 'Группа товаров'
+        verbose_name_plural = 'Группы товаров'
 
     category_title = models.CharField(max_length=250)
 
@@ -151,6 +151,7 @@ class Post(models.Model):
     post_text = models.TextField()                           # Текст страници
     post_category = models.ForeignKey(Category, blank=True, null=True)
     post_cat_level = models.IntegerField(default=0)
+    post_priority = models.IntegerField(default=1)
     # post_submenu = models.BooleanField(default=False)
     # post_mainmenu = models.BooleanField(default=False)
 
@@ -169,6 +170,7 @@ class Tags(models.Model):
     tag_title = models.CharField(max_length=250)                # Название категории
     tag_publish = models.BooleanField(blank=True)
     tag_priority = models.IntegerField(blank=True)
+    delete_tag = models.BooleanField(blank=True, default=False)
 
 
 # Модель категории товара
@@ -184,6 +186,7 @@ class Subtags(models.Model):
     tag_url = models.CharField(max_length=250, unique=True)       # Ссылка на категорию
     tag_title = models.CharField(max_length=250)                  # Название категории
     tag_parent_tag = models.ForeignKey(Tags, blank=True)          # Parents category
+    delete_stag = models.BooleanField(blank=True, default=False)
 
     @classmethod
     def create(cls, tag_title):
@@ -246,32 +249,37 @@ class Offers(models.Model):
     offer_text = models.TextField(verbose_name='Полное описание')                                      # Текст описания товара
     offer_photo_alt = models.CharField(max_length=250, blank=True, verbose_name='Комментарий к изображению')
     offer_priority = models.BooleanField(default=False, verbose_name='Приоритетный товар')
-    offer_urt_to_rubric = models.URLField(blank=True, verbose_name='Ссылка на рубрику')
+    offer_urt_to_rubric = models.URLField(blank=True, verbose_name='Ссылка на рубрику', null=True)
     offer_characteristics = models.TextField(blank=True, verbose_name='Характеристики')
     offer_availability = models.ForeignKey(Availability, verbose_name='Наличие')
-    offer_article = models.CharField(max_length=50, blank=True, verbose_name='Артикул')
-    offer_id_on_site = models.IntegerField(blank=True, verbose_name='ID товара на сайте www.pulscen.ru')
-    offer_code = models.CharField(max_length=50, blank=True, verbose_name='Код товара в вашем каталоге')
+    offer_article = models.CharField(max_length=50, blank=True, verbose_name='Артикул', null=True)
+    offer_id_on_site = models.IntegerField(blank=True, verbose_name='ID товара на сайте www.pulscen.ru', null=True)
+    offer_code = models.CharField(max_length=50, blank=True, verbose_name='Код товара в вашем каталоге', null=True)
     offer_publish = models.ForeignKey(Publish, verbose_name='Публикуемость')
     offer_url = models.CharField(max_length=250, verbose_name='Ссылка на товар на нашем сайте')                         # Ссылка на товар на нашем сайте
     offer_photo = models.ImageField(blank=True, null=True, verbose_name='Фото на страницу')                          # Фото на страницу ( если нету ссылки на фото)
+    offer_image_url = models.URLField(null=True, blank=True, verbose_name="Ссылка на картинку")
     offer_tag = models.ForeignKey(Tags, blank=True, verbose_name='Группа 1 уровня')                      # Ссылка на категорию
-    offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='Группа 2 уровня')          # Ссылка на категорию
+    offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='pr')          # Ссылка на категорию
 
     @property
     def get_main_image(self):
         img = False
         if self.images.filter(main=True).first():
             img = self.images.filter(main=True).first()
+            img = img.images_file.url
         elif self.images.first():
             img = self.images.first()
+            img = img.url
         elif self.offer_photo:
             img = self.offer_photo
+            img = img.url
         return img
 
     #fix offer img_main
     def get_main_image_url(self):
         name = str(self.get_main_image)
+        print(name)
         if name:
             # --Вывод Главного изображения товара--
             # Было os.path.exists(os.path.join(settings.MEDIA_ROOT, name)):,
@@ -287,7 +295,6 @@ class Offers(models.Model):
     @models.permalink
     def get_admin_url(self):
         return "admin:%s_%s_change" % (self._meta.app_label, self._meta.model_name), (self.id, )
-
 
 # Банер на главной
 class MainBaner(models.Model):
@@ -353,7 +360,6 @@ class TopOffers(models.Model):
 
     to_title = models.CharField(max_length=80)  # Текст на банере
     to_link = models.CharField(max_length=250)
-    to_link = models.CharField(max_length=250)
 
 
 class Support(models.Model):
@@ -391,7 +397,7 @@ class HeaderPhoto(models.Model):
         verbose_name = 'Картинка в шапку на главной'
         verbose_name_plural = 'Картинка в шапку на главной'
 
-    hp_name= models.CharField(max_length=80)
+    hp_name = models.CharField(max_length=80)
     hp_photo = models.ImageField()
 
 
@@ -405,7 +411,8 @@ class Reviews(models.Model):
         verbose_name_plural = 'Отзывы'
 
     name = models.CharField(blank=True, null=True, max_length=150)
-    email = models.CharField(blank=True,null=True, max_length=100)
+    email = models.CharField(blank=True, null=True, max_length=100)
     text = models.TextField()
+    comment = models.TextField(null=True)
     publish = models.BooleanField(default=False, blank=True)
     date = models.DateTimeField(auto_now_add=True)

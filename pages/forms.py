@@ -1,5 +1,6 @@
 from django import forms
 from django.core.urlresolvers import reverse
+from django.forms import formset_factory
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
@@ -9,7 +10,16 @@ from crispy_forms.layout import Submit, Layout, Div, Fieldset
 from django.core.files.storage import default_storage as storage
 from tinymce.widgets import TinyMCE
 
-from .models import Reviews, Offers, Images
+from .models import *
+
+
+class CommentAdminForm(forms.ModelForm):
+    class Meta:
+        model = Reviews
+        fields = ['comment']
+        widgets = {
+            'comment': TinyMCE(attrs={'rows': 10}),
+        }
 
 
 class ReviewsForm(forms.Form):
@@ -33,9 +43,113 @@ class ReviewsForm(forms.Form):
             Fieldset('',
                      Field('name', placeholder=''),
                      Field('email', placeholder=''),
-                     Field('number', placeholder=''),
                      Field('text', placeholder=''),
                      ))
+
+
+class FBlocksForm(forms.ModelForm):
+    class Meta:
+        model = FBlocks
+        fields = ['fb_title', 'fb_text', 'fb_url']
+        widgets = {
+            'fb_text': TinyMCE(attrs={'rows': 10}),
+        }
+
+    class Media:
+        js = ('/static/js/tiny_mce/tiny_mce.js',
+              '/static/js/tiny_mce/textareas.js',)
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+
+class LBlocksForm(forms.ModelForm):
+    class Meta:
+        model = LBlocks
+        fields = ['lb_title', 'lb_text', 'lb_icon', 'lb_link']
+        widgets = {
+            'lb_text': TinyMCE(attrs={'rows': 10}),
+        }
+
+    class Media:
+        js = ('/static/js/tiny_mce/tiny_mce.js',
+              '/static/js/tiny_mce/textareas.js',)
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+
+class AboutCompanyForm(forms.ModelForm):
+    class Meta:
+        model = AboutCompany
+        fields = ['ac_title', 'ac_text']
+        widgets = {
+            'ac_text': TinyMCE(attrs={'rows': 10}),
+        }
+
+    class Media:
+        js = ('/static/js/tiny_mce/tiny_mce.js',
+              '/static/js/tiny_mce/textareas.js',)
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+
+class TopOffersForm(forms.ModelForm):
+    class Meta:
+        model = TopOffers
+        fields = ['to_title', 'to_link']
+
+    class Media:
+        js = ('/static/js/tiny_mce/tiny_mce.js',
+              '/static/js/tiny_mce/textareas.js',)
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+
+class SupportForm(forms.ModelForm):
+    class Meta:
+        model = Support
+        fields = ['sup_title', 'sup_time', 'sup_slogan', 'sup_phone']
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+
+class PersonalForm(forms.ModelForm):
+    class Meta:
+        model = Personal
+        fields = ['p_name', 'p_doljnost', 'p_photo']
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ['name', 'email', 'skype', 'address', 'mob_phone', 'rob_phone', 'facebook_link', 'twitter_link']
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+
+class HeaderPhotoForm(forms.ModelForm):
+    class Meta:
+        model = HeaderPhoto
+        fields = ['hp_name', 'hp_photo']
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
 
 
 class OfferForm(forms.ModelForm):
@@ -54,6 +168,36 @@ class OfferForm(forms.ModelForm):
         js = ('/static/js/tiny_mce/tiny_mce.js',
               '/static/js/tiny_mce/textareas.js',)
 
+
+class SubtagsForm(forms.ModelForm):
+    class Meta:
+        model = Subtags
+        fields = ['tag_url', 'tag_title', 'tag_parent_tag', 'delete_stag']
+        widgets = {
+            'delete_stag': forms.CheckboxInput(attrs={'class': 'main-check'})
+        }
+
+class SinglePageForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['post_text', 'post_title', 'post_cat_level', 'post_priority']
+        widgets = {
+            'post_text': TinyMCE(attrs={'rows': 45}),
+        }
+
+    class Media:
+        js = ('/static/js/tiny_mce/tiny_mce.js',
+              '/static/js/tiny_mce/textareas.js',)
+
+
+class TagsForm(forms.ModelForm):
+
+    class Meta:
+        model = Tags
+        fields = ['tag_title', 'tag_url', 'tag_priority', 'delete_tag']
+        widgets = {
+            'delete_tag': forms.CheckboxInput(attrs={'class': 'main-check'})
+        }
 
 class ImageForm(forms.ModelForm):
 

@@ -11,11 +11,12 @@
     <link rel="stylesheet" href={% static "css/style.css" %}>
     <link rel="stylesheet" href={% static "css/camera.css" %}>
     <link rel="stylesheet" href={% static "css/owl-carousel.css" %}>
-    <link type="text/css" rel="stylesheet" href={% static "css/lightslider.css" %}/>
+    <link type="text/css" rel="stylesheet" href={% static "css/lightslider.css" %}>
       <link type="text/css" rel="stylesheet" href={% static "css/lightbox.css" %}>
     <script src={% static "js/jquery.js" %}></script>
     <script src={% static "js/jquery-migrate-1.2.1.js" %}></script>
     <script src={% static "js/lightslider.js" %}></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <!--[if lt IE 9]>
     <html class="lt-ie9">
       <div style="clear: both; text-align:center; position: relative;"><a href="http://windows.microsoft.com/en-US/internet-explorer/.."><img src="images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
@@ -38,6 +39,10 @@
 
 
       -->
+                    {% if request.user.is_superuser or edit %}
+                        <form action="hp_post" id="hp_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                    {% endif %}
+    <span class="hp_form_id"></span>
       <header class="hp" style="background-image: url({{ hf.hp_photo.url }})">
         <div class="container">
           <div class="brand"><img src={% static  "images/imgpsh_fullsize.png" %} width="180px">
@@ -45,15 +50,15 @@
 
           </div><a href="callto:#" class="fa-phone">+7(978)213-40-89</a>
           <p>Время работы: пн-вс 8:00-18:00, без перерыва</p>
-        </div>
+        </div>T
         <div id="stuck_container" class="stuck_container">
           <div class="container">
             <nav class="nav">
-              <ul data-type="navbar" class="sf-menu">
-                <li class="active"><a href="/">Главная</a>
+              <ul data-type="navbar" class="sf-menu" style="padding: 0;margin: 0;">
+                <li class="active" style="width:100%;"><a href="/">Главная</a>
                   {% for k in topmenu_category %}
                     {% if k.post_cat_level == 1 %}
-                <li class="active"><a href="/{{ k.post_seourl }}">{{ k.post_title }}</a>
+                <li style="width:100%;background: #196743 !important" class="active {%if k.post_title.lower == 'спецпредложения' %}special{% endif %}"><a href="/{{ k.post_seourl }}">{{ k.post_title }}</a>
                     {% endif %}
                       {% for g in topmenu_category %}
                           {% if g.post_category == k.post_category and g.post_cat_level > 1 %}
@@ -68,13 +73,21 @@
 
                 </li>
                   {% endfor %}
-
               </ul>
             </nav>
           </div>
         </div>
       </header>
-
+    {% if request.user.is_superuser %}
+                                            <span class="super_user">
+                                                 <input type="hidden" name="edit" value="1">
+                                                 <button type="submit" class="fast-set" style="color: white;font-size: 20px;position: relative;bottom:65px;"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+                                                                 </span>
+                    {% endif %}
+                    {% csrf_token %}
+                        {% if request.user.is_superuser or edit %}
+                            </form>
+                        {% endif %}
     {% block content %}
 
 
@@ -82,8 +95,8 @@
 {% block footer %}
 {% endblock %}
     </div>
-    <script src={% static "js/script.js" %}></script>
+  </body>
+<script src={% static "js/script.js" %}></script>
     {% block additional_scripts %}
     {% endblock %}
-  </body>
 </html>

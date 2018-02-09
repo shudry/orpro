@@ -21,7 +21,7 @@
                                  {% endif %}
                                  {% if offer.offer_photo or offer.images.all %}
                                      <ul id="imageGallery">
-                                         {% if offer.images %}
+                                         {% if offer.images.first %}
                                              {% for img in offer.images.all %}
                                                  {% if img.images_file %}
                                                      <li data-thumb="{{ img.images_file.url }}" data-src="{{ img.images_file.url }}" >
@@ -29,7 +29,7 @@
                                                      </li>
                                                  {% endif %}
                                              {% endfor %}
-                                         {% elif offer.offer_photo %}
+                                         {% else %}
                                              <li data-thumb="{{ offer.offer_photo.url }}" data-src="{{ offer.offer_photo.url }}">
                                                  <a href="{{ offer.offer_photo.url }}" data-lightbox="roadtrip"><img src="{{ offer.offer_photo.url }}" width="220px"/></a>
                                              </li>

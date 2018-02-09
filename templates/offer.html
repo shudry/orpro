@@ -13,7 +13,7 @@
      <div class="row">
          <div class="grid_3">
              <div class="scrol-right-menu" >
-                 <h2>Каталог</h2>
+                 <h2>Группа товаров</h2>
                  <ul class="marked-list">
                      {% for i in tags %}<li><a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a></li>
                      {% endfor %}
@@ -75,7 +75,6 @@
     {{ images.management_form }}
     <script type="text/javascript">
         function cloneMore(selector, type) {
-            console.log("Hello!");
             var newElement = $(selector).clone(true);
             var total = $('#id_' + type + '-TOTAL_FORMS').val();
             newElement.find(':input').each(function() {
@@ -103,7 +102,7 @@
 
              tinyMCE.init({
                  mode : "textareas",
-                 theme : "advanced"
+                 theme : "advanced",
              });
 
         }
@@ -152,7 +151,6 @@
             $('#images_form').preloader({setRelative: false});
             var form = e.target;
             $form = $(form);
-            console.log(form.action, form.method);
             $form.ajaxSubmit({
                 url: form.action,
                 method: form.method,
@@ -173,7 +171,6 @@
 
                             $('.main-check:first').prop('checked', true);
                         }
-                        console.log(document.querySelectorAll('.main-check:checked'));
                     });
                     $('[data-toggle="tooltip"]').tooltip();
                 },
@@ -193,7 +190,6 @@
                 url: $form.attr('action'),
                 method: 'get',
                 success: function (data) {
-                    console.log(data);
                     $form.find(".modal-body").html($.parseHTML(data));
                     console.log('Hello');
                     $form.preloader('remove');
@@ -210,7 +206,6 @@
 
                             $('.main-check:first').prop('checked', true);
                         }
-                        console.log(document.querySelectorAll('.main-check:checked'));
                     });
                     $('[data-toggle="tooltip"]').tooltip();
                 },

@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-import sys
+from decouple import config, UndefinedValueError
 import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -23,11 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'ge69cxw&hpbqdeyev_jykmjp8myq%$ig#@f(2o0x!g_mcl(c07'
 
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'cg#p$g+j9tax!#a3cup@1$8obt2_+&k3q+pmu)5%asj6yjpkag')
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
+DEBUG = config('DJANGO_DEBUG', cast=bool)
 
 
 ALLOWED_HOSTS = ['*']
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'captcha',
     'pages',
+    'import_export'
 ]
 
 MIDDLEWARE = [
@@ -84,23 +85,26 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': '',
-                'USER': '',
-                'PASSWORD': '',
-                'HOST': '',
-                'PORT': '5432',
-        #'OPTIONS': {
-        #    'init_command': 'SET innodb_strict_mode=1',
-        #    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        #},
-    }
-}
+DATABASES = {'default': {}}
 
-db_from_env = dj_database_url.config()
-DATABASES['default'].update(db_from_env)
+try:
+    DATABASES = {
+        'default': {
+                    'ENGINE': config('DB_ENGINE'),
+                    'NAME': config('DB_NAME'),
+                    'USER': config('DB_USER'),
+                    'PASSWORD': config('DB_PASSWORD'),
+                    'HOST': config('DB_HOST'),
+                    'PORT': '5432',
+            #'OPTIONS': {
+            #    'init_command': 'SET innodb_strict_mode=1',
+            #    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            #},
+        }
+    }
+except UndefinedValueError:
+    db_from_env = dj_database_url.config()
+    DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -134,7 +138,15 @@ USE_L10N = True
 
 USE_TZ = True
 
+from django.contrib.messages import constants as messages
 
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -149,6 +161,7 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
+
 REGION_NAME = 'us-east-1'
 AWS_LOCATION = 'static'
 AWS_MEDIA = 'media'
@@ -162,4 +175,4 @@ MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA)
 DEFAULT_FILE_STORAGE = 'app.storage_backends.MediaStorage'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-RECAPTCHA_SECRET_KEY = os.environ.get('RECAPTCHA_SECRET_KEY')
+RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
