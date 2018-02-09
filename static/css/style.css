@@ -930,6 +930,9 @@ table tr:nth-child(even) {
     color: #fff;
     background: #5ab7de;
     border-right: 1px solid #4bb0db;
+    text-align: center;
+    padding-left: 35px;
+    padding-right: 35px;
 }
 
 .sf-menu ul {
