@@ -58,7 +58,7 @@
                 <li class="active"><a href="/">Главная</a>
                   {% for k in topmenu_category %}
                     {% if k.post_cat_level == 1 %}
-                <li class="active"><a href="/{{ k.post_seourl }}">{{ k.post_title }}</a>
+                <li class="active {%if k.post_title.lower == 'спецпредложения' %}special{% endif %}"><a href="/{{ k.post_seourl }}">{{ k.post_title }}</a>
                     {% endif %}
                       {% for g in topmenu_category %}
                           {% if g.post_category == k.post_category and g.post_cat_level > 1 %}

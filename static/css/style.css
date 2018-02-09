@@ -2231,3 +2231,13 @@ div#camera {
     padding-right: 10px;
 }
 }
+
+.special >a {
+    background: #196743 !important;
+}
+
+.special {
+    font-style: italic !important;
+    font-weight: 600 !important;
+    /* background-color: red !important; */
+}
