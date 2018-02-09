@@ -612,7 +612,7 @@ class OfferAjaxUpdateView(UpdateView):
             ctx['hf'] = HeaderPhoto.objects.get(id=1)
             ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
             ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
-            ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag).order_by('?')
+            ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag).order_by('?').order_by('?')[0:100]
 
         ctx['offer'] = self.object
 
@@ -672,13 +672,13 @@ def catalog(request, cat_url='nothing'):
         args['pre'] = 'Группа товаров'
         mt = Tags.objects.get(tag_url=cat_url)
         offers = Offers.objects.filter (offer_tag=mt)
-        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by ('?')
+        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by ('?').order_by('?')[0:100]
     except Exception:
         args['pre'] = 'КЛЮЧЕВОЕ СЛОВО'
         print(cat_url)
         mt = Subtags.objects.get (tag_url=cat_url)
         offers = Offers.objects.filter(offer_subtags = mt)
-        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by ('?')
+        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by ('?').order_by('?')[0:100]
 
 
     args['hf'] = HeaderPhoto.objects.get(id=1)
