@@ -168,6 +168,40 @@ def stag_post(request):
     return HttpResponseForbidden()
 
 
+def comment_delete(request):
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            response_data = {}
+            data = request.POST
+            Reviews.objects.get(id=data.get("id")).delete()
+            response_data["id"] = data.get("id")
+            return JsonResponse(response_data)
+    return HttpResponseForbidden()
+
+def comment_admin(request):
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            response_data = {}
+            post_text = request.POST
+            print(post_text)
+            f = Reviews.objects.get(id=post_text.get("edit")).id
+            Reviews.objects.filter(id=f).update(comment=post_text["comment"])
+            response_data['comment'] = Reviews.objects.get(id=f).comment
+            response_data['id'] = f
+            print(response_data)
+            return JsonResponse(response_data)
+        else:
+            args = {}
+            if 'edit' in request.GET:
+                print(request.GET["edit"])
+                args['edit'] = True
+                id_edit = request.GET["edit"]
+                comment_initial = Reviews.objects.get(id=id_edit)
+            form = CommentAdminForm(initial={'comment': comment_initial.comment})
+            return render(request, 'comment_admin_form.html', locals())
+    return HttpResponseForbidden()
+
+
 def hp_post(request):
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -622,7 +656,7 @@ def catalog(request, cat_url='nothing'):
         cat_url = Tags.objects.filter(tag_publish=True).order_by('tag_priority')[0].tag_url
     args = {}
     try:
-        args['pre'] = 'КАТЕГОРИЯ'
+        args['pre'] = 'Группа товаров'
         mt = Tags.objects.get(tag_url=cat_url)
         offers = Offers.objects.filter (offer_tag=mt)
         args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by ('?')

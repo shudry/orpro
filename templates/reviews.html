@@ -2,6 +2,10 @@
 {% load static %} {% load staticfiles %}
 {% load crispy_forms_tags %}
 {% block content %}
+    {% block additional_head %}
+    <link rel="stylesheet" href="{% static 'css/preloader.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+{% endblock %}
 <div class="container hr well1 ins2">
     <div class="row">
         <div class="grid_9">
@@ -35,8 +39,14 @@
                 </div>
 
                 <h1 style="margin: 20px 0px 20px 0px">Отзывы</h1>
+            {% if request.user.is_superuser %}
+                  <div class="alert text-center" id="alert" role="alert" style="color: #155724;height: 40px;text-align: center;
+                     line-height: 40px;background-color: #d4edda;border-color: #c3e6cb;visibility: hidden;border-radius: 0.3em;">
+                    <h4>Удалено</h4>
+                  </div>
+            {% endif %}
                 {% for review in reviews %}
-                <div class="review">
+                <div class="review" id="review_{{ review.id }}">
                     <article class="row">
                         <div class="panel panel-default arrow left">
                             <div class="panel-body">
@@ -44,6 +54,9 @@
                                     <div class="comment-user" style='font-size: large'>
                                         <i class="fa fa-user"></i>
                                         <b>{% if review.name %}{{ review.name }}{% else %}Аноним{% endif %}</b>
+                                     {% if request.user.is_superuser or edit %}
+                                    <div style="float: right;position: relative;margin-right: 25px" id="delete_comment" data-id="{{ review.id }}"><a href="javascript;"><i class="fa fa-trash" aria-hidden="true"></i></a></div>
+                                    {% endif %}
                                     </div>
                                     <time class="comment-date" datetime="16-12-2014 13:05"><i class="fa fa-clock-o"></i>
                                         {{ review.date|date:'Y-m-d H:i' }}
@@ -54,9 +67,36 @@
                                         {{ review.text }}
                                     </p>
                                 </div>
-                            {% if request.user.is_superuser or edit %}
-                         <div style="float: right;bottom: 70px;position: relative">X</div>
-                                    {% endif %}
+                            {% if request.user.is_superuser %}
+                                <form action="/comment_admin" id="comment_admin_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                            {% endif %}
+                            <span class="comment_admin_{{ review.id }}">
+                                {% if review.comment %}
+                                    <div style="border-top:1px dotted darkgreen;">
+                                        <div class="admin-block text-left" style="padding-left: 20px">
+                                                <div class="comment-user" style='font-size: large'>
+                                                        <i class="fa fa-user"></i>
+                                                        <b>Администрация</b>
+                                                    </div>
+                                                <div class="comment-admin" style="padding-left: 10px">
+                                                    <p>
+                                                        {{ review.comment|safe }}
+                                                    </p>
+                                                </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </span>
+                            {% if request.user.is_superuser %}
+                                            <span class="super_user">
+                                                 <input type="hidden" name="edit" value="{{ review.id }}">
+                                                 <button type="submit" class="fast-set" ><i class="fa-pencil" aria-hidden="true"></i></button>
+                                                                 </span>
+                            {% endif %}
+                            {% csrf_token %}
+                        {% if request.user.is_superuser or edit %}
+                            </form>
+                        {% endif %}
                             </div>
                         </div>
 
@@ -88,7 +128,11 @@
         </div>
     </div>
 </footer>
-<script>
+     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.preloader.min.js' %}"></script>
+    <script type="text/javascript" src="{% static "js/tiny_mce/tiny_mce.js" %}"></script>
+    <script>
     $(document).ready(function () {
         $('#send-review').hide();
         $('#show-form').click(function () {
@@ -96,6 +140,93 @@
             $('#send-review-button').hide();
         });
     });
+    function init_data(){
+             tinyMCE.init({
+                 mode : "textareas",
+                 theme : "advanced",
+                 width : "30%"
+             });
 
+        }
+        init_data();
+    $(document).on('click', '#delete_comment', function (e) {
+       e.preventDefault();
+        var data = {};
+        data["id"] = $(this).data("id");
+        var csrf_token = $('#comment_admin_form [name="csrfmiddlewaretoken"]').val();
+        data["csrfmiddlewaretoken"] = csrf_token;
+        var url = '/delete';
+        $.ajax({
+             url: url,
+             type: 'POST',
+             data: data,
+             cache: true,
+             success: function (data) {
+                 var successAlert = document.getElementById("alert");
+                successAlert.style.visibility = "visible";
+                function AlertDelay() {
+                        successAlert.style.visibility = "hidden";
+                }
+                setTimeout(AlertDelay, 2000);
+                $("#review_"+data.id).remove();
+             },
+             error: function(){
+                 alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
+             }
+         })
+    });
+    $(document).on('submit', '#comment_admin_form', function(e)  {
+            e.preventDefault();
+            $('#comment_admin_form').preloader({setRelative: false});
+            var form = e.target;
+            $form = $(form);
+            $form.ajaxSubmit({
+                url: form.action,
+                method: form.method,
+                success: function (data) {
+                    try{
+                    if( data.indexOf('<span style="display: none">') > -1 ) {
+                        $(".comment_admin_"+data.slice(data.indexOf('none">')+6, data.indexOf('</span>'))).html(data);
+                        $form.attr("method", "post");
+                        $(".fast-set").css("display","none");
+                        init_data();
+                        $('#comment_admin_form').preloader('remove');
+                    }}
+                    catch (TypeError){
+                         $form.attr("method", "get");
+                        $(".fast-set").css("display","block");
+                        if (data.comment == ''){
+                            $(".comment_admin_"+data.id).html('');
+                        }
+                        else {
+                        $(".comment_admin_"+data.id).html(
+                           '<div style="border-top:1px dotted darkgreen;">'+
+                                        '<div class="admin-block text-left" style="padding-left: 20px">'+
+                                                '<div class="comment-user" style="font-size: large">'+
+                                                       '<i class="fa fa-user">'+'</i>'+
+                                                        '<b>'+'Администрация'+'</b>'+
+                                                    '</div>'+
+                                                '<div class="comment-admin" style="padding-left: 10px">'+
+                                                    '<p>'+
+                                                        data.comment+
+                                                    '</p>'+
+                                                '</div>'+
+                                        '</div>'+
+                                    '</div>'
+
+                            );
+                        };
+                        $('.super_user').html();
+                    };
+                    $('#comment_admin_form').preloader('remove');
+{#                    $('#fb_form').preloader('remove');#}
+                },
+                error: function (xhr, textStatus, error) {
+                    console.log(data);
+                    alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова!');
+                    $('#comment_admin_form').preloader('remove');
+                }
+            });
+        });
 </script>
 {% endblock %}

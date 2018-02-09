@@ -129,8 +129,8 @@ class Category(models.Model):
        return self.category_title
 
     class Meta:
-        verbose_name = 'Категория'
-        verbose_name_plural = 'Категории'
+        verbose_name = 'Группа товаров'
+        verbose_name_plural = 'Группы товаров'
 
     category_title = models.CharField(max_length=250)
 
@@ -409,7 +409,8 @@ class Reviews(models.Model):
         verbose_name_plural = 'Отзывы'
 
     name = models.CharField(blank=True, null=True, max_length=150)
-    email = models.CharField(blank=True,null=True, max_length=100)
+    email = models.CharField(blank=True, null=True, max_length=100)
     text = models.TextField()
+    comment = models.TextField(null=True)
     publish = models.BooleanField(default=False, blank=True)
     date = models.DateTimeField(auto_now_add=True)
