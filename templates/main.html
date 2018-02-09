@@ -54,11 +54,11 @@
         <div id="stuck_container" class="stuck_container">
           <div class="container">
             <nav class="nav">
-              <ul data-type="navbar" class="sf-menu">
-                <li class="active"><a href="/">Главная</a>
+              <ul data-type="navbar" class="sf-menu" style="padding: 0;margin: 0;">
+                <li class="active" style="width:100%;"><a href="/">Главная</a>
                   {% for k in topmenu_category %}
                     {% if k.post_cat_level == 1 %}
-                <li class="active {%if k.post_title.lower == 'спецпредложения' %}special{% endif %}"><a href="/{{ k.post_seourl }}">{{ k.post_title }}</a>
+                <li style="width:100%;background: #196743 !important" class="active {%if k.post_title.lower == 'спецпредложения' %}special{% endif %}"><a href="/{{ k.post_seourl }}">{{ k.post_title }}</a>
                     {% endif %}
                       {% for g in topmenu_category %}
                           {% if g.post_category == k.post_category and g.post_cat_level > 1 %}

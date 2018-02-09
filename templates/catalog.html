@@ -84,9 +84,9 @@
     <ul class="cloud">
         {% for tag in subtags %}
             {% if request.user.is_superuser or edit %}
-                                    <form action="/stag_post" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                    <form action="/stag_post" style="display: flex;" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                                 {% endif %}
-            <span class="stag_form_{{ tag.id }}">
+            <span class="stag_form_{{ tag.id }} stag_form_stl">
             <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
             </span>
             {% if request.user.is_superuser %}
@@ -208,4 +208,5 @@
             });
         });
     </script>
+    <style>
     {% endblock %}

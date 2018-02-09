@@ -1648,7 +1648,31 @@ footer .copyright a:hover {
     font-size: 0.9em;
     color: forestgreen;
 }
+.cloud > span > li {
+    list-style: none;
+    display: inline;
+}
 
+.cloud > span  > li:nth-of-type(3n + 1) {
+    font-size: 1.15em;
+    color: darkgreen;
+}
+
+.cloud > span  > li:nth-of-type(4n+3) {
+    font-size: 0.85em;
+    color: darkolivegreen;
+}
+
+.cloud > span  > li:nth-of-type(5n - 3) {
+    font-size: 1em;
+    color: green;
+
+}
+
+.cloud > span > li:nth-of-type(4n - 3) {
+    font-size: 0.9em;
+    color: forestgreen;
+}
 /*! lightslider - v1.1.6 - 2016-10-25
 * https://github.com/sachinchoolur/lightslider
 * Copyright (c) 2016 Sachin N; Licensed MIT */
