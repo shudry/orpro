@@ -172,14 +172,10 @@ class OfferForm(forms.ModelForm):
 class SubtagsForm(forms.ModelForm):
     class Meta:
         model = Subtags
-        fields = ['tag_url', 'tag_title', 'tag_parent_tag']
-
-
-class TagsForm(forms.ModelForm):
-    class Meta:
-        model = Tags
-        fields = ['tag_url', 'tag_title', 'tag_publish', 'tag_priority']
-
+        fields = ['tag_url', 'tag_title', 'tag_parent_tag', 'delete_stag']
+        widgets = {
+            'delete_stag': forms.CheckboxInput(attrs={'class': 'main-check'})
+        }
 
 class SinglePageForm(forms.ModelForm):
     class Meta:
@@ -198,7 +194,10 @@ class TagsForm(forms.ModelForm):
 
     class Meta:
         model = Tags
-        fields = ['tag_title', 'tag_url', 'tag_priority']
+        fields = ['tag_title', 'tag_url', 'tag_priority', 'delete_tag']
+        widgets = {
+            'delete_tag': forms.CheckboxInput(attrs={'class': 'main-check'})
+        }
 
 class ImageForm(forms.ModelForm):
 

@@ -107,7 +107,7 @@ def review(request):
 
     args['hf'] = HeaderPhoto.objects.get(id=1)
 
-    args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0))
+    args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['reviews'] = Reviews.objects.filter(publish=True).order_by('-date')
     args['tags'] = Subtags.objects.all().order_by('?')[0:100]
     print(args)
@@ -147,15 +147,21 @@ def stag_post(request):
         if request.method == 'POST':
             response_data = {}
             post_text = request.POST
-            print(post_text)
-            f = Subtags.objects.get(id=post_text.get("edit")).id
-            Subtags.objects.filter(id=f).update(tag_title=post_text["tag_title"], tag_url=post_text["tag_url"],
-                                                tag_parent_tag=post_text["tag_parent_tag"])
-            response_data['tag_title'] = Subtags.objects.get(id=f).tag_title
-            response_data['tag_url'] = Subtags.objects.get(id=f).tag_url
-            response_data['id'] = f
-            print(response_data)
-            return JsonResponse(response_data)
+            if request.POST.get('delete_stag', False):
+                f = Subtags.objects.get(id=post_text.get("edit")).id
+                Subtags.objects.get(id=f).delete()
+                response_data['id'] = f
+                response_data['del'] = True
+                return JsonResponse(response_data)
+            else:
+                f = Subtags.objects.get(id=post_text.get("edit")).id
+                Subtags.objects.filter(id=f).update(tag_title=post_text["tag_title"], tag_url=post_text["tag_url"],
+                                                    tag_parent_tag=post_text["tag_parent_tag"])
+                response_data['tag_title'] = Subtags.objects.get(id=f).tag_title
+                response_data['tag_url'] = Subtags.objects.get(id=f).tag_url
+                response_data['id'] = f
+                print(response_data)
+                return JsonResponse(response_data)
         else:
             args = {}
             if 'edit' in request.GET:
@@ -398,15 +404,22 @@ def tag_post(request):
         if request.method == 'POST':
             response_data = {}
             post_text = request.POST
-            f = Tags.objects.get(id=post_text.get("edit")).id
-            Tags.objects.filter(id=f).update(tag_url=post_text["tag_url"], tag_title=post_text["tag_title"], tag_priority=post_text["tag_priority"])
-            response_data['tag_url'] = Tags.objects.get(id=f).tag_url
-            response_data['tag_title'] = Tags.objects.get(id=f).tag_title
-            response_data['tag_publish'] = Tags.objects.get(id=f).tag_publish
-            response_data['tag_priority'] = Tags.objects.get(id=f).tag_priority
-            response_data['id'] = f
-            print(response_data)
-            return JsonResponse(response_data)
+            if request.POST.get('delete_tag', False):
+                f = Tags.objects.get(id=post_text.get("edit")).id
+                Tags.objects.get(id=f).delete()
+                response_data['id'] = f
+                response_data['del'] = True
+                return JsonResponse(response_data)
+            else:
+                f = Tags.objects.get(id=post_text.get("edit")).id
+                Tags.objects.filter(id=f).update(tag_url=post_text["tag_url"], tag_title=post_text["tag_title"], tag_priority=post_text["tag_priority"])
+                response_data['tag_url'] = Tags.objects.get(id=f).tag_url
+                response_data['tag_title'] = Tags.objects.get(id=f).tag_title
+                response_data['tag_publish'] = Tags.objects.get(id=f).tag_publish
+                response_data['tag_priority'] = Tags.objects.get(id=f).tag_priority
+                response_data['id'] = f
+                print(response_data)
+                return JsonResponse(response_data)
         else:
             args = {}
             if 'edit' in request.GET:

@@ -170,6 +170,7 @@ class Tags(models.Model):
     tag_title = models.CharField(max_length=250)                # Название категории
     tag_publish = models.BooleanField(blank=True)
     tag_priority = models.IntegerField(blank=True)
+    delete_tag = models.BooleanField(blank=True, default=False)
 
 
 # Модель категории товара
@@ -185,6 +186,7 @@ class Subtags(models.Model):
     tag_url = models.CharField(max_length=250, unique=True)       # Ссылка на категорию
     tag_title = models.CharField(max_length=250)                  # Название категории
     tag_parent_tag = models.ForeignKey(Tags, blank=True)          # Parents category
+    delete_stag = models.BooleanField(blank=True, default=False)
 
     @classmethod
     def create(cls, tag_title):
