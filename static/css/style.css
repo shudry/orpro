@@ -888,7 +888,7 @@ table tr:nth-child(even) {
 
 /*========================   Menu   ==========================*/
 .sf-menu {
-    display: inline-block;
+    display: flex;
 }
 
 .sf-menu:before, .sf-menu:after {
@@ -904,6 +904,7 @@ table tr:nth-child(even) {
 .sf-menu > li {
     position: relative;
     float: left;
+    width: 100%;
 }
 
 .sf-menu a {
@@ -931,8 +932,6 @@ table tr:nth-child(even) {
     background: #5ab7de;
     border-right: 1px solid #4bb0db;
     text-align: center;
-    padding-left: 35px;
-    padding-right: 35px;
 }
 
 .sf-menu ul {
@@ -2220,17 +2219,6 @@ div#camera {
     height: 383px !important;
 }
 
-@media only screen and (max-width: 500px) {
-    .sf-menu > li.active > a {
-    color: #fff;
-    background: #5ab7de;
-    border-right: 1px solid #4bb0db;
-    /* width: 170px; */
-    text-align: center;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-}
 
 .special >a {
     background: #196743 !important;
