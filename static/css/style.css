@@ -2219,3 +2219,15 @@ footer .copyright a:hover {
 div#camera {
     height: 383px !important;
 }
+
+@media only screen and (max-width: 500px) {
+    .sf-menu > li.active > a {
+    color: #fff;
+    background: #5ab7de;
+    border-right: 1px solid #4bb0db;
+    /* width: 170px; */
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+}
