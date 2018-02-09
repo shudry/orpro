@@ -12,27 +12,27 @@
                  <div class="grid_3">
           <div class="scrol-right-menu" >
               <h2>Группа товаров</h2>
-         <ul class="marked-list">
-             {% for i in tags %}
-                 {% if request.user.is_superuser or edit %}
-                                    <form action="/tag_post" id="tag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                                {% endif %}
-            <span class="tag_form_{{ i.id }}">
-                  <li><a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a></li>
-            </span>
-                 {% if request.user.is_superuser %}
-                                            <span class="super_user">
-                                                 <input type="hidden" name="edit" value="{{i.id}}">
-                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                                                                 </span>
-                                {% endif %}
-                                        {% csrf_token %}
-                                        {% if request.user.is_superuser or edit %}
-                                            </form>
+                 <ul class="marked-list">
+                     {% for i in tags %}
+                         {% if request.user.is_superuser or edit %}
+                                            <form action="/tag_post" id="tag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                                         {% endif %}
-             {% endfor %}
+                    <span class="tag_form_{{ i.id }}">
+                          <li><a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a></li>
+                    </span>
+                         {% if request.user.is_superuser %}
+                                                    <span class="super_user">
+                                                         <input type="hidden" name="edit" value="{{i.id}}">
+                                                         <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+                                                                         </span>
+                                        {% endif %}
+                                                {% csrf_token %}
+                                                {% if request.user.is_superuser or edit %}
+                                                    </form>
+                                                {% endif %}
+                     {% endfor %}
 
-                </ul>
+                        </ul>
          </div>
 </div>
          <div class="grid_6">
@@ -81,7 +81,7 @@
 
 
 </div>
-    <ul class="cloud">
+    <ul class="cloud" style="position: relative;left: 10px">
         {% for tag in subtags %}
             {% if request.user.is_superuser or edit %}
                                     <form action="/stag_post" style="display: flex;" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
