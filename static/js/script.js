@@ -1,5 +1,5 @@
 function include(scriptUrl) {
-    document.write('<script src="https://orpro-assets.s3.amazonaws.com/static/' + scriptUrl + '"></script>');
+    document.write('<script src="https://orpro-assets.s3.amazonaws.com/static/' + scriptUrl + '" async></script>');
 }
 
 function isIE() {
