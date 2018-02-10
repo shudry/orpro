@@ -81,7 +81,7 @@
 
 
 </div>
-    <ul class="cloud" style="position: absolute;left: 90%">
+    <ul class="cloud" style="position: absolute;left: 71%">
         {% for tag in subtags %}
             {% if request.user.is_superuser or edit %}
                                     <form action="/stag_post" style="display: flex;" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
