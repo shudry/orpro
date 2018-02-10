@@ -261,6 +261,7 @@ class Offers(models.Model):
     offer_image_url = models.URLField(null=True, blank=True, verbose_name="Ссылка на картинку")
     offer_tag = models.ForeignKey(Tags, blank=True, verbose_name='Группа 1 уровня')                      # Ссылка на категорию
     offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='pr')          # Ссылка на категорию
+    created = models.DateTimeField(verbose_name='Создан', auto_now_add=True, auto_now=False)
 
     @property
     def get_main_image(self):
