@@ -26,7 +26,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def api_import(request):
-    offers_list = Offers.objects.all().order_by("created")
+    offers_list = Offers.objects.all().order_by("-created")
     page = request.GET.get('page', 1)
 
     paginator = Paginator(offers_list, 10)
