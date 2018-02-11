@@ -123,6 +123,7 @@ class UploadingProducts(object):
             x = json.loads(uploaded_file.read())
             js = []
             self.err = []
+            self.add = ["Добавлены поля по стандарту", ]
             ThroughModel = Offers.offer_subtags.through
             for i in range(len(x)):
                 d = dict()
@@ -145,17 +146,17 @@ class UploadingProducts(object):
                     d["offer_valuta"] = x[i]["offer_valuta"]
                 except KeyError:
                     d["offer_valuta"] = "руб."
-                    return False
+                    self.add.append("offer_valuta: руб.")
                 try:
                     d["offer_value"] = x[i]["offer_value"]
                 except KeyError:
-                    self.list_err = "offer_value"
+                    self.err.append("offer_value")
                     return False
                 try:
                     d["offer_minorder"] = x[i]["offer_minorder"]
                 except KeyError:
                     d["offer_minorder"] = "1"
-                    return False
+                    self.add.append("offer_minorder: 1")
                 try:
                     d["offer_minorder_value"] = x[i]["offer_minorder_value"]
                 except KeyError:
@@ -165,27 +166,28 @@ class UploadingProducts(object):
                     d["offer_pre_text"] = x[i]["offer_pre_text"]
                 except KeyError:
                     d["offer_pre_text"] = ""
-                    return False
+                    self.add.append("offer_pre_text: """)
                 try:
                     d["offer_text"] = x[i]["offer_text"]
                 except KeyError:
                     d["offer_text"] = ""
-                    return False
+                    self.add.append("offer_text: """)
                 try:
                     d["offer_image_url"] = x[i]["offer_image_url"]
                 except KeyError:
                     d["offer_image_url"] = x[i]["image_link"]
-                    return False
                 try:
                     d["offer_availability"], created = Availability.objects.get_or_create(
                         availability_title=x[i]["offer_availability"])
                 except KeyError:
                     d["offer_availability"], created = Availability.objects.get_or_create(
                         availability_title="Под заказ")
+                    self.add.append("offer_availability: Под заказ")
                 try:
                     d["offer_publish"], created = Publish.objects.get_or_create(publish_title=x[i]["offer_publish"])
                 except KeyError:
                     d["offer_publish"], created = Publish.objects.get_or_create(publish_title="Публикуемый")
+                    self.add.append("offer_publish: Публикуемый")
                 try:
                     try:
                         d["offer_tag"] = Tags.objects.get(tag_title=x[i]["offer_tag"])
