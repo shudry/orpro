@@ -25,7 +25,6 @@ class UploadingProducts(object):
         data = data
         self.uploaded_file = data.get("file")
         self.format_file = data.get("format_file")
-        self.parsing()
 
     def getting_related_model(self, field_name):
         related_model = self.model._meta.get_field(field_name).rel.to
@@ -153,7 +152,7 @@ class UploadingProducts(object):
                     js.append(d)
                     Offers.objects.update_or_create(**d)
                 except KeyError:
-                    continue
+                    return False
             for k in range(len(x)):
                 try:
                     for j in range(len(x[k]["offer_subtags"].split(", "))):

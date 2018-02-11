@@ -59,8 +59,8 @@ def api_import(request):
                     messages.error(request, "Формат файла не подходит!")
                 else:
                     uploading_file = UploadingProducts({'file': file, 'format_file': format_file})
-                    if uploading_file:
-                        messages.success(request, "Загружено")
+                    if uploading_file.parsing():
+                        messages.success(request, "Загружено и обновлено")
                     else:
                         messages.error(request, "Ошибка")
             except MultiValueDictKeyError:
