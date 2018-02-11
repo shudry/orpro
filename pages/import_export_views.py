@@ -122,26 +122,71 @@ class UploadingProducts(object):
         elif self.format_file == 'json':
             x = json.loads(uploaded_file.read())
             js = []
+            self.err = []
             ThroughModel = Offers.offer_subtags.through
             for i in range(len(x)):
                 d = dict()
                 try:
                     d["offer_title"] = x[i]["offer_title"]
+                except KeyError:
+                    self.err.append("offer_title")
+                    return False
+                try:
                     d["offer_url"] = x[i]["offer_url"]
+                except KeyError:
+                    self.err.append("offer_url")
+                    return False
+                try:
                     d["offer_price"] = x[i]["offer_price"].replace(",", ".")
+                except KeyError:
+                    self.err.append("offer_price")
+                    return False
+                try:
                     d["offer_valuta"] = x[i]["offer_valuta"]
+                except KeyError:
+                    d["offer_valuta"] = "руб."
+                    return False
+                try:
                     d["offer_value"] = x[i]["offer_value"]
+                except KeyError:
+                    self.list_err = "offer_value"
+                    return False
+                try:
                     d["offer_minorder"] = x[i]["offer_minorder"]
+                except KeyError:
+                    d["offer_minorder"] = "1"
+                    return False
+                try:
                     d["offer_minorder_value"] = x[i]["offer_minorder_value"]
+                except KeyError:
+                    self.err.append("offer_minorder_value")
+                    return False
+                try:
                     d["offer_pre_text"] = x[i]["offer_pre_text"]
+                except KeyError:
+                    d["offer_pre_text"] = ""
+                    return False
+                try:
                     d["offer_text"] = x[i]["offer_text"]
-                    try:
-                        d["offer_image_url"] = x[i]["offer_image_url"]
-                    except KeyError:
-                        d["offer_image_url"] = x[i]["image_link"]
+                except KeyError:
+                    d["offer_text"] = ""
+                    return False
+                try:
+                    d["offer_image_url"] = x[i]["offer_image_url"]
+                except KeyError:
+                    d["offer_image_url"] = x[i]["image_link"]
+                    return False
+                try:
                     d["offer_availability"], created = Availability.objects.get_or_create(
                         availability_title=x[i]["offer_availability"])
+                except KeyError:
+                    d["offer_availability"], created = Availability.objects.get_or_create(
+                        availability_title="Под заказ")
+                try:
                     d["offer_publish"], created = Publish.objects.get_or_create(publish_title=x[i]["offer_publish"])
+                except KeyError:
+                    d["offer_publish"], created = Publish.objects.get_or_create(publish_title="Публикуемый")
+                try:
                     try:
                         d["offer_tag"] = Tags.objects.get(tag_title=x[i]["offer_tag"])
                     except ObjectDoesNotExist:
@@ -149,15 +194,16 @@ class UploadingProducts(object):
                                             tag_title=x[i]["offer_tag"],
                                             tag_publish=True, tag_priority=1)
                         d["offer_tag"] = get_object_or_404(Tags, tag_title=x[i]["offer_tag"])
-                    js.append(d)
-                    Offers.objects.update_or_create(**d)
                 except KeyError:
                     return False
+                js.append(d)
+                Offers.objects.update_or_create(**d)
             for k in range(len(x)):
                 try:
                     for j in range(len(x[k]["offer_subtags"].split(", "))):
                         try:
                             v = Subtags.objects.get(tag_title=x[k]["offer_subtags"].split(", ")[j])
+                            print(v)
                         except ObjectDoesNotExist:
                             Subtags.objects.create(tag_url=slugify(unidecode(x[k]["offer_subtags"].split(", ")[j])),
                                                    tag_title=x[k]["offer_subtags"].split(", ")[j],

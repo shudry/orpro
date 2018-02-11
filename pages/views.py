@@ -62,7 +62,7 @@ def api_import(request):
                     if uploading_file.parsing():
                         messages.success(request, "Загружено и обновлено")
                     else:
-                        messages.error(request, "Ошибка")
+                        messages.error(request, "Ошибка. Нет поля: {}".format(uploading_file.err))
             except MultiValueDictKeyError:
                 messages.error(request, "Выберите файл!")
     return render(request, 'api.html', locals())
