@@ -44,30 +44,30 @@ include('js/jquery.easing.1.3.js');
 
 /* ToTop
  ========================================================*/
-;
-(function ($) {
-    var o = $('html');
-    if (o.hasClass('desktop')) {
-        include('js/jquery.ui.totop.js');
-
-        $(document).ready(function () {
-            $().UItoTop({
-                easingType: 'easeOutQuart',
-                containerClass: 'toTop fa fa-angle-up'
-            });
-        });
-    }
-})(jQuery);
-
-/* EqualHeights
- ========================================================*/
-;
-(function ($) {
-    var o = $('[data-equal-group]');
-    if (o.length > 0) {
-        include('js/jquery.equalheights.js');
-    }
-})(jQuery);
+// ;
+// (function ($) {
+//     var o = $('html');
+//     if (o.hasClass('desktop')) {
+//         include('js/jquery.ui.totop.js');
+//
+//         $(document).ready(function () {
+//             $().UItoTop({
+//                 easingType: 'easeOutQuart',
+//                 containerClass: 'toTop fa fa-angle-up'
+//             });
+//         });
+//     }
+// })(jQuery);
+//
+// /* EqualHeights
+//  ========================================================*/
+// ;
+// (function ($) {
+//     var o = $('[data-equal-group]');
+//     if (o.length > 0) {
+//         include('js/jquery.equalheights.js');
+//     }
+// })(jQuery);
 
 /* Copyright Year
  ========================================================*/
