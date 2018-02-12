@@ -30,17 +30,17 @@ include('js/jquery.easing.1.3.js');
 
 /* Stick up menus
  ========================================================*/
-;
-(function ($) {
-    var o = $('html');
-    if (o.hasClass('desktop')) {
-        include('js/tmstickup.js');
-
-        $(document).ready(function () {
-            $('#stuck_container').TMStickUp({})
-        });
-    }
-})(jQuery);
+// ;
+// (function ($) {
+//     var o = $('html');
+//     if (o.hasClass('desktop')) {
+//         include('js/tmstickup.js');
+//
+//         $(document).ready(function () {
+//             $('#stuck_container').TMStickUp({})
+//         });
+//     }
+// })(jQuery);
 
 /* ToTop
  ========================================================*/
