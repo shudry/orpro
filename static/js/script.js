@@ -1,5 +1,5 @@
 function include(scriptUrl) {
-    document.write('<script src="/static/' + scriptUrl + '" async></script>');
+    document.write('<script src="/static/' + scriptUrl + '"></script>');
 }
 
 function isIE() {
@@ -30,44 +30,44 @@ include('js/jquery.easing.1.3.js');
 
 /* Stick up menus
  ========================================================*/
-// ;
-// (function ($) {
-//     var o = $('html');
-//     if (o.hasClass('desktop')) {
-//         include('js/tmstickup.js');
-//
-//         $(document).ready(function () {
-//             $('#stuck_container').TMStickUp({})
-//         });
-//     }
-// })(jQuery);
+;
+(function ($) {
+    var o = $('html');
+    if (o.hasClass('desktop')) {
+        include('js/tmstickup.js');
+
+        $(document).ready(function () {
+            $('#stuck_container').TMStickUp({})
+        });
+    }
+})(jQuery);
 
 /* ToTop
  ========================================================*/
-// ;
-// (function ($) {
-//     var o = $('html');
-//     if (o.hasClass('desktop')) {
-//         include('js/jquery.ui.totop.js');
-//
-//         $(document).ready(function () {
-//             $().UItoTop({
-//                 easingType: 'easeOutQuart',
-//                 containerClass: 'toTop fa fa-angle-up'
-//             });
-//         });
-//     }
-// })(jQuery);
+;
+(function ($) {
+    var o = $('html');
+    if (o.hasClass('desktop')) {
+        include('js/jquery.ui.totop.js');
+
+        $(document).ready(function () {
+            $().UItoTop({
+                easingType: 'easeOutQuart',
+                containerClass: 'toTop fa fa-angle-up'
+            });
+        });
+    }
+})(jQuery);
 //
 // /* EqualHeights
 //  ========================================================*/
 // ;
-// (function ($) {
-//     var o = $('[data-equal-group]');
-//     if (o.length > 0) {
-//         include('js/jquery.equalheights.js');
-//     }
-// })(jQuery);
+(function ($) {
+    var o = $('[data-equal-group]');
+    if (o.length > 0) {
+        include('js/jquery.equalheights.js');
+    }
+})(jQuery);
 
 /* Copyright Year
  ========================================================*/
