@@ -140,15 +140,6 @@
             $('#send-review-button').hide();
         });
     });
-    function init_data(){
-             tinyMCE.init({
-                 mode : "textareas",
-                 theme : "advanced",
-                 width : "30%"
-             });
-
-        }
-        init_data();
     $(document).on('click', '#delete_comment', function (e) {
        e.preventDefault();
         var data = {};
@@ -189,7 +180,6 @@
                         $(".comment_admin_"+data.slice(data.indexOf('none">')+6, data.indexOf('</span>'))).html(data);
                         $form.attr("method", "post");
                         $(".fast-set").css("display","none");
-                        init_data();
                         $('#comment_admin_form').preloader('remove');
                     }}
                     catch (TypeError){
