@@ -1,5 +1,5 @@
 function include(scriptUrl) {
-    document.write('<script src="https://orpro-assets.s3.amazonaws.com/static/' + scriptUrl + '" async></script>');
+    document.write('<script src="/static/' + scriptUrl + '"></script>');
 }
 
 function isIE() {
@@ -58,10 +58,10 @@ include('js/jquery.easing.1.3.js');
         });
     }
 })(jQuery);
-
-/* EqualHeights
- ========================================================*/
-;
+//
+// /* EqualHeights
+//  ========================================================*/
+// ;
 (function ($) {
     var o = $('[data-equal-group]');
     if (o.length > 0) {

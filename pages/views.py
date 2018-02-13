@@ -26,7 +26,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def api_import(request):
-    offers_list = Offers.objects.all()
+    offers_list = Offers.objects.all().order_by("-created")
     page = request.GET.get('page', 1)
 
     paginator = Paginator(offers_list, 10)
@@ -59,10 +59,10 @@ def api_import(request):
                     messages.error(request, "Формат файла не подходит!")
                 else:
                     uploading_file = UploadingProducts({'file': file, 'format_file': format_file})
-                    if uploading_file:
-                        messages.success(request, "Загружено")
+                    if uploading_file.parsing():
+                        messages.success(request, "Загружено и обновлено. {}".format(uploading_file.add if uploading_file.add else ""))
                     else:
-                        messages.error(request, "Ошибка")
+                        messages.error(request, "Ошибка. Нет поля: {}".format(uploading_file.err))
             except MultiValueDictKeyError:
                 messages.error(request, "Выберите файл!")
     return render(request, 'api.html', locals())

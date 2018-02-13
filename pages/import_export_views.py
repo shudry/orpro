@@ -25,7 +25,6 @@ class UploadingProducts(object):
         data = data
         self.uploaded_file = data.get("file")
         self.format_file = data.get("format_file")
-        self.parsing()
 
     def getting_related_model(self, field_name):
         related_model = self.model._meta.get_field(field_name).rel.to
@@ -123,46 +122,111 @@ class UploadingProducts(object):
         elif self.format_file == 'json':
             x = json.loads(uploaded_file.read())
             js = []
+            self.err = []
+            self.add = ["Добавлены поля по стандарту", ]
             ThroughModel = Offers.offer_subtags.through
             for i in range(len(x)):
                 d = dict()
                 try:
                     d["offer_title"] = x[i]["offer_title"]
-                    d["offer_url"] = x[i]["offer_url"]
-                    d["offer_price"] = x[i]["offer_price"]
+                except KeyError:
+                    self.err.append("offer_title")
+                    return False
+                try:
+                    if x[i]["offer_url"] == "":
+                        print("WOAP")
+                        d["offer_url"] = slugify(unidecode(x[i]["offer_title"]))
+                    else:
+                        d["offer_url"] = x[i]["offer_url"]
+                except KeyError:
+                    d["offer_url"] = slugify(unidecode(x[i]["offer_title"]))
+                    self.add.append("offer_url:{}".format(slugify(unidecode(x[i]["offer_title"]))))
+                    return False
+                try:
+                    d["offer_price"] = x[i]["offer_price"].replace(",", ".")
+                except KeyError:
+                    self.err.append("offer_price")
+                    return False
+                try:
                     d["offer_valuta"] = x[i]["offer_valuta"]
+                except KeyError:
+                    d["offer_valuta"] = "руб."
+                    self.add.append("offer_valuta: руб.")
+                try:
                     d["offer_value"] = x[i]["offer_value"]
+                except KeyError:
+                    self.err.append("offer_value")
+                    return False
+                try:
                     d["offer_minorder"] = x[i]["offer_minorder"]
+                except KeyError:
+                    d["offer_minorder"] = "1"
+                    self.add.append("offer_minorder: 1")
+                try:
                     d["offer_minorder_value"] = x[i]["offer_minorder_value"]
+                except KeyError:
+                    self.err.append("offer_minorder_value")
+                    return False
+                try:
                     d["offer_pre_text"] = x[i]["offer_pre_text"]
+                except KeyError:
+                    d["offer_pre_text"] = ""
+                    self.add.append("offer_pre_text: """)
+                try:
                     d["offer_text"] = x[i]["offer_text"]
+                except KeyError:
+                    d["offer_text"] = ""
+                    self.add.append("offer_text: """)
+                try:
                     d["offer_image_url"] = x[i]["offer_image_url"]
+                except KeyError:
+                    d["offer_image_url"] = x[i]["image_link"]
+                try:
                     d["offer_availability"], created = Availability.objects.get_or_create(
                         availability_title=x[i]["offer_availability"])
-                    d["offer_publish"], created = Publish.objects.get_or_create(publish_title=x[i]["offer_publish"])
+                except KeyError:
+                    d["offer_availability"], created = Availability.objects.get_or_create(
+                        availability_title="Под заказ")
+                    self.add.append("offer_availability: Под заказ")
+                try:
+                    if x[i]["offer_publish"] == "":
+                        d["offer_publish"], created = Publish.objects.get_or_create(publish_title="Публикуемый")
+                    else:
+                        d["offer_publish"], created = Publish.objects.get_or_create(publish_title=x[i]["offer_publish"])
+                except KeyError:
+                    d["offer_publish"], created = Publish.objects.get_or_create(publish_title="Публикуемый")
+                    self.add.append("offer_publish: Публикуемый")
+                try:
                     try:
                         d["offer_tag"] = Tags.objects.get(tag_title=x[i]["offer_tag"])
                     except ObjectDoesNotExist:
-                        Tags.objects.create(tag_url=slugify(unidecode(x[i]["offer_tag"])), tag_title=x[i]["offer_tag"],
+                        Tags.objects.create(tag_url=slugify(unidecode(x[i]["offer_tag"])),
+                                            tag_title=x[i]["offer_tag"],
                                             tag_publish=True, tag_priority=1)
                         d["offer_tag"] = get_object_or_404(Tags, tag_title=x[i]["offer_tag"])
-                    js.append(d)
-                    Offers.objects.update_or_create(**d)
                 except KeyError:
-                    continue
+                    return False
+                js.append(d)
+                Offers.objects.update_or_create(**d)
             for k in range(len(x)):
                 try:
                     for j in range(len(x[k]["offer_subtags"].split(", "))):
                         try:
                             v = Subtags.objects.get(tag_title=x[k]["offer_subtags"].split(", ")[j])
+                            print(v)
                         except ObjectDoesNotExist:
-                            Subtags.objects.create(tag_url=slugify(unidecode(x[k]["offer_subtags"].split(", ")[j])),
-                                                   tag_title=x[k]["offer_subtags"].split(", ")[j],
-                                                   tag_parent_tag=Tags.objects.get(tag_title=x[k]["offer_tag"]))
-                            v = get_object_or_404(Subtags, tag_title=x[k]["offer_subtags"].split(", ")[j])
+                            try:
+                                Subtags.objects.create(tag_url=slugify(unidecode(x[k]["offer_subtags"].split(", ")[j])),
+                                                       tag_title=x[k]["offer_subtags"].split(", ")[j],
+                                                       tag_parent_tag=Tags.objects.get(tag_title=x[k]["offer_tag"]))
+                                v = get_object_or_404(Subtags, tag_title=x[k]["offer_subtags"].split(", ")[j])
+                            except IntegrityError:
+                                continue
                         try:
                             ThroughModel.objects.bulk_create([
-                                ThroughModel(offers_id=get_object_or_404(Offers, offer_url=x[k]["offer_url"]).id,
+                                ThroughModel(offers_id=get_object_or_404(Offers, offer_url=slugify(
+                                    unidecode(x[k]["offer_title"])) if x[k]["offer_url"] == ""
+                                else x[k]["offer_url"]).id,
                                              subtags_id=get_object_or_404(Subtags, tag_title__icontains=v).id),
                             ])
                         except (MultipleObjectsReturned, IntegrityError):
