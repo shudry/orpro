@@ -179,7 +179,6 @@
                         $(".comment_admin_"+data.slice(data.indexOf('none">')+6, data.indexOf('</span>'))).html(data);
                         $form.attr("method", "post");
                         $(".fast-set").css("display","none");
-                        init_data();
                         $('#comment_admin_form').preloader('remove');
                     }}
                     catch (TypeError){
