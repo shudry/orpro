@@ -126,9 +126,9 @@
                     <li class="grid_6">
                         <div class="box wow fadeInRight wp">
                             {% if request.user.is_superuser or edit %}
-                        <form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                    {% endif %}
-                        <span class="form_lb_1">
+                            <form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                            {% endif %}
+                                <span class="form_lb_1">
                             <div class="box_aside">
                                 <div class="icon {{ lb1.lb_icon }}"></div>
                             </div>
@@ -176,28 +176,25 @@
                     </li>
                     <li class="grid_6">
                         <div data-wow-delay="0.3s" class="box wow fadeInRight wp">
-                             {% if request.user.is_superuser or edit %}
-                        <form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                    {% endif %}
-                        <span class="form_lb_3">
-                            <div class="box_aside">
-                                <div class="icon {{ lb3.lb_icon }}"></div>
-                            </div>
-                            <div class="box_cnt__no-flow">
-                                <h3><a href="{{ lb1.lb_link }}" id="url_lb_3">{{ lb3.lb_title }}</a></h3>
-                                <p>{{ lb3.lb_text|safe  }}</p>
-                            </div>
-                        </span>
-                        {% if request.user.is_superuser %}
-                                            <span class="super_user">
-                                                 <input type="hidden" name="edit" value="3">
-                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                                                                 </span>
-                {% endif %}
-                        {% csrf_token %}
-                        {% if request.user.is_superuser or edit %}
+                            <form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                <!--{% if request.user.is_superuser or edit %} {% endif %}-->
+                                <span class="form_lb_3">
+                                    <div class="box_aside">
+                                        <div class="icon {{ lb3.lb_icon }}"></div>
+                                    </div>
+                                    <div class="box_cnt__no-flow">
+                                        <h3><a href="{{ lb3.lb_link }}" id="url_lb_3">{{ lb3.lb_title }}</a></h3>
+                                        <p>{{ lb3.lb_text|safe  }}</p>
+                                    </div>
+                                </span>
+                                {% if request.user.is_superuser %}
+                                {% csrf_token %}
+                                <span class="super_user">
+                                    <input type="hidden" name="edit" value="3">
+                                    <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+                                </span>
+                                {% endif %}
                             </form>
-                        {% endif %}
                         </div>
                         <hr>
                         <div data-wow-delay="0.4s" class="box wow fadeInRight wp">
