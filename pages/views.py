@@ -181,6 +181,43 @@ def lb_post(request):
     return HttpResponseForbidden()
 
 
+def tag_post(request):
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            response_data = {}
+            post_text = request.POST
+            if request.POST.get('delete_tag', False):
+                f = Tags.objects.get(id=post_text.get("edit")).id
+                Tags.objects.get(id=f).delete()
+                response_data['id'] = f
+                response_data['del'] = True
+                return JsonResponse(response_data)
+            else:
+                f = Tags.objects.get(id=post_text.get("edit")).id
+                Tags.objects.filter(id=f).update(tag_url=post_text["tag_url"],
+                                                 tag_title=post_text["tag_title"],
+                                                 tag_priority=post_text["tag_priority"])
+                response_data['tag_url'] = Tags.objects.get(id=f).tag_url
+                response_data['tag_title'] = Tags.objects.get(id=f).tag_title
+                response_data['tag_publish'] = Tags.objects.get(id=f).tag_publish
+                response_data['tag_priority'] = Tags.objects.get(id=f).tag_priority
+                response_data['id'] = f
+                print(response_data)
+                return JsonResponse(response_data)
+        else:
+            args = {}
+            if 'edit' in request.GET:
+                print(request.GET["edit"])
+                args['edit'] = True
+                id_edit = request.GET["edit"]
+            tag_initial = Tags.objects.get(id=id_edit)
+            form = TagsForm(initial={'tag_url': tag_initial.tag_url,
+                                     'tag_title': tag_initial.tag_title,
+                                     'tag_priority': tag_initial.tag_priority})
+            return render(request, 'tag_form.html', locals())
+    return HttpResponseForbidden()
+
+
 def stag_post(request):
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -194,10 +231,13 @@ def stag_post(request):
                 return JsonResponse(response_data)
             else:
                 f = Subtags.objects.get(id=post_text.get("edit")).id
-                Subtags.objects.filter(id=f).update(tag_title=post_text["tag_title"], tag_url=post_text["tag_url"],
-                                                    tag_parent_tag=post_text["tag_parent_tag"])
+                Subtags.objects.filter(id=f).update(tag_title=post_text["tag_title"],
+                                                    tag_url=post_text["tag_url"],
+                                                    tag_parent_tag=post_text["tag_parent_tag"],
+                                                    tag_priority=post_text["tag_priority"])
                 response_data['tag_title'] = Subtags.objects.get(id=f).tag_title
                 response_data['tag_url'] = Subtags.objects.get(id=f).tag_url
+                response_data['tag_priority'] = Tags.objects.get(id=f).tag_priority
                 response_data['id'] = f
                 print(response_data)
                 return JsonResponse(response_data)
@@ -208,8 +248,11 @@ def stag_post(request):
                 id_edit = request.GET["edit"]
             stag_initial = Subtags.objects.get(id=id_edit)
             form = SubtagsForm(
-                initial={'tag_title': stag_initial.tag_title, 'tag_url': stag_initial.tag_url,
-                         'tag_parent_tag': stag_initial.tag_parent_tag})
+                initial={'tag_title': stag_initial.tag_title,
+                         'tag_url': stag_initial.tag_url,
+                         'tag_parent_tag': stag_initial.tag_parent_tag,
+                         'tag_priority': stag_initial.tag_priority,
+                         })
             return render(request, 'stag_form.html', locals())
     return HttpResponseForbidden()
 
@@ -411,41 +454,6 @@ def p_post(request):
             form = PersonalForm(initial={'p_name': p_initial.p_name, 'p_doljnost': p_initial.p_doljnost,
                                          'p_photo': p_initial.p_photo.url})
             return render(request, 'p_form.html', locals())
-    return HttpResponseForbidden()
-
-
-def tag_post(request):
-    if request.user.is_superuser:
-        if request.method == 'POST':
-            response_data = {}
-            post_text = request.POST
-            if request.POST.get('delete_tag', False):
-                f = Tags.objects.get(id=post_text.get("edit")).id
-                Tags.objects.get(id=f).delete()
-                response_data['id'] = f
-                response_data['del'] = True
-                return JsonResponse(response_data)
-            else:
-                f = Tags.objects.get(id=post_text.get("edit")).id
-                Tags.objects.filter(id=f).update(tag_url=post_text["tag_url"], tag_title=post_text["tag_title"],
-                                                 tag_priority=post_text["tag_priority"])
-                response_data['tag_url'] = Tags.objects.get(id=f).tag_url
-                response_data['tag_title'] = Tags.objects.get(id=f).tag_title
-                response_data['tag_publish'] = Tags.objects.get(id=f).tag_publish
-                response_data['tag_priority'] = Tags.objects.get(id=f).tag_priority
-                response_data['id'] = f
-                print(response_data)
-                return JsonResponse(response_data)
-        else:
-            args = {}
-            if 'edit' in request.GET:
-                print(request.GET["edit"])
-                args['edit'] = True
-                id_edit = request.GET["edit"]
-            tag_initial = Tags.objects.get(id=id_edit)
-            form = TagsForm(initial={'tag_url': tag_initial.tag_url, 'tag_title': tag_initial.tag_title,
-                                     'tag_priority': tag_initial.tag_priority})
-            return render(request, 'tag_form.html', locals())
     return HttpResponseForbidden()
 
 

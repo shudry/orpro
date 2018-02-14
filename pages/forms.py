@@ -172,7 +172,7 @@ class OfferForm(forms.ModelForm):
 class SubtagsForm(forms.ModelForm):
     class Meta:
         model = Subtags
-        fields = ['tag_url', 'tag_title', 'tag_parent_tag', 'delete_stag']
+        fields = ['tag_url', 'tag_title', 'tag_parent_tag', 'delete_stag', 'tag_priority']
         widgets = {
             'delete_stag': forms.CheckboxInput(attrs={'class': 'main-check'})
         }
