@@ -9,66 +9,62 @@
 {% endblock %}
  <div class="container hr well1 ins2">
      <div class="row">
-{% if post.post_seourl == 'price' %}
-
+         {% if post.post_seourl == 'price' %}
          <div class="grid_3" style="height: 160px">
-          <div class="scrol-right-menu" >
-              <h2>Группа товаров</h2>
-         <ul class="marked-list">
-             {% for i in tags %}
-                 {% if request.user.is_superuser or edit %}
-                                    <form action="/tag_post" id="tag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                                {% endif %}
-            <span class="tag_form_{{ i.id }}">
-                  <li><a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a></li>
-            </span>
-                 {% if request.user.is_superuser %}
-                                            <span class="super_user">
-                                                 <input type="hidden" name="edit" value="{{i.id}}">
-                                                 <button type="submit" class="fast-set">Изменить</button>
-                                                                 </span>
-                                {% endif %}
-                                        {% csrf_token %}
-                                        {% if request.user.is_superuser or edit %}
-                                            </form>
-                                        {% endif %}
-             {% endfor %}
-
-                </ul>
+             <div class="scrol-right-menu" >
+                 <h2>Группа товаров</h2>
+                 <ul class="marked-list">
+                     {% for i in tags %}
+                     {% if request.user.is_superuser or edit %}
+                     <form action="/tag_post" id="tag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                         {% endif %}
+                         <span class="tag_form_{{ i.id }}">
+                             <li><a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a></li>
+                         </span>
+                         {% if request.user.is_superuser %}
+                         <span class="super_user">
+                             <input type="hidden" name="edit" value="{{i.id}}">
+                             <button type="submit" class="fast-set">Изменить</button>
+                         </span>
+                         {% endif %}
+                         {% csrf_token %}
+                         {% if request.user.is_superuser or edit %
+                     </form>
+                     {% endif %}
+                     {% endfor %}
+                 </ul>
+             </div>
          </div>
-</div>
-
 
          <div class="grid_9">
               {{ post.post_text|safe }}
          </div>
-{% else %}
+         {% else %}
          <div class="grid_9">
               {% include 'singlpage_form.html' %}
          </div>
          <div class="grid_3">
-    <ul class="cloud">
-        {% for tag in tags %}
-            {% if forloop.counter < 100 %}
-            <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
-        {% endif %}
-        {% endfor %}
-    </ul>
-</div>
-{% endif %}
-
-
+             <ul class="cloud">
+                 {% for tag in tags %}
+                 {% if forloop.counter < 100 %}
+                 <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
+                 {% endif %}
+                 {% endfor %}
+             </ul>
+         </div>
+         {% endif %}
      </div>
  </div>
 {% endblock %}
-{% block footer %}<footer>
-<div class="container">
-            <div class="copyright">© Профсистемы-Крым 2016 г.
-г. Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89
-Время работы:
-пн-вс 8:00-18:00, без перерыва
-            </div>
-          </div>
+{% block footer %}
+<footer>
+    <div class="container">
+        <div class="copyright">© Профсистемы-Крым 2016 г.
+            г. Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89
+            Время работы:
+            пн-вс 8:00-18:00, без перерыва
+        </div>
+    </div>
 </footer>
 {% endblock %}
 {% block additional_scripts %}
