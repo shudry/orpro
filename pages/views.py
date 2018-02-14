@@ -237,7 +237,7 @@ def stag_post(request):
                                                     tag_priority=post_text["tag_priority"])
                 response_data['tag_title'] = Subtags.objects.get(id=f).tag_title
                 response_data['tag_url'] = Subtags.objects.get(id=f).tag_url
-                response_data['tag_priority'] = Tags.objects.get(id=f).tag_priority
+                response_data['tag_priority'] = Subtags.objects.get(id=f).tag_priority
                 response_data['id'] = f
                 print(response_data)
                 return JsonResponse(response_data)
