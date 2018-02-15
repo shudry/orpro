@@ -76,9 +76,7 @@ def review(request):
     args['form'] = form
     if 'submit' in request.POST:
         form = ReviewsForm(request.POST)
-        print('POST')
         if form.is_valid():
-            print('valid')
             recaptcha_response = request.POST.get('g-recaptcha-response')  # запрос на передачу данных серверу recaptcha
             url = 'https://www.google.com/recaptcha/api/siteverify'
             # данные для передачи на сервер
@@ -112,7 +110,6 @@ def review(request):
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['reviews'] = Reviews.objects.filter(publish=True).order_by('-date')
     args['tags'] = Subtags.objects.all().order_by('?')[0:100]
-    print(args)
     return render(request, 'reviews.html', args)
 
 
@@ -640,8 +637,8 @@ class OfferAjaxUpdateView(UpdateView):
         if not self.request.is_ajax():
             ctx['hf'] = HeaderPhoto.objects.get(id=1)
             ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
-            ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
-            ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag).order_by('tag_priority')[0:100]
+            ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('-tag_priority')
+            ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag).order_by('-tag_priority')[0:100]
 
         ctx['offer'] = self.object
 
@@ -696,26 +693,26 @@ class OfferImagesAjaxUpdateView(FormView):
 
 def catalog(request, cat_url='nothing'):
     if cat_url == 'nothing':
-        cat_url = Tags.objects.filter(tag_publish=True).order_by('tag_priority')[0].tag_url
+        cat_url = Tags.objects.filter(tag_publish=True).order_by('-tag_priority')[0].tag_url
     args = {}
     try:
         args['pre'] = 'Группа товаров'
         mt = Tags.objects.get(tag_url=cat_url)
         offers = Offers.objects.filter(offer_tag=mt)
-        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
+        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('-tag_priority')[0:100]
     except Exception:
         args['pre'] = 'КЛЮЧЕВОЕ СЛОВО'
         print(cat_url)
         mt = Subtags.objects.get(tag_url=cat_url)
         offers = Offers.objects.filter(offer_subtags=mt)
-        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by('tag_priority')[0:100]
+        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by('-tag_priority')[0:100]
 
     args['hf'] = HeaderPhoto.objects.get(id=1)
 
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['offer'] = offers
     args['cat_title'] = mt
-    args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
+    args['tags'] = Tags.objects.filter(tag_publish=True).order_by('-tag_priority')
 
     return render(request, 'catalog.html', args)
 
