@@ -17,7 +17,6 @@
                      {% for i in tags %}
                      {% if request.user.is_superuser or edit %}
                      <form action="/tag_post" id="tag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                         {% endif %}
                          <span class="tag_form_{{ i.id }}">
                              <li><a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a></li>
                          </span>
