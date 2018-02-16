@@ -21,102 +21,98 @@
                     <div data-src={{ i.baner_img.url }} >
                         <div class="camera_caption fadeIn">
                             <div class="container">
-                                <div class="row"><a href="{{ i.baner_url }}" style="display: block"></a>
-
+                                <div class="row">
+                                    <a href="{{ i.baner_url }}" style="display: block"></a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
-
-
             </div>
         </section>
         <section>
             <div class="container banner_wr">
                 <ul class="banner">
-                    {% if request.user.is_superuser or edit %}
-                        <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                    {% endif %}
-                                             <li><a href="{{ fb1.fb_url }}" id="url_fb_1">
-                                                <div class="fa-globe yel"></div>
-                                                 <span class="form-fb-1">
-                                                <h3>{{ fb1.fb_title }}</h3>
-                                                <p>{{ fb1.fb_text|safe  }}</p>
-                                                     </span>
-                                            </a>
-
-                                                 {% if request.user.is_superuser %}
-                                            <span class="super_user">
-                                                 <input type="hidden" name="edit" value="1">
-                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                                                                 </span>
-                {% endif %}
-                                             </li>
-                    {% csrf_token %}
-                        {% if request.user.is_superuser or edit %}
-                            </form>
-                        {% endif %}
-                {% if request.user.is_superuser or edit %}
-                        <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                    {% endif %}
-                    <li><a href="{{ fb2.fb_url }}"  id="url_fb_2">
-                        <div class="fa-lightbulb-o"></div>
-                        <span class="form-fb-2">
-                        <h3>{{ fb2.fb_title }}<br></h3>
-                        <p>{{ fb2.fb_text|safe  }}</p>
+                    <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <li>
+                            <a href="{{ fb1.fb_url }}" id="url_fb_1">
+                                <div class="fa-globe yel"></div>
+                                <span class="form-fb-1">
+                                    <h3>{{ fb1.fb_title }}</h3>
+                                    <p>{{ fb1.fb_text|safe  }}</p>
+                                </span>
+                            </a>
+                            {% if request.user.is_superuser %}
+                            {% csrf_token %}
+                            <span class="super_user">
+                                <input type="hidden" name="edit" value="1">
+                                <button type="submit" class="fast-set">
+                                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                </button>
                             </span>
-                    </a>{% if request.user.is_superuser %}
-                                            <span class="super_user">
-                                                 <input type="hidden" name="edit" value="2">
-                                                 <button type="submit" class="fast-set" ><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                                                                 </span>
-                {% endif %}</li>
-                {% csrf_token %}
-                        {% if request.user.is_superuser or edit %}
-                            </form>
-                        {% endif %}
-                {% if request.user.is_superuser or edit %}
-                        <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                    {% endif %}
-                    <li><a href="{{ fb3.fb_url }}"  id="url_fb_3">
-                        <div class="fa-cog"></div>
-                        <span class="form-fb-3">
-                        <h3>{{ fb3.fb_title }}</h3>
-                        <p>{{ fb3.fb_text|safe  }}</p>
+                            {% endif %}
+                        </li>
+                    </form>
+                    <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <li>
+                            <a href="{{ fb2.fb_url }}"  id="url_fb_2">
+                                <div class="fa-lightbulb-o"></div>
+                                <span class="form-fb-2">
+                                    <h3>{{ fb2.fb_title }}<br></h3>
+                                    <p>{{ fb2.fb_text|safe  }}</p>
+                                </span>
+                            </a>
+                            {% if request.user.is_superuser %}
+                            {% csrf_token %}
+                            <span class="super_user">
+                                <input type="hidden" name="edit" value="2">
+                                <button type="submit" class="fast-set" >
+                                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                </button>
                             </span>
-                    </a>
-                    {% if request.user.is_superuser %}
-                                            <span class="super_user">
-                                                 <input type="hidden" name="edit" value="3">
-                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                                                                 </span>
-                {% endif %}</li>
-                {% csrf_token %}
-                        {% if request.user.is_superuser or edit %}
-                            </form>
-                        {% endif %}
-                {% if request.user.is_superuser or edit %}
-                        <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                    {% endif %}
-                    <li><a href="{{ fb4.fb_url }}"  id="url_fb_4">
-                        <div class="fa-briefcase"></div>
-                        <span class="form-fb-4">
-                        <h3>{{ fb4.fb_title }}</h3>
-                        <p>{{ fb4.fb_text|safe  }}</p>
-                     </span></a>
-
-                        {% if request.user.is_superuser %}
-                                            <span class="super_user">
-                                                 <input type="hidden" name="edit" value="4">
-                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                                                                 </span>
-                {% endif %}
-                    </li>
-                {% csrf_token %}
-                        {% if request.user.is_superuser or edit %}
-                            </form>
-                        {% endif %}
+                            {% endif %}
+                        </li>
+                    </form>
+                    <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <li>
+                            <a href="{{ fb3.fb_url }}"  id="url_fb_3">
+                                <div class="fa-cog"></div>
+                                <span class="form-fb-3">
+                                    <h3>{{ fb3.fb_title }}</h3>
+                                    <p>{{ fb3.fb_text|safe  }}</p>
+                                </span>
+                            </a>
+                            {% if request.user.is_superuser %}
+                            {% csrf_token %}
+                            <span class="super_user">
+                                <input type="hidden" name="edit" value="3">
+                                <button type="submit" class="fast-set">
+                                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                            {% endif %}
+                        </li>
+                    </form>
+                    <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <li>
+                            <a href="{{ fb4.fb_url }}"  id="url_fb_4">
+                                <div class="fa-briefcase"></div>
+                                <span class="form-fb-4">
+                                    <h3>{{ fb4.fb_title }}</h3>
+                                    <p>{{ fb4.fb_text|safe  }}</p>
+                                </span>
+                            </a>
+                            {% if request.user.is_superuser %}
+                            {% csrf_token %}
+                            <span class="super_user">
+                                <input type="hidden" name="edit" value="4">
+                                <button type="submit" class="fast-set">
+                                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                            {% endif %}
+                        </li>
+                    </form>
                 </ul>
             </div>
         </section>
@@ -125,59 +121,54 @@
                 <ul class="row product-list">
                     <li class="grid_6">
                         <div class="box wow fadeInRight wp">
-                            {% if request.user.is_superuser or edit %}
                             <form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                            {% endif %}
                                 <span class="form_lb_1">
-                            <div class="box_aside">
-                                <div class="icon {{ lb1.lb_icon }}"></div>
-                            </div>
-                            <div class="box_cnt__no-flow">
-                                <h3><a href="{{ lb1.lb_link }}" id="url_lb_1">{{ lb1.lb_title }}</a></h3>
-                                <p>{{ lb1.lb_text|safe }}</p>
-                            </div>
-                        </span>
-                        {% if request.user.is_superuser %}
-                                            <span class="super_user">
-                                                 <input type="hidden" name="edit" value="1">
-                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                                                                 </span>
-                {% endif %}
-                        {% csrf_token %}
-                        {% if request.user.is_superuser or edit %}
+                                    <div class="box_aside">
+                                        <div class="icon {{ lb1.lb_icon }}"></div>
+                                    </div>
+                                    <div class="box_cnt__no-flow">
+                                        <h3><a href="{{ lb1.lb_link }}" id="url_lb_1">{{ lb1.lb_title }}</a></h3>
+                                        <p>{{ lb1.lb_text|safe }}</p>
+                                    </div>
+                                </span>
+                                {% if request.user.is_superuser %}
+                                {% csrf_token %}
+                                <span class="super_user">
+                                    <input type="hidden" name="edit" value="1">
+                                    <button type="submit" class="fast-set">
+                                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                    </button>
+                                </span>
+                                {% endif %}
                             </form>
-                        {% endif %}
                         </div>
                         <hr>
                         <div data-wow-delay="0.2s" class="box wow fadeInRight wp">
-                             {% if request.user.is_superuser or edit %}
-                        <form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                    {% endif %}
-                        <span class="form_lb_2">
-                            <div class="box_aside">
-                                <div class="icon {{ lb2.lb_icon }}"></div>
-                            </div>
-                            <div class="box_cnt__no-flow">
-                                <h3><a href="{{ lb2.lb_link }}" id="url_lb_2">{{ lb2.lb_title }}</a></h3>
-                                <p>{{ lb2.lb_text|safe  }}</p>
-                            </div>
-                        </span>
-                        {% if request.user.is_superuser %}
-                                            <span class="super_user">
-                                                 <input type="hidden" name="edit" value="2">
-                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                                                                 </span>
-                {% endif %}
-                        {% csrf_token %}
-                        {% if request.user.is_superuser or edit %}
+                            <form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                <span class="form_lb_2">
+                                    <div class="box_aside">
+                                        <div class="icon {{ lb2.lb_icon }}"></div>
+                                    </div>
+                                    <div class="box_cnt__no-flow">
+                                        <h3><a href="{{ lb2.lb_link }}" id="url_lb_2">{{ lb2.lb_title }}</a></h3>
+                                        <p>{{ lb2.lb_text|safe  }}</p>
+                                    </div>
+                                </span>
+                                {% if request.user.is_superuser %}
+                                {% csrf_token %}
+                                <span class="super_user">
+                                    <input type="hidden" name="edit" value="2">
+                                    <button type="submit" class="fast-set">
+                                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                    </button>
+                                </span>
+                                {% endif %}
                             </form>
-                        {% endif %}
                         </div>
                     </li>
                     <li class="grid_6">
                         <div data-wow-delay="0.3s" class="box wow fadeInRight wp">
                             <form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                                <!--{% if request.user.is_superuser or edit %} {% endif %}-->
                                 <span class="form_lb_3">
                                     <div class="box_aside">
                                         <div class="icon {{ lb3.lb_icon }}"></div>
@@ -198,30 +189,27 @@
                         </div>
                         <hr>
                         <div data-wow-delay="0.4s" class="box wow fadeInRight wp">
-                             {% if request.user.is_superuser or edit %}
-                        <form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                    {% endif %}
-                        <span class="form_lb_4">
-                            <div class="box_aside">
-                                <div class="icon {{ lb4.lb_icon }}"></div>
-                            </div>
-                            <div class="box_cnt__no-flow">
-                                <h3><a href="{{ lb4.lb_link }}" id="url_lb_4">{{ lb4.lb_title }}</a></h3>
-                                <p>{{ lb4.lb_text|safe  }}</p>
-                            </div>
-                        </span>
-                        {% if request.user.is_superuser %}
-                                            <span class="super_user">
-                                                 <input type="hidden" name="edit" value="4">
-                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                                                                 </span>
-                {% endif %}
-                        {% csrf_token %}
-                        {% if request.user.is_superuser or edit %}
+                            <form action="/lb_post" id="lb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                <span class="form_lb_4">
+                                    <div class="box_aside">
+                                        <div class="icon {{ lb4.lb_icon }}"></div>
+                                    </div>
+                                    <div class="box_cnt__no-flow">
+                                        <h3><a href="{{ lb4.lb_link }}" id="url_lb_4">{{ lb4.lb_title }}</a></h3>
+                                        <p>{{ lb4.lb_text|safe  }}</p>
+                                    </div>
+                                </span>
+                                {% if request.user.is_superuser %}
+                                {% csrf_token %}
+                                <span class="super_user">
+                                    <input type="hidden" name="edit" value="4">
+                                    <button type="submit" class="fast-set">
+                                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                    </button>
+                                </span>
+                                {% endif %}
                             </form>
-                        {% endif %}
                         </div>
-
                     </li>
                 </ul>
             </div>
@@ -230,111 +218,97 @@
             <div class="container">
                 <div class="row">
                     <div class="grid_4">
-                        {% if request.user.is_superuser or edit %}
                         <form action="/ac_post" id="ac_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                    {% endif %}
-                    <span class="ac_form_1">
-                        <h2>{{ ac1.ac_title }}</h2>
-                        <p>{{ ac1.ac_text|safe }}</p>
-                    </span>
-                        <a href="/about" class="btn">Читать больше</a>
-                    {% if request.user.is_superuser %}
-                                            <span class="super_user">
-                                                 <input type="hidden" name="edit" value="1">
-                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                                                                 </span>
-                {% endif %}
-                        {% csrf_token %}
-                        {% if request.user.is_superuser or edit %}
-                            </form>
-                        {% endif %}
+                            <span class="ac_form_1">
+                                <h2>{{ ac1.ac_title }}</h2>
+                                <p>{{ ac1.ac_text|safe }}</p>
+                            </span>
+                            <a href="/about" class="btn">Читать больше</a>
+                            {% if request.user.is_superuser %}
+                            {% csrf_token %}
+                            <span class="super_user">
+                                <input type="hidden" name="edit" value="1">
+                                <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                            {% endif %}
+                        </form>
                     </div>
                     <div class="grid_4">
                         <h2>Товары</h2>
                         <p>Список самых покупаемых товаров</p>
                         <ul class="marked-list">
                             {% for i in TO %}
-                                {% if request.user.is_superuser or edit %}
                                     <form action="/to_post" id="to_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                                {% endif %}
-                                <span class="to_form_{{i.id}}">
-                            <li><a href="/goods/{{i.to_link}}">{{ i.to_title }}</a></li>
-                                </span>
-                                {% if request.user.is_superuser %}
-                                            <span class="super_user">
-                                                 <input type="hidden" name="edit" value="{{i.id}}">
-                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                                                                 </span>
-                {% endif %}
-                        {% csrf_token %}
-                        {% if request.user.is_superuser or edit %}
-                            </form>
-                        {% endif %}
+                                        <span class="to_form_{{i.id}}">
+                                            <li><a href="/goods/{{i.to_link}}">{{ i.to_title }}</a></li>
+                                        </span>
+                                        {% if request.user.is_superuser %}
+                                        {% csrf_token %}
+                                        <span class="super_user">
+                                            <input type="hidden" name="edit" value="{{i.id}}">
+                                            <button type="submit" class="fast-set">
+                                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                            </button>
+                                        </span>
+                                        {% endif %}
+                                    </form>
                             {% endfor %}
                         </ul>
                         <a href="/catalog" class="btn">Читать больше</a>
                     </div>
                     <div class="grid_4">
                         <div class="info-box">
-                            {% if request.user.is_superuser or edit %}
-                                    <form action="/sup_post" id="sup_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                            <form action="/sup_post" id="sup_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                <span class="sup_form">
+                                    <h2 class="fa-comment">{{ sup.sup_title  }}</h2>
+                                    <hr>
+                                    <h3>{{ sup.sup_slogan }}</h3>
+                                    <dl>
+                                        <dd>{{ sup.sup_time }}</dd>
+                                    </dl>
+                                    <p>{{ sup.sup_phone }}</p>
+                                </span>
+                                {% if request.user.is_superuser %}
+                                {% csrf_token %}
+                                <span class="super_user">
+                                    <input type="hidden" name="edit" value="1">
+                                    <button type="submit" class="fast-set">
+                                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                    </button>
+                                </span>
                                 {% endif %}
-                        <span class="sup_form">
-                            <h2 class="fa-comment">{{ sup.sup_title  }}</h2>
-                            <hr>
-                            <h3>{{ sup.sup_slogan }}</h3>
-                            <dl>
-
-                                <dd>{{ sup.sup_time }}</dd>
-                            </dl>
-
-
-                            <p>{{ sup.sup_phone }}</p>
-                        </span>
-                            {% if request.user.is_superuser %}
-                        <span class="super_user">
-                             <input type="hidden" name="edit" value="1">
-                             <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                                             </span>
-                        {% endif %}
-                        {% csrf_token %}
-                        {% if request.user.is_superuser or edit %}
                             </form>
-                        {% endif %}
                         </div>
                         <div class="owl-carousel">
                             {% for p in personal %}
                             <div class="item">
                                 <blockquote class="box">
-                                    {% if request.user.is_superuser or edit %}
                                     <form action="/p_post" id="p_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                                {% endif %}
-                                <span class="p_form_{{p.id}}">
-                                    <div class="box_aside"><img
-                                            src="{{ p.p_photo.url }}"
-                                            alt=""></div>
-                                    <div class="box_cnt__no-flow">
-                                        <p>
-                                            <q>{{ p.p_doljnost }}</q>
-                                        </p>
-                                        <cite><a href="/about">{{ p.p_name }}</a></cite>
-                                    </div>
-                                    </span>
-                                {% if request.user.is_superuser %}
+                                        <span class="p_form_{{p.id}}">
+                                            <div class="box_aside">
+                                                <img src="{{ p.p_photo.url }}" alt="">
+                                            </div>
+                                            <div class="box_cnt__no-flow">
+                                                <p>
+                                                    <q>{{ p.p_doljnost }}</q>
+                                                </p>
+                                                <cite><a href="/about">{{ p.p_name }}</a></cite>
+                                            </div>
+                                        </span>
+                                        {% if request.user.is_superuser %}
+                                        {% csrf_token %}
                                             <span class="super_user">
                                                  <input type="hidden" name="edit" value="{{p.id}}">
-                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                                                                 </span>
-                                {% endif %}
-                                        {% csrf_token %}
-                                        {% if request.user.is_superuser or edit %}
-                                            </form>
+                                                 <button type="submit" class="fast-set">
+                                                     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                                 </button>
+                                            </span>
                                         {% endif %}
+                                    </form>
                                 </blockquote>
                             </div>
                             {% endfor %}
-
-
                         </div>
                     </div>
                 </div>
