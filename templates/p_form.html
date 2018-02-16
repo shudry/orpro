@@ -1,5 +1,11 @@
-<span style="display: none">{{ id_edit }}</span>
-Имя : <span style="color: black"> {{ form.p_name }}</span><br>
-Должость: <span style="color: black"> {{ form.p_doljnost }}</span><br>
-картинка: <span style="color: black"> {{ form.p_photo}}</span>
-<button class="btn btn-default" type="submit">Сохранить</button>
+<div class="row">
+    <div class="container">
+        <div class="col-md-3 col-xs-12">
+            <div><span style="display: none">{{ id_edit }}</span></div>
+            <div>Имя : <p style="color: black">{{ form.p_name }}</p></div>
+            <div>Должность: <p style="color: black"> {{ form.p_doljnost }}</p></div>
+            <div>Картинка: <p style="color: black"> {{ form.p_photo}}</p></div>
+            <div><button class="btn btn-default" type="submit">Сохранить</button></div>
+        </div>
+    </div>
+</div>
