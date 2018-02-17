@@ -33,8 +33,8 @@
         <section>
             <div class="container banner_wr">
                 <ul class="banner">
-                    <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                        <li>
+                    <li>
+                        <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                             <a href="{{ fb1.fb_url }}" id="url_fb_1">
                                 <div class="fa-globe yel"></div>
                                 <span class="form-fb-1">
@@ -51,10 +51,10 @@
                                 </button>
                             </span>
                             {% endif %}
-                        </li>
-                    </form>
-                    <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                        <li>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                             <a href="{{ fb2.fb_url }}"  id="url_fb_2">
                                 <div class="fa-lightbulb-o"></div>
                                 <span class="form-fb-2">
@@ -71,10 +71,10 @@
                                 </button>
                             </span>
                             {% endif %}
-                        </li>
-                    </form>
-                    <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                        <li>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                             <a href="{{ fb3.fb_url }}"  id="url_fb_3">
                                 <div class="fa-cog"></div>
                                 <span class="form-fb-3">
@@ -91,10 +91,10 @@
                                 </button>
                             </span>
                             {% endif %}
-                        </li>
-                    </form>
-                    <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                        <li>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                             <a href="{{ fb4.fb_url }}"  id="url_fb_4">
                                 <div class="fa-briefcase"></div>
                                 <span class="form-fb-4">
@@ -111,8 +111,8 @@
                                 </button>
                             </span>
                             {% endif %}
-                        </li>
-                    </form>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </section>
@@ -328,65 +328,63 @@
         <section class="well3">
             <div class="container">
                 <ul class="row contact-list">
-                    {% if request.user.is_superuser or edit %}
-                                    <form action="/company_post" id="company_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                                {% endif %}
-                <span class="company_form_id">
-                    <li class="grid_4">
-                        <div class="box">
-                            <div class="box_aside">
-                                <div class="icon2 fa-map-marker"></div>
-                            </div>
-                            <div class="box_cnt__no-flow">
-                                <address>{{ company.address }}</address>
-                            </div>
-                        </div>
-                        <div class="box">
-                            <div class="box_aside">
-                                <div class="icon2 fa-skype"></div>
-                            </div>
-                            <div class="box_cnt__no-flow">{{ company.skype }}</div>
-                        </div>
-                    </li>
-                    <li class="grid_4">
-                        <div class="box">
-                            <div class="box_aside">
-                                <div class="icon2 fa-phone"></div>
-                            </div>
-                            <div class="box_cnt__no-flow">{{ company.mob_phone }}</div>
-                        </div>
-                        <div class="box">
-                            <div class="box_aside">
-                                <div class="icon2 fa-fax"></div>
-                            </div>
-                            <div class="box_cnt__no-flow">{{ company.rob_phone }}</div>
-                        </div>
-                    </li>
-                    <li class="grid_4">
-                        <div class="box">
-                            <div class="box_aside">
-                                <div class="icon2 fa-facebook"></div>
-                            </div>
-                            <div class="box_cnt__no-flow"><a href="{{ company.facebook_link }}">Мы в Фейсбуке</a></div>
-                        </div>
-                        <div class="box">
-                            <div class="box_aside">
-                                <div class="icon2 fa-twitter"></div>
-                            </div>
-                            <div class="box_cnt__no-flow"><a href="{{ company.twitter_link }}">Мы в Твиттере</a></div>
-                        </div>
-                    </li>
-                    </span>
-                {% if request.user.is_superuser %}
-                                            <span class="super_user">
-                                                 <input type="hidden" name="edit" value="1">
-                                                 <button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                                                                 </span>
-                                {% endif %}
-                                        {% csrf_token %}
-                                        {% if request.user.is_superuser or edit %}
-                                            </form>
-                                        {% endif %}
+                    <form action="/company_post" id="company_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                        <span class="company_form_id">
+                            <li class="grid_4">
+                                <div class="box">
+                                    <div class="box_aside">
+                                        <div class="icon2 fa-map-marker"></div>
+                                    </div>
+                                    <div class="box_cnt__no-flow">
+                                        <address>{{ company.address }}</address>
+                                    </div>
+                                </div>
+                                <div class="box">
+                                    <div class="box_aside">
+                                        <div class="icon2 fa-skype"></div>
+                                    </div>
+                                    <div class="box_cnt__no-flow">{{ company.skype }}</div>
+                                </div>
+                            </li>
+                            <li class="grid_4">
+                                <div class="box">
+                                    <div class="box_aside">
+                                        <div class="icon2 fa-phone"></div>
+                                    </div>
+                                    <div class="box_cnt__no-flow">{{ company.mob_phone }}</div>
+                                </div>
+                                <div class="box">
+                                    <div class="box_aside">
+                                        <div class="icon2 fa-fax"></div>
+                                    </div>
+                                    <div class="box_cnt__no-flow">{{ company.rob_phone }}</div>
+                                </div>
+                            </li>
+                            <li class="grid_4">
+                                <div class="box">
+                                    <div class="box_aside">
+                                        <div class="icon2 fa-facebook"></div>
+                                    </div>
+                                    <div class="box_cnt__no-flow"><a href="{{ company.facebook_link }}">Мы в Фейсбуке</a></div>
+                                </div>
+                                <div class="box">
+                                    <div class="box_aside">
+                                        <div class="icon2 fa-twitter"></div>
+                                    </div>
+                                    <div class="box_cnt__no-flow"><a href="{{ company.twitter_link }}">Мы в Твиттере</a></div>
+                                </div>
+                            </li>
+                        </span>
+                        {% if request.user.is_superuser %}
+                        {% csrf_token %}
+                        <span class="super_user">
+                            <input type="hidden" name="edit" value="1">
+                            <button type="submit" class="fast-set">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                            </button>
+                        </span>
+                        {% endif %}
+                    </form>
                 </ul>
             </div>
         </section>
