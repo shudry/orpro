@@ -60,12 +60,14 @@ def api_import(request):
                 else:
                     uploading_file = UploadingProducts({'file': file, 'format_file': format_file})
                     if uploading_file.parsing():
-                        messages.success(request, "Загружено и обновлено. {}".format(uploading_file.add if uploading_file.add else ""))
+                        messages.success(request, "Загружено и обновлено. {}".format(
+                            uploading_file.add if uploading_file.add else ""))
                     else:
                         messages.error(request, "Ошибка. Нет поля: {}".format(uploading_file.err))
             except MultiValueDictKeyError:
                 messages.error(request, "Выберите файл!")
     return render(request, 'api.html', locals())
+
 
 def review(request):
     args = {}
@@ -74,10 +76,8 @@ def review(request):
     args['form'] = form
     if 'submit' in request.POST:
         form = ReviewsForm(request.POST)
-        print('POST')
         if form.is_valid():
-            print('valid')
-            recaptcha_response = request.POST.get('g-recaptcha-response') # запрос на передачу данных серверу recaptcha
+            recaptcha_response = request.POST.get('g-recaptcha-response')  # запрос на передачу данных серверу recaptcha
             url = 'https://www.google.com/recaptcha/api/siteverify'
             # данные для передачи на сервер
             values_responce = {
@@ -110,7 +110,6 @@ def review(request):
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['reviews'] = Reviews.objects.filter(publish=True).order_by('-date')
     args['tags'] = Subtags.objects.all().order_by('?')[0:100]
-    print(args)
     return render(request, 'reviews.html', args)
 
 
@@ -121,7 +120,9 @@ def fb_post(request):
             post_text = request.POST
             print(post_text)
             f = FBlocks.objects.get(id=post_text.get("edit")).id
-            FBlocks.objects.filter(id=f).update(fb_title=post_text["fb_title"], fb_text=post_text["fb_text"], fb_url=post_text["fb_url"])
+            FBlocks.objects.filter(id=f).update(fb_title=post_text["fb_title"],
+                                                fb_text=post_text["fb_text"],
+                                                fb_url=post_text["fb_url"])
             response_data['fb_title'] = FBlocks.objects.get(id=f).fb_title
             response_data['fb_text'] = FBlocks.objects.get(id=f).fb_text
             response_data['fb_url'] = FBlocks.objects.get(id=f).fb_url
@@ -136,9 +137,81 @@ def fb_post(request):
             id_edit = request.GET["edit"]
             fb_initial = FBlocks.objects.get(id=id_edit)
             form = FBlocksForm(
-                initial={'fb_title': fb_initial.fb_title, 'fb_text': fb_initial.fb_text, 'fb_url': fb_initial.fb_url})
+                initial={'fb_title': fb_initial.fb_title,
+                         'fb_text': fb_initial.fb_text,
+                         'fb_url': fb_initial.fb_url},
+            )
 
             return render(request, 'fb_form.html', locals())
+    return HttpResponseForbidden()
+
+
+def lb_post(request):
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            response_data = {}
+            post_text = request.POST
+            edit_id = LBlocks.objects.get(id=post_text.get("edit")).id
+            LBlocks.objects.filter(id=edit_id).update(lb_title=post_text["lb_title"],
+                                                      lb_text=post_text["lb_text"],
+                                                      lb_icon=post_text["lb_icon"],
+                                                      lb_link=post_text["lb_link"]
+                                                      )
+            response_data['lb_title'] = LBlocks.objects.get(id=edit_id).lb_title
+            response_data['lb_text'] = LBlocks.objects.get(id=edit_id).lb_text
+            response_data['lb_icon'] = LBlocks.objects.get(id=edit_id).lb_icon
+            response_data['lb_link'] = LBlocks.objects.get(id=edit_id).lb_link
+            response_data['id'] = edit_id
+            return JsonResponse(response_data)
+        else:
+            args = {}
+            if 'edit' in request.GET:
+                print(request.GET["edit"])
+                args['edit'] = True
+                id_edit = request.GET["edit"]
+            lb_initial = LBlocks.objects.get(id=id_edit)
+            form = LBlocksForm(initial={'lb_title': lb_initial.lb_title,
+                                        'lb_text': lb_initial.lb_text,
+                                        'lb_icon': lb_initial.lb_icon,
+                                        'lb_link': lb_initial.lb_link})
+            return render(request, 'lb_form.html', locals())
+    return HttpResponseForbidden()
+
+
+def tag_post(request):
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            response_data = {}
+            post_text = request.POST
+            if request.POST.get('delete_tag', False):
+                f = Tags.objects.get(id=post_text.get("edit")).id
+                Tags.objects.get(id=f).delete()
+                response_data['id'] = f
+                response_data['del'] = True
+                return JsonResponse(response_data)
+            else:
+                f = Tags.objects.get(id=post_text.get("edit")).id
+                Tags.objects.filter(id=f).update(tag_url=post_text["tag_url"],
+                                                 tag_title=post_text["tag_title"],
+                                                 tag_priority=post_text["tag_priority"])
+                response_data['tag_url'] = Tags.objects.get(id=f).tag_url
+                response_data['tag_title'] = Tags.objects.get(id=f).tag_title
+                response_data['tag_publish'] = Tags.objects.get(id=f).tag_publish
+                response_data['tag_priority'] = Tags.objects.get(id=f).tag_priority
+                response_data['id'] = f
+                print(response_data)
+                return JsonResponse(response_data)
+        else:
+            args = {}
+            if 'edit' in request.GET:
+                print(request.GET["edit"])
+                args['edit'] = True
+                id_edit = request.GET["edit"]
+            tag_initial = Tags.objects.get(id=id_edit)
+            form = TagsForm(initial={'tag_url': tag_initial.tag_url,
+                                     'tag_title': tag_initial.tag_title,
+                                     'tag_priority': tag_initial.tag_priority})
+            return render(request, 'tag_form.html', locals())
     return HttpResponseForbidden()
 
 
@@ -155,10 +228,13 @@ def stag_post(request):
                 return JsonResponse(response_data)
             else:
                 f = Subtags.objects.get(id=post_text.get("edit")).id
-                Subtags.objects.filter(id=f).update(tag_title=post_text["tag_title"], tag_url=post_text["tag_url"],
-                                                    tag_parent_tag=post_text["tag_parent_tag"])
+                Subtags.objects.filter(id=f).update(tag_title=post_text["tag_title"],
+                                                    tag_url=post_text["tag_url"],
+                                                    tag_parent_tag=post_text["tag_parent_tag"],
+                                                    tag_priority=post_text["tag_priority"])
                 response_data['tag_title'] = Subtags.objects.get(id=f).tag_title
                 response_data['tag_url'] = Subtags.objects.get(id=f).tag_url
+                response_data['tag_priority'] = Subtags.objects.get(id=f).tag_priority
                 response_data['id'] = f
                 print(response_data)
                 return JsonResponse(response_data)
@@ -169,7 +245,11 @@ def stag_post(request):
                 id_edit = request.GET["edit"]
             stag_initial = Subtags.objects.get(id=id_edit)
             form = SubtagsForm(
-                initial={'tag_title': stag_initial.tag_title, 'tag_url': stag_initial.tag_url, 'tag_parent_tag': stag_initial.tag_parent_tag})
+                initial={'tag_title': stag_initial.tag_title,
+                         'tag_url': stag_initial.tag_url,
+                         'tag_parent_tag': stag_initial.tag_parent_tag,
+                         'tag_priority': stag_initial.tag_priority,
+                         })
             return render(request, 'stag_form.html', locals())
     return HttpResponseForbidden()
 
@@ -183,6 +263,7 @@ def comment_delete(request):
             response_data["id"] = data.get("id")
             return JsonResponse(response_data)
     return HttpResponseForbidden()
+
 
 def comment_admin(request):
     if request.user.is_superuser:
@@ -233,38 +314,9 @@ def hp_post(request):
                 id_edit = request.GET["edit"]
             hp_initial = HeaderPhoto.objects.get(id=id_edit)
             hp_photo_url = hp_initial.hp_photo.url
-            form = HeaderPhotoForm(initial={'hp_name': hp_initial.hp_name, 'hp_photo': hp_initial.hp_photo })
+            form = HeaderPhotoForm(initial={'hp_name': hp_initial.hp_name, 'hp_photo': hp_initial.hp_photo})
             return render(request, 'hp_form.html', locals())
     return HttpResponseForbidden()
-
-
-def lb_post(request):
-    if request.user.is_superuser:
-        if request.method == 'POST':
-            response_data = {}
-            post_text = request.POST
-            print(post_text)
-            f = LBlocks.objects.get(id=post_text.get("edit")).id
-            LBlocks.objects.filter(id=f).update(lb_title=post_text["lb_title"], lb_text=post_text["lb_text"],
-                                                lb_icon=post_text["lb_icon"], lb_link=post_text["lb_link"])
-            response_data['lb_title'] = LBlocks.objects.get(id=f).lb_title
-            response_data['lb_text'] = LBlocks.objects.get(id=f).lb_text
-            response_data['lb_icon'] = LBlocks.objects.get(id=f).lb_icon
-            response_data['lb_link'] = LBlocks.objects.get(id=f).lb_link
-            response_data['id'] = f
-            print(response_data)
-            return JsonResponse(response_data)
-        else:
-            args = {}
-            if 'edit' in request.GET:
-                print(request.GET["edit"])
-                args['edit'] = True
-                id_edit = request.GET["edit"]
-            lb_initial = LBlocks.objects.get(id=id_edit)
-            form = LBlocksForm(initial={'lb_title': lb_initial.lb_title, 'lb_text': lb_initial.lb_text,'lb_icon': lb_initial.lb_icon,'lb_link': lb_initial.lb_link})
-            return render(request, 'lb_form.html', locals())
-    return HttpResponseForbidden()
-
 
 
 def ac_post(request):
@@ -287,7 +339,7 @@ def ac_post(request):
                 args['edit'] = True
                 id_edit = request.GET["edit"]
             ac_initial = AboutCompany.objects.get(id=id_edit)
-            form = AboutCompanyForm(initial={'ac_title': ac_initial.ac_title,'ac_text': ac_initial.ac_text})
+            form = AboutCompanyForm(initial={'ac_title': ac_initial.ac_title, 'ac_text': ac_initial.ac_text})
             return render(request, 'ac_form.html', locals())
     return HttpResponseForbidden()
 
@@ -299,7 +351,8 @@ def to_post(request):
             post_text = request.POST
             print(post_text)
             f = TopOffers.objects.get(id=post_text.get("edit")).id
-            TopOffers.objects.filter(id=f).update(to_title=post_text["to_title"], to_link=post_text["to_link"])
+            TopOffers.objects.filter(id=f).update(to_title=post_text["to_title"],
+                                                  to_link=post_text["to_link"])
             response_data['to_title'] = TopOffers.objects.get(id=f).to_title
             response_data['to_link'] = TopOffers.objects.get(id=f).to_link
             response_data['id'] = f
@@ -316,29 +369,31 @@ def to_post(request):
             return render(request, 'to_form.html', locals())
     return HttpResponseForbidden()
 
-def to_post(request):
-    if request.user.is_superuser:
-        if request.method == 'POST':
-            response_data = {}
-            post_text = request.POST
-            print(post_text)
-            f = TopOffers.objects.get(id=post_text.get("edit")).id
-            TopOffers.objects.filter(id=f).update(to_title=post_text["to_title"], to_link=post_text["to_link"])
-            response_data['to_title'] = TopOffers.objects.get(id=f).to_title
-            response_data['to_link'] = TopOffers.objects.get(id=f).to_link
-            response_data['id'] = f
-            print(response_data)
-            return JsonResponse(response_data)
-        else:
-            args = {}
-            if 'edit' in request.GET:
-                print(request.GET["edit"])
-                args['edit'] = True
-                id_edit = request.GET["edit"]
-            to_initial = TopOffers.objects.get(id=id_edit)
-            form = TopOffersForm(initial={'to_title': to_initial.to_title, 'to_link': to_initial.to_link})
-            return render(request, 'to_form.html', locals())
-    return HttpResponseForbidden()
+
+# def to_post(request):
+#     if request.user.is_superuser:
+#         if request.method == 'POST':
+#             response_data = {}
+#             post_text = request.POST
+#             print(post_text)
+#             f = TopOffers.objects.get(id=post_text.get("edit")).id
+#             TopOffers.objects.filter(id=f).update(to_title=post_text["to_title"],
+#                                                   to_link=post_text["to_link"])
+#             response_data['to_title'] = TopOffers.objects.get(id=f).to_title
+#             response_data['to_link'] = TopOffers.objects.get(id=f).to_link
+#             response_data['id'] = f
+#             print(response_data)
+#             return JsonResponse(response_data)
+#         else:
+#             args = {}
+#             if 'edit' in request.GET:
+#                 print(request.GET["edit"])
+#                 args['edit'] = True
+#                 id_edit = request.GET["edit"]
+#             to_initial = TopOffers.objects.get(id=id_edit)
+#             form = TopOffersForm(initial={'to_title': to_initial.to_title, 'to_link': to_initial.to_link})
+#             return render(request, 'to_form.html', locals())
+#     return HttpResponseForbidden()
 
 
 def sup_post(request):
@@ -394,41 +449,8 @@ def p_post(request):
                 id_edit = request.GET["edit"]
             p_initial = Personal.objects.get(id=id_edit)
             form = PersonalForm(initial={'p_name': p_initial.p_name, 'p_doljnost': p_initial.p_doljnost,
-                                        'p_photo': p_initial.p_photo.url})
+                                         'p_photo': p_initial.p_photo.url})
             return render(request, 'p_form.html', locals())
-    return HttpResponseForbidden()
-
-
-def tag_post(request):
-    if request.user.is_superuser:
-        if request.method == 'POST':
-            response_data = {}
-            post_text = request.POST
-            if request.POST.get('delete_tag', False):
-                f = Tags.objects.get(id=post_text.get("edit")).id
-                Tags.objects.get(id=f).delete()
-                response_data['id'] = f
-                response_data['del'] = True
-                return JsonResponse(response_data)
-            else:
-                f = Tags.objects.get(id=post_text.get("edit")).id
-                Tags.objects.filter(id=f).update(tag_url=post_text["tag_url"], tag_title=post_text["tag_title"], tag_priority=post_text["tag_priority"])
-                response_data['tag_url'] = Tags.objects.get(id=f).tag_url
-                response_data['tag_title'] = Tags.objects.get(id=f).tag_title
-                response_data['tag_publish'] = Tags.objects.get(id=f).tag_publish
-                response_data['tag_priority'] = Tags.objects.get(id=f).tag_priority
-                response_data['id'] = f
-                print(response_data)
-                return JsonResponse(response_data)
-        else:
-            args = {}
-            if 'edit' in request.GET:
-                print(request.GET["edit"])
-                args['edit'] = True
-                id_edit = request.GET["edit"]
-            tag_initial = Tags.objects.get(id=id_edit)
-            form = TagsForm(initial={'tag_url': tag_initial.tag_url, 'tag_title': tag_initial.tag_title, 'tag_priority': tag_initial.tag_priority})
-            return render(request, 'tag_form.html', locals())
     return HttpResponseForbidden()
 
 
@@ -439,8 +461,10 @@ def company_post(request):
             post_text = request.POST
             print(post_text)
             f = Company.objects.get(id=post_text.get("edit")).id
-            Company.objects.filter(id=f).update(name=post_text["name"], email=post_text["email"], address=post_text["address"], skype=post_text["skype"],
-                                                mob_phone=post_text["mob_phone"], rob_phone=post_text["rob_phone"], facebook_link=post_text["facebook_link"],
+            Company.objects.filter(id=f).update(name=post_text["name"], email=post_text["email"],
+                                                address=post_text["address"], skype=post_text["skype"],
+                                                mob_phone=post_text["mob_phone"], rob_phone=post_text["rob_phone"],
+                                                facebook_link=post_text["facebook_link"],
                                                 twitter_link=post_text["twitter_link"])
             response_data['name'] = Company.objects.get(id=f).name
             response_data['email'] = Company.objects.get(id=f).email
@@ -463,7 +487,8 @@ def company_post(request):
             form = CompanyForm(initial={'name': company_initial.name, 'email': company_initial.email,
                                         'address': company_initial.address, 'skype': company_initial.skype,
                                         'mob_phone': company_initial.mob_phone, 'rob_phone': company_initial.rob_phone,
-                                        'facebook_link': company_initial.facebook_link, 'twitter_link': company_initial.twitter_link})
+                                        'facebook_link': company_initial.facebook_link,
+                                        'twitter_link': company_initial.twitter_link})
             return render(request, 'company_form.html', locals())
     return HttpResponseForbidden()
 
@@ -491,8 +516,8 @@ def home(request):
 
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
 
-
     return render(request, 'home.html', args)
+
 
 # def singlepage(request, post_seourl):
 #     args = {}
@@ -560,6 +585,7 @@ class SinglePageAjaxUpdateView(UpdateView):
                 ctx['edit'] = True
         return ctx
 
+
 class OfferAjaxUpdateView(UpdateView):
     queryset = Offers.objects.all()
     form_class = OfferForm
@@ -612,7 +638,7 @@ class OfferAjaxUpdateView(UpdateView):
             ctx['hf'] = HeaderPhoto.objects.get(id=1)
             ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
             ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
-            ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag).order_by('?').order_by('?')[0:100]
+            ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag).order_by('tag_priority')[0:100]
 
         ctx['offer'] = self.object
 
@@ -664,6 +690,7 @@ class OfferImagesAjaxUpdateView(FormView):
             })
         return kwargs
 
+
 def catalog(request, cat_url='nothing'):
     if cat_url == 'nothing':
         cat_url = Tags.objects.filter(tag_publish=True).order_by('tag_priority')[0].tag_url
@@ -671,15 +698,14 @@ def catalog(request, cat_url='nothing'):
     try:
         args['pre'] = 'Группа товаров'
         mt = Tags.objects.get(tag_url=cat_url)
-        offers = Offers.objects.filter (offer_tag=mt)
-        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by ('?').order_by('?')[0:100]
+        offers = Offers.objects.filter(offer_tag=mt)
+        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
     except Exception:
         args['pre'] = 'КЛЮЧЕВОЕ СЛОВО'
         print(cat_url)
-        mt = Subtags.objects.get (tag_url=cat_url)
-        offers = Offers.objects.filter(offer_subtags = mt)
-        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by ('?').order_by('?')[0:100]
-
+        mt = Subtags.objects.get(tag_url=cat_url)
+        offers = Offers.objects.filter(offer_subtags=mt)
+        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by('tag_priority')[0:100]
 
     args['hf'] = HeaderPhoto.objects.get(id=1)
 
@@ -688,7 +714,7 @@ def catalog(request, cat_url='nothing'):
     args['cat_title'] = mt
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
 
-    return render (request, 'catalog.html', args)
+    return render(request, 'catalog.html', args)
 
 
 def pars_cat(request):
@@ -1104,8 +1130,8 @@ def pars_cat(request):
     }
 
     for i in rr['categories']['category']:
-        kk = Tags (tag_url=i['-id'], tag_id=i['-id'], tag_title=i['#text'])
-        kk.save ()
+        kk = Tags(tag_url=i['-id'], tag_id=i['-id'], tag_title=i['#text'])
+        kk.save()
 
 
 def pars_goods(request):
@@ -6443,15 +6469,14 @@ def pars_goods(request):
     ]
 
     for i in rr:
-        kk = Offers (offer_url=i['url'][26:], offer_valuta=i['currencyId'], offer_price=i['price'],
-                     offer_title=i['name'],
-                     offer_text=i['description'], offer_pre_text=i['description'][:100])
+        kk = Offers(offer_url=i['url'][26:], offer_valuta=i['currencyId'], offer_price=i['price'],
+                    offer_title=i['name'],
+                    offer_text=i['description'], offer_pre_text=i['description'][:100])
         try:
             kk.offer_photo_url = i['picture']
         except KeyError:
-            print ("lol")
+            print("lol")
         tag1 = Tags.objects.get(tag_id=i['categoryId'])
         kk.offer_main_tag = tag1
 
-        kk.save ()
-
+        kk.save()

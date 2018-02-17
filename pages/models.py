@@ -156,7 +156,7 @@ class Post(models.Model):
     # post_mainmenu = models.BooleanField(default=False)
 
 
-# Модель категории товара
+# Модель групп товара
 class Tags(models.Model):
 
     def __str__(self):
@@ -173,7 +173,7 @@ class Tags(models.Model):
     delete_tag = models.BooleanField(blank=True, default=False)
 
 
-# Модель категории товара
+# Модель ключевых слов товара
 class Subtags(models.Model):
 
     def __str__(self):
@@ -187,6 +187,7 @@ class Subtags(models.Model):
     tag_title = models.CharField(max_length=250)                  # Название категории
     tag_parent_tag = models.ForeignKey(Tags, blank=True)          # Parents category
     delete_stag = models.BooleanField(blank=True, default=False)
+    tag_priority = models.IntegerField(null=True, blank=True)
 
     @classmethod
     def create(cls, tag_title):

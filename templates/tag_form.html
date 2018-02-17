@@ -1,7 +1,14 @@
-<span style="display: none">{{ id_edit }}</span>
-Название страницы : <span style="color: black">{{ form.tag_title}}</span><br>
-Url: <span style="color: black"> {{ form.tag_url }}</span><br>
-Приоритет: <span style="color: black"> {{ form.tag_priority }}</span><br>
-Удалить?: <span style="color: black"> {{ form.delete_tag }}</span><br>
-<br>
-<button type="submit">Сохранить</button>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 col-xs-12">
+            <div><span style="display: none">{{ id_edit }}</span></div>
+            <div>Название страницы : <p style="color: black">{{ form.tag_title}}</p></div>
+            <div>Url: <p style="color: black"> {{ form.tag_url }}</p></div>
+            <div>Приоритет: <p style="color: black"> {{ form.tag_priority }}</p></div>
+            <div>
+                <p style="color: black"> Удалить?:{{ form.delete_tag }}</p>
+            </div>
+            <div><button class="btn btn-default" type="submit">Сохранить</button></div>
+        </div>
+    </div>
+</div>
