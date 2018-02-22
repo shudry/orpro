@@ -135,7 +135,11 @@ class PersonalForm(forms.ModelForm):
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name', 'email', 'skype', 'address', 'mob_phone', 'rob_phone', 'facebook_link', 'twitter_link']
+        fields = [
+            'name', 'email', 'skype', 'address',
+            'mob_phone', 'rob_phone', 'facebook_link',
+            'twitter_link'
+        ]
 
     def __init__(self, *args, **kwargs):
 
@@ -157,8 +161,9 @@ class OfferForm(forms.ModelForm):
     class Meta:
         model = Offers
         fields = ['offer_title', 'offer_minorder', 'offer_minorder_value',
-                  'offer_availability', 'offer_article', 'offer_price',
-                  'offer_price_from', 'offer_price_to', 'offer_text']
+                  'offer_availability', 'offer_article','offer_subtags',
+                  'offer_price', 'offer_price_from', 'offer_price_to',
+                  'offer_text']
 
         widgets = {
             'offer_text': TinyMCE(attrs={'rows': 45}),
@@ -176,6 +181,7 @@ class SubtagsForm(forms.ModelForm):
         widgets = {
             'delete_stag': forms.CheckboxInput(attrs={'class': 'main-check'})
         }
+
 
 class SinglePageForm(forms.ModelForm):
     class Meta:

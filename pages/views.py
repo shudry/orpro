@@ -370,32 +370,6 @@ def to_post(request):
     return HttpResponseForbidden()
 
 
-# def to_post(request):
-#     if request.user.is_superuser:
-#         if request.method == 'POST':
-#             response_data = {}
-#             post_text = request.POST
-#             print(post_text)
-#             f = TopOffers.objects.get(id=post_text.get("edit")).id
-#             TopOffers.objects.filter(id=f).update(to_title=post_text["to_title"],
-#                                                   to_link=post_text["to_link"])
-#             response_data['to_title'] = TopOffers.objects.get(id=f).to_title
-#             response_data['to_link'] = TopOffers.objects.get(id=f).to_link
-#             response_data['id'] = f
-#             print(response_data)
-#             return JsonResponse(response_data)
-#         else:
-#             args = {}
-#             if 'edit' in request.GET:
-#                 print(request.GET["edit"])
-#                 args['edit'] = True
-#                 id_edit = request.GET["edit"]
-#             to_initial = TopOffers.objects.get(id=id_edit)
-#             form = TopOffersForm(initial={'to_title': to_initial.to_title, 'to_link': to_initial.to_link})
-#             return render(request, 'to_form.html', locals())
-#     return HttpResponseForbidden()
-
-
 def sup_post(request):
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -620,6 +594,7 @@ class OfferAjaxUpdateView(UpdateView):
     def form_valid(self, form):
         context = self.get_context_data()
         images = context['images']
+
         form.save()
         if images.is_valid():
             images.save()
@@ -634,11 +609,13 @@ class OfferAjaxUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        ctx['subtags'] = Subtags.objects.filter(
+            tag_parent_tag=self.object.offer_tag).order_by(
+            'tag_priority')[0:100]
         if not self.request.is_ajax():
             ctx['hf'] = HeaderPhoto.objects.get(id=1)
             ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
             ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
-            ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag).order_by('tag_priority')[0:100]
 
         ctx['offer'] = self.object
 
