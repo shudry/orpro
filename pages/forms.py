@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import widgets
 from django.core.urlresolvers import reverse
 from django.forms import formset_factory
 from django.core.exceptions import ValidationError
@@ -161,13 +162,20 @@ class OfferForm(forms.ModelForm):
     class Meta:
         model = Offers
         fields = ['offer_title', 'offer_minorder', 'offer_minorder_value',
-                  'offer_availability', 'offer_article','offer_subtags',
+                  'offer_availability', 'offer_article', 'offer_subtags',
                   'offer_price', 'offer_price_from', 'offer_price_to',
                   'offer_text']
 
         widgets = {
             'offer_text': TinyMCE(attrs={'rows': 45}),
+            'offer_subtags': forms.CheckboxSelectMultiple,
         }
+
+    def __init__(self, *args, **kwargs):
+        super(OfferForm, self).__init__(*args, **kwargs)
+        if self.instance:
+            self.fields['offer_subtags'].queryset = Subtags.objects.filter(
+                tag_parent_tag=self.instance.offer_tag)
 
     class Media:
         js = ('/static/js/tiny_mce/tiny_mce.js',

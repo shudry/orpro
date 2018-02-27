@@ -18,7 +18,6 @@ from .models import *
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
-from django.shortcuts import get_object_or_404
 from urllib.parse import urlsplit
 import requests
 from pages.import_export_views import *
@@ -493,6 +492,10 @@ def home(request):
     return render(request, 'home.html', args)
 
 
+def get_signature(request):
+    company = get_object_or_404(Company, id=1)
+    return render(request, 'signature.html', company)
+
 # def singlepage(request, post_seourl):
 #     args = {}
 #
@@ -609,14 +612,13 @@ class OfferAjaxUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['subtags'] = Subtags.objects.filter(
-            tag_parent_tag=self.object.offer_tag).order_by(
-            'tag_priority')[0:100]
         if not self.request.is_ajax():
             ctx['hf'] = HeaderPhoto.objects.get(id=1)
             ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
             ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
-
+            ctx['subtags'] = Subtags.objects.filter(
+                tag_parent_tag=self.object.offer_tag).order_by(
+                'tag_priority')[0:100]
         ctx['offer'] = self.object
 
         if self.request.user.is_superuser:
@@ -690,6 +692,7 @@ def catalog(request, cat_url='nothing'):
     args['offer'] = offers
     args['cat_title'] = mt
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
+    args['company'] = Company.objects.get(id=1)
 
     return render(request, 'catalog.html', args)
 
