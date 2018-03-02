@@ -7,24 +7,24 @@
         <meta charset="utf-8">
         <meta name="format-detection" content="telephone=no">
         <link rel="icon" href="http://cdn.stpulscen.ru/system/images/apress/companies/templates/favicons/001/295/227_ico.ico" type="image/x-icon">
-        <link rel="stylesheet" href={% static "css/grid.css" %}>
-        <link rel="stylesheet" href={% static "css/colorScheme-5.css" %}>
-        <link rel="stylesheet" href={% static "css/style.css" %}>
-        <link rel="stylesheet" href={% static "css/camera.css" %}>
-        <link rel="stylesheet" href={% static "css/owl-carousel.css" %}>
-        <link type="text/css" rel="stylesheet" href={% static "css/lightslider.css" %}>
-        <link type="text/css" rel="stylesheet" href={% static "css/lightbox.css" %}>
-        <script src={% static "js/jquery.js" %}></script>
-        <script src={% static "js/jquery-migrate-1.2.1.js" %}></script>
-        <script src={% static "js/lightslider.js" %}></script>
+        <link rel="stylesheet" href="{% static 'css/grid.css' %}">
+        <link rel="stylesheet" href="{% static 'css/colorScheme-5.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/camera.css' %}">
+        <link rel="stylesheet" href="{% static 'css/owl-carousel.css' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'css/lightslider.css' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'css/lightbox.css' %}">
+        <script src="{% static 'js/jquery.js' %}"></script>
+        <script src="{% static 'js/jquery-migrate-1.2.1.js' %}"></script>
+        <script src="{% static 'js/lightslider.js' %}"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
         <!--[if lt IE 9]>
-        <!--<html class="lt-ie9">
+        <html class="lt-ie9">
         <div style="clear: both; text-align:center; position: relative;"><a href="http://windows.microsoft.com/en-US/internet-explorer/.."><img src="images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
         </html>
-        <script src={% static "js/html5shiv.js" %}></script>--><![endif]-->
-        <script src={% static "js/device.min.js" %}></script>
-        <script src={% static "js/lightbox.js" %}></script>
+        <script src="{% static 'js/html5shiv.js' %}"></script><![endif]-->
+        <script src="{% static 'js/device.min.js' %}"></script>
+        <script src="{% static 'js/lightbox.js' %}"></script>
         {% block additional_head %}
         {% endblock %}
     </head>
@@ -38,7 +38,7 @@
             <header class="hp" style="background-image: url({{ hf.hp_photo.url }})">
                 <div class="container">
                     <div class="brand">
-                        <img src={% static "images/imgpsh_fullsize.png" %} width="180px">
+                        <img src="{% static 'images/imgpsh_fullsize.png' %}" width="180px">
                         <h1 class="brand_name"><a href="/">Профсистемы-Крым</a></h1>
                     </div>
                     <a href="callto:#" class="fa-phone">+7(978)213-40-89</a>
@@ -88,7 +88,7 @@
             {% endblock %}
         </div>
     </body>
-    <script src={% static "js/script.js" %}></script>
+    <script src="{% static 'js/script.js' %}"></script>
     {% block additional_scripts %}
     {% endblock %}
 </html>
