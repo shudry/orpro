@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'captcha',
     'pages',
-    'import_export'
+    'import_export',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -156,12 +157,12 @@ MESSAGE_TAGS = {
 # устанавливаем через pip - boto3(для доступа и отправки файлов на Амазон),django-storages(для управления файлами)
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'orpro-assets'                                # Название основной папки на Амазоне
+AWS_STORAGE_BUCKET_NAME = 'orpro-assets'
+# Название основной папки на Амазоне
 AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
-
 REGION_NAME = 'us-east-1'
 AWS_LOCATION = 'static'
 AWS_MEDIA = 'media'
@@ -170,7 +171,7 @@ STATICFILES_STORAGE = 'custom_storages.StaticStorage'
 STATIC_URL = "https://{}/{}/".format(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 AWS_PUBLIC_MEDIA_LOCATION = 'media'
 # Через boto3 настраиваем сохранение медиа файлов (img, mov)
-MEDIA_URL = "https://{}/{}/".format(AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA)
+# MEDIA_URL = "https://{}/{}/".format(AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA)
 # Создаем внешнийф файл storage_backends.py, в котором укажем путь для сохранения файлов
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
