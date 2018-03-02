@@ -149,9 +149,9 @@ MESSAGE_TAGS = {
 }
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 # Подключение Амазона(основные настройки),
 # устанавливаем через pip - boto3(для доступа и отправки файлов на Амазон),django-storages(для управления файлами)
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
@@ -166,13 +166,13 @@ REGION_NAME = 'us-east-1'
 AWS_LOCATION = 'static'
 AWS_MEDIA = 'media'
 # Через boto3 настраиваем сохранение статических файлов (css, js)
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'custom_storages.StaticStorage'
 STATIC_URL = "https://{}/{}/".format(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 AWS_PUBLIC_MEDIA_LOCATION = 'media'
 # Через boto3 настраиваем сохранение медиа файлов (img, mov)
 MEDIA_URL = "https://{}/{}/".format(AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA)
 # Создаем внешнийф файл storage_backends.py, в котором укажем путь для сохранения файлов
-DEFAULT_FILE_STORAGE = 'app.storage_backends.MediaStorage'
+DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
