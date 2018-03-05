@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import widgets
 from django.core.urlresolvers import reverse
 from django.forms import formset_factory
 from django.core.exceptions import ValidationError
@@ -135,7 +136,11 @@ class PersonalForm(forms.ModelForm):
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name', 'email', 'skype', 'address', 'mob_phone', 'rob_phone', 'facebook_link', 'twitter_link']
+        fields = [
+            'name', 'email', 'skype', 'address',
+            'mob_phone', 'rob_phone', 'facebook_link',
+            'twitter_link'
+        ]
 
     def __init__(self, *args, **kwargs):
 
@@ -157,12 +162,20 @@ class OfferForm(forms.ModelForm):
     class Meta:
         model = Offers
         fields = ['offer_title', 'offer_minorder', 'offer_minorder_value',
-                  'offer_availability', 'offer_article', 'offer_price',
-                  'offer_price_from', 'offer_price_to', 'offer_text']
+                  'offer_availability', 'offer_article', 'offer_subtags',
+                  'offer_price', 'offer_price_from', 'offer_price_to',
+                  'offer_text']
 
         widgets = {
             'offer_text': TinyMCE(attrs={'rows': 45}),
+            'offer_subtags': forms.CheckboxSelectMultiple,
         }
+
+    def __init__(self, *args, **kwargs):
+        super(OfferForm, self).__init__(*args, **kwargs)
+        if self.instance:
+            self.fields['offer_subtags'].queryset = Subtags.objects.filter(
+                tag_parent_tag=self.instance.offer_tag)
 
     class Media:
         js = ('/static/js/tiny_mce/tiny_mce.js',
@@ -176,6 +189,7 @@ class SubtagsForm(forms.ModelForm):
         widgets = {
             'delete_stag': forms.CheckboxInput(attrs={'class': 'main-check'})
         }
+
 
 class SinglePageForm(forms.ModelForm):
     class Meta:

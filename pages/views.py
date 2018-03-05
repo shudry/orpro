@@ -18,7 +18,6 @@ from .models import *
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
-from django.shortcuts import get_object_or_404
 from urllib.parse import urlsplit
 import requests
 from pages.import_export_views import *
@@ -370,32 +369,6 @@ def to_post(request):
     return HttpResponseForbidden()
 
 
-# def to_post(request):
-#     if request.user.is_superuser:
-#         if request.method == 'POST':
-#             response_data = {}
-#             post_text = request.POST
-#             print(post_text)
-#             f = TopOffers.objects.get(id=post_text.get("edit")).id
-#             TopOffers.objects.filter(id=f).update(to_title=post_text["to_title"],
-#                                                   to_link=post_text["to_link"])
-#             response_data['to_title'] = TopOffers.objects.get(id=f).to_title
-#             response_data['to_link'] = TopOffers.objects.get(id=f).to_link
-#             response_data['id'] = f
-#             print(response_data)
-#             return JsonResponse(response_data)
-#         else:
-#             args = {}
-#             if 'edit' in request.GET:
-#                 print(request.GET["edit"])
-#                 args['edit'] = True
-#                 id_edit = request.GET["edit"]
-#             to_initial = TopOffers.objects.get(id=id_edit)
-#             form = TopOffersForm(initial={'to_title': to_initial.to_title, 'to_link': to_initial.to_link})
-#             return render(request, 'to_form.html', locals())
-#     return HttpResponseForbidden()
-
-
 def sup_post(request):
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -519,6 +492,10 @@ def home(request):
     return render(request, 'home.html', args)
 
 
+def get_signature(request):
+    company = get_object_or_404(Company, id=1)
+    return render(request, 'signature.html', company)
+
 # def singlepage(request, post_seourl):
 #     args = {}
 #
@@ -620,6 +597,7 @@ class OfferAjaxUpdateView(UpdateView):
     def form_valid(self, form):
         context = self.get_context_data()
         images = context['images']
+
         form.save()
         if images.is_valid():
             images.save()
@@ -638,8 +616,9 @@ class OfferAjaxUpdateView(UpdateView):
             ctx['hf'] = HeaderPhoto.objects.get(id=1)
             ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
             ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
-            ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag).order_by('tag_priority')[0:100]
-
+            ctx['subtags'] = Subtags.objects.filter(
+                tag_parent_tag=self.object.offer_tag).order_by(
+                'tag_priority')[0:100]
         ctx['offer'] = self.object
 
         if self.request.user.is_superuser:
@@ -713,6 +692,7 @@ def catalog(request, cat_url='nothing'):
     args['offer'] = offers
     args['cat_title'] = mt
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
+    args['company'] = Company.objects.get(id=1)
 
     return render(request, 'catalog.html', args)
 

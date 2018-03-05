@@ -176,18 +176,19 @@ class Tags(models.Model):
 # Модель ключевых слов товара
 class Subtags(models.Model):
 
-    def __str__(self):
-        return self.tag_title
-
-    class Meta:
-        verbose_name = 'Дополнительные теги'
-        verbose_name_plural = 'Дополнительные теги'
-
     tag_url = models.CharField(max_length=250, unique=True)       # Ссылка на категорию
     tag_title = models.CharField(max_length=250)                  # Название категории
     tag_parent_tag = models.ForeignKey(Tags, blank=True)          # Parents category
     delete_stag = models.BooleanField(blank=True, default=False)
     tag_priority = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Дополнительные теги'
+        verbose_name_plural = 'Дополнительные теги'
+        ordering = ['tag_title']
+
+    def __str__(self):
+        return self.tag_title
 
     @classmethod
     def create(cls, tag_title):
