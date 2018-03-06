@@ -36,7 +36,33 @@
                 <i class="fas fa-upload"></i>
             </a>
             {% endif %}
-            <h2 style="font-size: 22px">{{ pre }}: {{ cat_title.tag_title }}</h2>
+{#            <h2 style="font-size: 22px">{{ pre }}: {{ cat_title.tag_title }}</h2>#}
+            <div>
+                <div class="row stag-center">
+                    {% for tag in subtags %}
+                        {% if forloop.counter <= 4 %}
+                        <div class="col-6">
+                            <form action="/stag_post" style="display: flex;" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                                <span class="stag_form_{{ tag.id }} stag_form_stl">
+                                    <li>
+                                        <a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a>
+                                    </li>
+                                </span>
+                                {% if request.user.is_superuser %}
+                                {% csrf_token %}
+                                <span class="super_user">
+                                    <input type="hidden" name="edit" value="{{tag.id}}">
+                                    <button type="submit" class="fast-set">
+                                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                    </button>
+                                </span>
+                                {% endif %}
+                            </form>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
             <div class="row off2">
                 {%   for p in offer %}
                 <div class="grid_3  bg1">
@@ -69,22 +95,24 @@
         </div>
         <ul class="cloud" style="position: absolute;left: 71%">
             {% for tag in subtags %}
-            <form action="/stag_post" style="display: flex;" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-                <span class="stag_form_{{ tag.id }} stag_form_stl">
-                    <li>
-                        <a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a>
-                    </li>
-                </span>
-                {% if request.user.is_superuser %}
-                {% csrf_token %}
-                <span class="super_user">
-                    <input type="hidden" name="edit" value="{{tag.id}}">
-                    <button type="submit" class="fast-set">
-                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                    </button>
-                </span>
+                {% if forloop.counter > 4 %}
+                <form action="/stag_post" style="display: flex;" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+                    <span class="stag_form_{{ tag.id }} stag_form_stl">
+                        <li>
+                            <a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a>
+                        </li>
+                    </span>
+                    {% if request.user.is_superuser %}
+                    {% csrf_token %}
+                    <span class="super_user">
+                        <input type="hidden" name="edit" value="{{tag.id}}">
+                        <button type="submit" class="fast-set">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                        </button>
+                    </span>
+                    {% endif %}
+                </form>
                 {% endif %}
-            </form>
             {% endfor %}
         </ul>
     </div>
@@ -220,5 +248,28 @@
     font-size: 0.9em;
     color: forestgreen!important;
 }
+
+.stag-center {
+    list-style: none;
+}
+
+.stag-center {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 17px;
+}
+
+.stag-center .col-6 {
+    flex-grow: 1;
+    flex-basis: 50%;
+    margin-bottom: 30px;
+}
+
+.stag-center form {
+    justify-content: center;
+    text-align: center;
+}
+
 </style>
     {% endblock %}
