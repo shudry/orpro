@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'captcha',
     'pages',
-    'import_export'
+    'import_export',
+    'storages',
 ]
 
 MIDDLEWARE = [
