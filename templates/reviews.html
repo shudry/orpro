@@ -1,11 +1,12 @@
 {% extends "main.html" %}
 {% load static %} {% load staticfiles %}
 {% load crispy_forms_tags %}
-{% block content %}
-    {% block additional_head %}
+{% block additional_head %}
     <link rel="stylesheet" href="{% static 'css/preloader.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 {% endblock %}
+
+{% block content %}
 <div class="container hr well1 ins2">
     <div class="row">
         <div class="grid_9">
@@ -122,16 +123,18 @@
         <div class="copyright">
             <p>
                 © Профсистемы-Крым 2016 г.
-                г. Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89
+                г. Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-51-74
                 Время работы:пн-вс 8:00-18:00, без перерыва
             </p>
         </div>
     </div>
 </footer>
-     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
     <script type="text/javascript" src="{% static 'js/jquery.preloader.min.js' %}"></script>
     <script>
+
     $(document).ready(function () {
         $('#send-review').hide();
         $('#show-form').click(function () {
