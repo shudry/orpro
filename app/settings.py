@@ -177,3 +177,12 @@ DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
+
+#Tiny-MCE configuration
+
+TINYMCE_DEFAULT_CONFIG = {
+    'theme': "lightgray",
+    'relative_urls': False}
+TINYMCE_JS_ROOT = STATIC_URL + 'tiny_mce'
+TINYMCE_JS_URL = STATIC_URL + 'tiny_mce/tiny_mce.js'
+TINYMCE_INCLUDE_JQUERY = False
