@@ -69,13 +69,14 @@
         </div>
         <ul class="cloud" style="position: absolute;left: 71%">
             {% for tag in subtags %}
+            {% if request.user.is_superuser %}
             <form action="/stag_post" style="display: flex;" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
                 <span class="stag_form_{{ tag.id }} stag_form_stl">
                     <li>
                         <a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a>
                     </li>
                 </span>
-                {% if request.user.is_superuser %}
+
                 {% csrf_token %}
                 <span class="super_user">
                     <input type="hidden" name="edit" value="{{tag.id}}">
@@ -83,8 +84,10 @@
                         <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                     </button>
                 </span>
-                {% endif %}
             </form>
+            {% else %}
+            <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
+            {% endif %}
             {% endfor %}
         </ul>
     </div>
