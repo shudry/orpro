@@ -150,9 +150,9 @@ MESSAGE_TAGS = {
 }
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-# STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 # Подключение Амазона(основные настройки),
 # устанавливаем через pip - boto3(для доступа и отправки файлов на Амазон),django-storages(для управления файлами)
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
@@ -180,9 +180,9 @@ RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
 
 #Tiny-MCE configuration
 
-TINYMCE_DEFAULT_CONFIG = {
-    'theme': "lightgray",
-    'relative_urls': False}
-TINYMCE_JS_ROOT = STATIC_URL + 'tiny_mce'
-TINYMCE_JS_URL = STATIC_URL + 'tiny_mce/tiny_mce.js'
-TINYMCE_INCLUDE_JQUERY = False
+# TINYMCE_DEFAULT_CONFIG = {
+#     'theme': "lightgray",
+#     'relative_urls': False}
+# TINYMCE_JS_ROOT = STATIC_URL + 'tiny_mce'
+# TINYMCE_JS_URL = STATIC_URL + 'tiny_mce/tiny_mce.js'
+# TINYMCE_INCLUDE_JQUERY = False
