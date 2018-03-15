@@ -1,7 +1,7 @@
 {% extends "main.html" %}
-{% load static %} {% load staticfiles %}
+{% load static %}
 {% block additional_head %}
-    {{ form.media }}
+
     <link rel="stylesheet" href="{% static 'css/preloader.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 {% endblock %}
@@ -18,7 +18,7 @@
         <section class="camera_container">
             <div id="camera" class="camera_wrap">
                 {% for i in baner %}
-                    <div data-src={{ i.baner_img.url }} >
+                    <div data-src="{{ i.baner_img.url }}" >
                         <div class="camera_caption fadeIn">
                             <div class="container">
                                 <div class="row">

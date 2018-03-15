@@ -1,5 +1,5 @@
 {% extends "main.html" %}
-{% load staticfiles %}
+{% load static %}
 
 {% block additional_head %}
     {{ form.media }}
@@ -26,9 +26,9 @@
          <div class="grid_3">
              <ul class="cloud">
                  {% for tag in subtags %}
-                     <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
+                 <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
                  {% endfor %}
-            </ul>
+             </ul>
          </div>
      </div>
  </div>

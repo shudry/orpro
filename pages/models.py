@@ -11,34 +11,31 @@ from django.core.files.storage import default_storage as storage
 
 
 class Availability(models.Model):
+    availability_title = models.CharField(max_length=50)
 
     def __str__(self):
         return self.availability_title
 
-    availability_title = models.CharField(max_length=50)
-
 
 class Publish(models.Model):
+    publish_title = models.CharField(max_length=50)
 
     def __str__(self):
         return self.publish_title
 
-    publish_title = models.CharField(max_length=50)
-
 
 class Images(models.Model):
-
-    def __str__(self):
-        return self.images_url if self.images_url else self.images_file.name
+    images_url = models.URLField(null=True, blank=True)
+    images_file = models.ImageField(null=True, blank=True)
+    main = models.BooleanField(default=False)
+    offer = models.ForeignKey('Offers', related_name='images')
 
     class Meta:
         verbose_name = 'Изображение'
         verbose_name_plural = 'Изображения'
 
-    images_url = models.URLField(null=True, blank=True)
-    images_file = models.ImageField(null=True, blank=True)
-    main = models.BooleanField(default=False)
-    offer = models.ForeignKey('Offers', related_name='images')
+    def __str__(self):
+        return self.images_url if self.images_url else self.images_file.name
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None, max_width=0, max_height=0):
@@ -48,15 +45,6 @@ class Images(models.Model):
                      force_update=force_update,
                      using=using,
                      update_fields=update_fields)
-
-    # def send_amazon(self):
-    #     client = boto3.resource('s3')
-    #     # data = 'media/{}'.format(str(self.images_file.name))
-    #     # key = str(self.images_file.name)[:len(self.images_file.name) - 3] + 'jpg'
-    #     data = '34a450172d8f784479c5dc5ac41a8948f2fed1c4a504fd068e3799e370a042f8_full.jpeg'
-    #     key = 'media/{}'.format('34a450172d8f784479c5dc5ac41a8948f2fed1c4a504fd068e3799e370a042f8_full.jpeg')
-    #     print("done  " + str(self.images_file.url))
-    #     client.Bucket('orpro-assets').put_object(Key=key, Body=data)
 
     def get_remote_image(self):
         if self.images_url and not self.images_file:
@@ -124,27 +112,18 @@ class Images(models.Model):
 
 # Модель категории
 class Category(models.Model):
-
-    def __str__(self):
-       return self.category_title
+    category_title = models.CharField(max_length=250)
 
     class Meta:
         verbose_name = 'Группа товаров'
         verbose_name_plural = 'Группы товаров'
 
-    category_title = models.CharField(max_length=250)
-
-
-# Модель страници
-class Post(models.Model):
-
     def __str__(self):
-        return self.post_title
+        return self.category_title
 
-    class Meta:
-        verbose_name = 'Страница'
-        verbose_name_plural = 'Страници'
 
+# Модель страницы
+class Post(models.Model):
     post_title = models.CharField(max_length=250)            # <h1></h1>
     post_seourl = models.CharField(max_length=250)           # Ссылка на страницу ( мойсайт.ру/(эта ссылка) )
     post_photo = models.ImageField(blank=True)               # Фото на страницу
@@ -155,37 +134,43 @@ class Post(models.Model):
     # post_submenu = models.BooleanField(default=False)
     # post_mainmenu = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name = 'Страница'
+        verbose_name_plural = 'Страници'
+
+    def __str__(self):
+        return self.post_title
+
 
 # Модель групп товара
 class Tags(models.Model):
-
-    def __str__(self):
-        return self.tag_title
-
-    class Meta:
-        verbose_name = 'Основные теги'
-        verbose_name_plural = 'Основные теги'
-
     tag_url = models.CharField(max_length=250, unique=True)     # Ссылка на категорию
     tag_title = models.CharField(max_length=250)                # Название категории
     tag_publish = models.BooleanField(blank=True)
     tag_priority = models.IntegerField(blank=True)
     delete_tag = models.BooleanField(blank=True, default=False)
 
+    class Meta:
+        verbose_name = 'Основные теги'
+        verbose_name_plural = 'Основные теги'
+
+    def __str__(self):
+        return self.tag_title
+
 
 # Модель ключевых слов товара
 class Subtags(models.Model):
-
     tag_url = models.CharField(max_length=250, unique=True)       # Ссылка на категорию
     tag_title = models.CharField(max_length=250)                  # Название категории
     tag_parent_tag = models.ForeignKey(Tags, blank=True)          # Parents category
     delete_stag = models.BooleanField(blank=True, default=False)
     tag_priority = models.IntegerField(null=True, blank=True)
+    tag_description = models.CharField(max_length=400, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Дополнительные теги'
         verbose_name_plural = 'Дополнительные теги'
-        ordering = ['tag_title']
+        ordering = ['tag_url']
 
     def __str__(self):
         return self.tag_title
@@ -200,14 +185,6 @@ class Subtags(models.Model):
 
 # модель Организации
 class Company(models.Model):
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Организация'
-        verbose_name_plural = 'Организации'
-
     name = models.CharField(null=True, max_length=150)
     email = models.CharField(blank=True,null=True, max_length=100)
     address = models.CharField(blank=True,max_length=150)
@@ -216,6 +193,13 @@ class Company(models.Model):
     rob_phone = models.CharField(blank=True, max_length=80)
     facebook_link = models.CharField(blank=True, max_length=200)
     twitter_link = models.CharField(blank=True, max_length=80)
+
+    class Meta:
+        verbose_name = 'Организация'
+        verbose_name_plural = 'Организации'
+
+    def __str__(self):
+        return self.name
 
     # Нужен для примера написания метода организации
 
@@ -229,14 +213,6 @@ class Company(models.Model):
 
 # Модель товара
 class Offers(models.Model):
-
-    def __str__(self):
-        return self.offer_title
-
-    class Meta:
-        verbose_name = 'Товар'
-        verbose_name_plural = 'Товары'
-
     offer_title = models.CharField(max_length=250, verbose_name='Название')                       # Название товара
     offer_price = models.FloatField(default=0, verbose_name='Цена')                               # Price
     offer_price_discount = models.FloatField(blank=True, default=0, verbose_name='Цена со скидкой', null=True)
@@ -264,6 +240,13 @@ class Offers(models.Model):
     offer_tag = models.ForeignKey(Tags, blank=True, verbose_name='Группа 1 уровня')                      # Ссылка на категорию
     offer_subtags = models.ManyToManyField(Subtags, blank=True, verbose_name='pr')          # Ссылка на категорию
     created = models.DateTimeField(verbose_name='Создан', auto_now_add=True, auto_now=False)
+
+    class Meta:
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
+
+    def __str__(self):
+        return self.offer_title
 
     @property
     def get_main_image(self):
@@ -299,123 +282,122 @@ class Offers(models.Model):
     def get_admin_url(self):
         return "admin:%s_%s_change" % (self._meta.app_label, self._meta.model_name), (self.id, )
 
+
 # Банер на главной
 class MainBaner(models.Model):
-
-    def __str__(self):
-        return self.baner_text
+    baner_text = models.CharField(max_length=80)   # Текст на банере
+    baner_img = models.ImageField(blank=True)      # Картинка банера
+    baner_url = models.CharField(max_length=250)
 
     class Meta:
         verbose_name = 'Банер на главной'
         verbose_name_plural = 'Банер на главной'
 
-    baner_text = models.CharField(max_length=80)   # Текст на банере
-    baner_img = models.ImageField(blank=True)      # Картинка банера
-    baner_url = models.CharField(max_length=250)
+    def __str__(self):
+        return self.baner_text
 
 
 class FBlocks(models.Model):
-    def __str__(self):
-        return self.fb_title
+    fb_title = models.CharField(max_length=80)  # Текст на банере
+    fb_text = models.TextField()                # Текст на банере
+    fb_url = models.CharField(max_length=250)
 
     class Meta:
         verbose_name = 'Блоки под слайдером'
         verbose_name_plural = 'Блоки под слайдером'
 
-    fb_title = models.CharField(max_length=80)  # Текст на банере
-    fb_text = models.TextField()                # Текст на банере
-    fb_url = models.CharField(max_length=250)
+    def __str__(self):
+        return self.fb_title
 
 
 class LBlocks(models.Model):
-    def __str__(self):
-        return self.lb_title
-
-    class Meta:
-        verbose_name = 'Список под 4 блоками'
-        verbose_name_plural = 'Список под 4 блоками'
-
     lb_title = models.CharField(max_length=80)  # Текст на банере
     lb_text = models.TextField()                # Текст на банере
     lb_icon = models.CharField(max_length=80)
     lb_link = models.CharField(max_length=250, blank=True)
 
+    class Meta:
+        verbose_name = 'Список под 4 блоками'
+        verbose_name_plural = 'Список под 4 блоками'
+
+    def __str__(self):
+        return self.lb_title
+
 
 class AboutCompany(models.Model):
-    def __str__(self):
-        return self.ac_title
+    ac_title = models.CharField(max_length=80)  # Текст на банере
+    ac_text = models.TextField()  # Текст на банере
 
     class Meta:
         verbose_name = 'Про компанию на главной'
         verbose_name_plural = 'Про компанию на главной'
 
-    ac_title = models.CharField(max_length=80)  # Текст на банере
-    ac_text = models.TextField()  # Текст на банере
+    def __str__(self):
+        return self.ac_title
 
 
 class TopOffers(models.Model):
-    def __str__(self):
-        return self.to_title
+    to_title = models.CharField(max_length=80)  # Текст на банере
+    to_link = models.CharField(max_length=250)
 
     class Meta:
         verbose_name = 'Самые продаваемые товары'
         verbose_name_plural = 'Самые продаваемые товары'
 
-    to_title = models.CharField(max_length=80)  # Текст на банере
-    to_link = models.CharField(max_length=250)
+    def __str__(self):
+        return self.to_title
 
 
 class Support(models.Model):
-    def __str__(self):
-        return self.sup_title
-
-    class Meta:
-        verbose_name = 'Служба поддержки на главной'
-        verbose_name_plural = 'Служба поддержки на главной'
-
     sup_title = models.CharField(max_length=80)
     sup_time = models.CharField(max_length=80)
     sup_slogan = models.CharField(max_length=80)
     sup_phone = models.CharField(max_length=80)
 
+    class Meta:
+        verbose_name = 'Служба поддержки на главной'
+        verbose_name_plural = 'Служба поддержки на главной'
+
+    def __str__(self):
+        return self.sup_title
+
 
 class Personal(models.Model):
-    def __str__(self):
-        return self.p_name
+    p_name = models.CharField(max_length=80)
+    p_doljnost = models.CharField(max_length=80)
+    p_photo = models.ImageField()
 
     class Meta:
         verbose_name = 'Персонал на главной'
         verbose_name_plural = 'Персонал на главной'
 
-    p_name = models.CharField(max_length=80)
-    p_doljnost = models.CharField(max_length=80)
-    p_photo = models.ImageField()
+    def __str__(self):
+        return self.p_name
 
 
 class HeaderPhoto(models.Model):
-    def __str__(self):
-        return self.hp_name
+    hp_name = models.CharField(max_length=80)
+    hp_photo = models.ImageField()
 
     class Meta:
         verbose_name = 'Картинка в шапку на главной'
         verbose_name_plural = 'Картинка в шапку на главной'
 
-    hp_name = models.CharField(max_length=80)
-    hp_photo = models.ImageField()
+    def __str__(self):
+        return self.hp_name
 
 
 class Reviews(models.Model):
-
-    def __str__(self):
-        return self.text
-
-    class Meta:
-        verbose_name = 'Отзыв'
-        verbose_name_plural = 'Отзывы'
-
     name = models.CharField(blank=True, null=True, max_length=150)
     email = models.CharField(blank=True, null=True, max_length=100)
     text = models.TextField()
     comment = models.TextField(null=True)
     publish = models.BooleanField(default=False, blank=True)
     date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
+
+    def __str__(self):
+        return self.text

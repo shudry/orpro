@@ -2,12 +2,12 @@
 {% load thumbnail %}
 
 <form id="update_offer_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-    <section>
-        <div class="container  well1 ins2">
+    <section class="well1 ins2">
+        <div class="container">
             <div class="row">
-                <div class="col-md-8 col-xs-12">
+                <div class="col-md-5 col-sm-6 col-xs-12">
                     <div class="col-md-12">
-                        <h2 style="width: 50%; padding-bottom: 30px" >
+                        <h2 style="width: 100%; padding-bottom: 30px" >
                         {% if edit %}
                             {{ form.offer_title }}
                         {% else %}
@@ -42,19 +42,19 @@
                         </div>
                     </div>
                     {% if edit %}
-                    <div class="col-md-8 col-xs-12">
+                    <div class="col-md-8 col-xs-12 form-group">
                         <div>Мин. заказ: {{ form.offer_minorder }} {{ form.offer_minorder_value}}</div>
                         <div>Наличие: {{ form.offer_availability }}</div>
                         <div>Арт: {{ form.offer_article }}</div>
                     </div>
-                    <div class="col-md-8 col-xs-12">
+                    <div class="col-md-12 col-xs-12">
                         Метка:
                         {% for subtag in form.offer_subtags %}
                         {{ subtag }}
                         {% endfor %}
                     </div >
                     {% else %}
-                    <div class="col-md-4 col-xs-12">
+                    <div class="col-md-6 col-xs-12">
                         <div>Мин. заказ: {{ offer.offer_minorder }} {{ offer.offer_minorder_value}}</div>
                         <div>{{ offer.offer_availability }}</div>
                         <div>Арт: {{ offer.offer_article }}</div>
@@ -72,7 +72,7 @@
                     <div class="info col-md-4 col-xs-12">
                         {% csrf_token %}
                         {% if edit %}
-                        <button type="submit" style="margin-top: 10px">Сохранить</button>
+                        <button type="submit" value="Update" style="margin-top: 10px">Сохранить</button>
                         {% else %}
                         <p><a href="{{ offer.get_admin_url }}" target="_blank">Редактировать в Админке</a></p>
                         <input type="hidden" name="edit" value="1">
