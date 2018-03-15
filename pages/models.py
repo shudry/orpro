@@ -170,7 +170,7 @@ class Subtags(models.Model):
     class Meta:
         verbose_name = 'Дополнительные теги'
         verbose_name_plural = 'Дополнительные теги'
-        ordering = ['tag_title']
+        ordering = ['tag_url']
 
     def __str__(self):
         return self.tag_title
