@@ -513,7 +513,7 @@ class SinglePageAjaxUpdateView(UpdateView):
     slug_field = "post_seourl"
     slug_url_kwarg = "post_seourl"
     template_name = "singlpage.html"
-    ajax_template_name = "singlpage_form.html"
+    ajax_template_name = "forms/edit-single-page.html"
 
     def post(self, request, *args, **kwargs):
         if request.user.is_superuser:
@@ -569,7 +569,7 @@ class OfferAjaxUpdateView(UpdateView):
     slug_field = "offer_url"
     slug_url_kwarg = "off_url"
     template_name = "offer.html"
-    ajax_template_name = "offer_form.html"
+    ajax_template_name = "forms/offer-form.html"
 
     def post(self, request, *args, **kwargs):
         if request.user.is_superuser:

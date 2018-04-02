@@ -4,6 +4,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+settings-run-local.py
 
 # C extensions
 *.so
@@ -73,6 +74,7 @@ target/
 
 # pyenv
 .python-version
+.virtual/
 
 # celery beat schedule file
 celerybeat-schedule
@@ -105,3 +107,6 @@ ENV/
 .DS_Store
 Pipfile
 os.path.join(BASE_DIR, 'db.sqlite3')
+
+#Database
+*.sqlite3
