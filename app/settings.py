@@ -155,15 +155,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 # Подключение Амазона(основные настройки),
 # устанавливаем через pip - boto3(для доступа и отправки файлов на Амазон),django-storages(для управления файлами)
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'orpro-assets'
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
 # Название основной папки на Амазоне
 AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
-REGION_NAME = 'us-east-1'
+# REGION_NAME = 'us-east-1'
+REGION_NAME = config('REGION_NAME')
 AWS_LOCATION = 'static'
 AWS_MEDIA = 'media'
 # Через boto3 настраиваем сохранение статических файлов (css, js)
