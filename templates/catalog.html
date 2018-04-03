@@ -11,39 +11,8 @@
 {% block content %}
 	<div class="grid_3">
 
-		<div class="custom-category-list">
-			<h2>Группа товаров</h2>
-			<ul class="marked-list">
-				{% for i in tags %}
-					<!--{#<form action="/tag_post" id="tag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-						<li>
-							<a href="/catalog/{{ i.tag_url }}"><i class="fa-check"></i> {{ i.tag_title }}</a>
-						</li>
-						<span class="tag_form_{{ i.id }}">
-							<li>
-								<a href="/catalog/{{ i.tag_url }}">{{ i.tag_title }}</a>
-							</li>
-						</span>
-					{% if request.user.is_superuser %} {% csrf_token %}
-						<span class="super_user">
-							<input type="hidden" name="edit" value="{{i.id}}">
-							<button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-						</span>
-					{% endif %}
-					</form>#}-->
-
-					<li>
-						<a href="/catalog/{{ i.tag_url }}">
-							{% if cat_title.tag_title == i.tag_title %}
-								<i class="fa-arrow-right"></i>
-							{% else %}
-								<i class="fa-check"></i>
-							{% endif %}
-							<p>{{ i.tag_title }}</p>
-						</a>
-					</li>
-				{% endfor %}
-			</ul>
+		<div class="hidden-mobile">
+			{% include 'lists/catalog-menu.html' with tags_menu=tags %}
 		</div>
 
 
@@ -89,7 +58,6 @@
 
 
 		{#<h2 style="font-size: 13px;color: #999;">Каталог / {{ cat_title.tag_title }}</h2>#}
-
 
 		<!--{#<div class="row">
 			{% for tag in subtags %}
@@ -138,20 +106,31 @@
 		</div>
 
 
+		<!--{# Панель отображения товаров(списком или блочно) и способ сортировки #}-->
+		<div class="custom-viewers-line">			
+			<div class="block-settings-type-sorted"></div>
+			<div class="block-settings-type-view">
+				<p id="text-settings-list-or-block">Списком</p>
+				<a id="offer-show-list" class="active"><i class="fa fa-th-list"></i></a>
+				<a id="offer-show-block"><i class="fa fa-th-large"></i></a>
+			</div>
+		</div>
+
 
 
 		<div class="custom-orders-list" {% if offer|length <= 2 %}style="justify-content: flex-start;"{% endif %}>
 			{% for p in offer %}
-				<div class="grid-order catalog-order" {% if offer|length <= 2 %}style="margin-right: 20px;"{% endif %}>
+				<div class="catalog-order order-show-list" {% if offer|length <= 2 %}style="margin-right: 20px;"{% endif %}>
 					
 
 					<div class="catalog-order-image">
-						<img src="{{ p.get_main_image }}"  alt="{{ p.offer_title }}">
+						<a href="/goods/{{ p.offer_url }}/"><img src="{{ p.get_main_image }}"  alt="{{ p.offer_title }}"></a>
 					</div>
 
 
 					<div class="catalog-order-text">
-							<h5>{{ p.offer_title|truncatechars:40 }}</h5>
+							<h5 class="hidden-in-list title">{{ p.offer_title|truncatechars:40 }}</h5>
+							<a href="/goods/{{ p.offer_url }}/" class="hidden-in-block title"><h5>{{ p.offer_title|truncatechars:40 }}</h5></a>
 							
 							{% if p.offer_price != 0 %}
 								<b class="order-price">{{ p.offer_price|stringformat:"i" }} руб.</b>
@@ -161,11 +140,11 @@
 								<b class="order-price">Нет в наличии</b>
 							{% endif %}
 							
-							<p>{{ p.offer_pre_text|safe|truncatechars:60 }}</p>
+							<p>{{ p.offer_pre_text|safe|truncatechars:160 }}</p>
 					</div>
 
 
-					<div class="catalog-order-button">
+					<div class="catalog-order-button hidden-in-list">
 						<a href="/goods/{{ p.offer_url }}/">Просмотреть</a>
 					</div>
 				</div>
@@ -206,7 +185,30 @@
 {% endblock %}
 
 
-{% block additional_scripts %}{% endblock %}
+{% block additional_scripts %}
+	<script type="text/javascript">
+		$('#offer-show-block').on('click', function() {
+			//alert($('.custom-orders-list').length());
+			if ($('.custom-orders-list > .catalog-order').hasClass('order-show-list')){
+				$('.custom-orders-list > .catalog-order').toggleClass('order-show-list order-show-block');
+				$('#text-settings-list-or-block').text('Таблицей');
+				$('.block-settings-type-view > a').toggleClass('active');
+			} else {
+				//Is already show
+			}
+		});
+
+		$('#offer-show-list').on('click', function() {
+			if ($('.custom-orders-list > .catalog-order').hasClass('order-show-block')){
+				$('.custom-orders-list > .catalog-order').toggleClass('order-show-list order-show-block');
+				$('#text-settings-list-or-block').text('Списком');
+				$('.block-settings-type-view > a').toggleClass('active');
+			} else {
+				//Is already show
+			}
+		});
+	</script>
+{% endblock %}
 
 <!--{#
 <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>

@@ -60,8 +60,9 @@
 
 
 
-
-<body style="background: #F1F1F1;">
+<!--{# Отступ требуется для корректного отображения логотипа на странице каталога, 
+			так как в мобильной версии появляется панель отображения товаров(списком или блочно). #}-->
+<body style="background: #F1F1F1;" class="{% if category_page %} catalog-margin-top-30 {% endif %}">
 	<header style="background-image: url({{ hf.hp_photo.url }});">
 		
 
@@ -85,25 +86,35 @@
 					</div>
 
 					<ul class="custom-list-menu">
-						<li>
+						<li {%if request.path == '/' %} class="active-mobile" {%endif%}>
 							<a href="/">Главная</a>
 						</li>
 							
 						
 
-						<!--{#
-								По одному выводит названия категорий 		
-																			#}-->
+						<!--{# Список страниц в главном меню #}-->
 						{% for single_menu_item in topmenu_category %}
 							{% if single_menu_item.post_cat_level == 1 %}
-							<!--{# {#if single_menu_item.post_title.lower == 'спецпредложения' #}special{# endif #} #}-->
-								<li>
-									<a href="/{{ single_menu_item.post_seourl }}">{{ single_menu_item.post_title }}</a>
-								</li>
-							{% elif single_menu_item.post_cat_level > 1 %}
-								<li>
-									<a href="/{{ single_menu_item.post_seourl }}">{{ single_menu_item.post_title }}111</a>
-								</li>
+								
+								<!--{#  Если пользователь открывает страницу каталога на мобильном телефоне, список категорий
+											выводится в верхнем(открывающемся) меню. ВАЖНО: url должен быть 'catalog' 
+
+										Также, добавляется класс "active-mobile" к активной ссылке #}-->
+								{% if request.path == '/catalog' and single_menu_item.post_seourl == 'catalog' %}
+									<li class="active-mobile">
+										<a href="/{{ single_menu_item.post_seourl }}">{{ single_menu_item.post_title }}
+											<i class="fa fa-arrow-down visible-mobile" style="margin-left: 10px;"></i>
+										</a>
+									</li>
+									
+									<div class="open-catalog-menu-mobile">
+										{% include 'lists/catalog-menu.html' with tags_menu=tags %}
+									</div>
+								{% else %}
+									<li {%if request.path|cut:'/' == single_menu_item.post_seourl %} class="active-mobile" {%endif%}>
+										<a href="/{{ single_menu_item.post_seourl }}">{{ single_menu_item.post_title }}</a>
+									</li>
+								{% endif %}
 							{% endif %}
 						{% endfor %}
 					</ul>
@@ -140,13 +151,22 @@
 
 
 </body>
-	<!--{# Мобильная версия. Кнопка разварота меню. #}-->
-    {# block additional_scripts #}{# endblock #}
+	<!--{# Мобильная версия. Кнопка открытия меню. #}-->
+    {% block additional_scripts %}{% endblock %}
     <script type="text/javascript">
     	(function($){
 			$(function() {
 				$('.custom-menu-icon').on('click', function() {
 					$(this).closest('.custom-navbar').toggleClass('menu_state_open');
+
+					var heightMenu = $('.custom-navbar').css('height');
+					if (heightMenu == '50px'){
+						$('.custom-navbar').css({height: 'auto'});
+						$('html').css({'overflow-y': 'hidden'});
+					} else {
+						$('.custom-navbar').css({height: '50px'});
+						$('html').css({'overflow-y': ''});
+					}
 				});
 			});
 		})(jQuery);

@@ -694,6 +694,8 @@ def catalog(request, cat_url='nothing'):
     args['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
     args['company'] = Company.objects.get(id=1)
 
+    args['category_page'] = True
+
     return render(request, 'catalog.html', args)
 
 
