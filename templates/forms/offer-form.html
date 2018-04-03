@@ -250,10 +250,12 @@ $('.slick-arrow').css({
 function viewImage(image_url, is_view){
 	if (is_view){
 		$('.view-pop-up-image').css({display: 'block'});
-		$('.view-pop-up-image').html('<img class="opened-image-in-pop-up" src="'+ image_url +'" alt="Image offer" />');
+		$('.view-pop-up-image').html('<p>Чтобы закрыть, щелкните в любом месте</p><img class="opened-image-in-pop-up" src="'+ image_url +'" alt="Image offer" />');
+		$('html').css({'overflow-y': 'hidden'});
 	} else {
 		$('.view-pop-up-image').css({display: 'none'});
 		$('.view-pop-up-image').html('');
+		$('html').css({'overflow-y': ''});
 	}
 }
 </script>
