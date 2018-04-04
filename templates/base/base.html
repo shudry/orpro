@@ -1,7 +1,7 @@
 {% load static %}
 <!-- saved from url=(0014)about:internet -->
 <!DOCTYPE html>
-<html manifest="default.appcache" lang="ru-RU">
+<html lang="ru-RU">
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -66,7 +66,7 @@
 	<header style="background-image: url({{ hf.hp_photo.url }});">
 		
 
-		<div class="custom-container">
+		<div class="custom-container hidden-mobile-logo">
 			<div class="custom-brand">
 				<img src="{% static 'images/imgpsh_fullsize.png' %}" width="180px">
 				<h1 class="brand_name"><a href="/">Профсистемы-Крым</a></h1>
@@ -83,6 +83,10 @@
 					<div class="custom-menu-icon">
 						<span></span><span></span><span></span><span></span>
 						<p>Профсистемы-Крым (пгт Гурзуф, ул. Ялтинская, 12)</p>
+					</div>
+
+					<div class="logo-mobile-in-navbar">
+						<img src="{% static 'images/imgpsh_fullsize.png' %}" width="80px">
 					</div>
 
 					<ul class="custom-list-menu">
