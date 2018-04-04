@@ -19,7 +19,7 @@
 		{% if offer|length > 12 %}
 			<ul class="cloud">
 			{% for tag in subtags %}
-			{% if forloop.counter > 4 %}
+			{% if forloop.counter > 4 and forloop.counter <= 20 %}
 				{% if request.user.is_superuser %}
 					<form action="/stag_post" style="display: flex;" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
 						<span class="stag_form_{{ tag.id }} stag_form_stl">

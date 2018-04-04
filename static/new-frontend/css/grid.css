@@ -446,7 +446,7 @@ input[type='button']::-moz-focus-inner {
 }
 @media (max-width: 767px) {
   .custom-container, .custom-container-fluid {
-    width: 420px;
+    width: 90%;
     padding: 0;
   }
 
@@ -472,8 +472,8 @@ input[type='button']::-moz-focus-inner {
   }
 
   .custom-container, .custom-container-fluid {
-    width: 450px;
-    padding: 0 15px;
+    width: 90%;
+    padding: 0 25px;
   }
 
   .row {
