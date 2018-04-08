@@ -14,34 +14,6 @@
 		<div class="hidden-mobile">
 			{% include 'lists/catalog-menu.html' with tags_menu=tags %}
 		</div>
-
-
-		{% if offer|length > 12 %}
-			<ul class="cloud">
-			{% for tag in subtags %}
-			{% if forloop.counter > 4 and forloop.counter <= 20 %}
-				{% if request.user.is_superuser %}
-					<form action="/stag_post" style="display: flex;" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-						<span class="stag_form_{{ tag.id }} stag_form_stl">
-							<li>
-								<a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a>
-							</li>
-						</span>
-						{% csrf_token %}
-						<span class="super_user">
-							<input type="hidden" name="edit" value="{{tag.id}}">
-							<button type="submit" class="fast-set">
-								<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-							</button>
-						</span>
-					</form>
-				{% else %}
-					<li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
-				{% endif %}
-			{% endif %}
-			{% endfor %}
-		</ul>
-		{% endif %}
 	</div>
 
 
@@ -105,12 +77,19 @@
 			{% endfor %}
 		</div>
 
+		
+		<div class="hidden-mobile">
+			{% include 'lists/cloud-tags.html' %}
+		</div>
+
 
 		<!--{# Панель отображения товаров(списком или блочно) и способ сортировки #}-->
 		<div class="custom-viewers-line">			
 			<div class="block-settings-type-sorted"></div>
 			<div class="block-settings-type-view">
-				<p id="text-settings-list-or-block">Списком</p>
+				<!--<p id="text-settings-list-or-block"></p>-->
+				<a class="return-to-category">{{ cat_title.tag_title }}</a>
+
 				<a id="offer-show-list" class="active"><i class="fa fa-th-list"></i></a>
 				<a id="offer-show-block"><i class="fa fa-th-large"></i></a>
 			</div>
@@ -150,39 +129,26 @@
 				</div>
 			{% endfor %}
 		</div>
+		
+
+			<div class="visible-mobile">
+				{% include 'lists/cloud-tags.html' %}
+			</div>
+
 		{% endblock container_list_offers %}
-
-
-
-		{% if offer|length <= 12 %}
-			<ul class="cloud">
-			{% for tag in subtags %}
-			{% if forloop.counter > 4 %}
-				{% if request.user.is_superuser %}
-					<form action="/stag_post" style="display: flex;" id="stag_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-						<span class="stag_form_{{ tag.id }} stag_form_stl">
-							<li>
-								<a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a>
-							</li>
-						</span>
-						{% csrf_token %}
-						<span class="super_user">
-							<input type="hidden" name="edit" value="{{tag.id}}">
-							<button type="submit" class="fast-set">
-								<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-							</button>
-						</span>
-					</form>
-				{% else %}
-					<li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
-				{% endif %}
-			{% endif %}
-			{% endfor %}
-		</ul>
-		{% endif %}
 	</div>
 
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
 
 
 {% block additional_scripts %}
@@ -191,8 +157,8 @@
 			//alert($('.custom-orders-list').length());
 			if ($('.custom-orders-list > .catalog-order').hasClass('order-show-list')){
 				$('.custom-orders-list > .catalog-order').toggleClass('order-show-list order-show-block');
-				$('#text-settings-list-or-block').text('Таблицей');
-				$('.block-settings-type-view > a').toggleClass('active');
+				//$('#text-settings-list-or-block').text('Таблицей');
+				$('.block-settings-type-view > a:not(.return-to-category)').toggleClass('active');
 			} else {
 				//Is already show
 			}
@@ -201,8 +167,8 @@
 		$('#offer-show-list').on('click', function() {
 			if ($('.custom-orders-list > .catalog-order').hasClass('order-show-block')){
 				$('.custom-orders-list > .catalog-order').toggleClass('order-show-list order-show-block');
-				$('#text-settings-list-or-block').text('Списком');
-				$('.block-settings-type-view > a').toggleClass('active');
+				//$('#text-settings-list-or-block').text('Списком');
+				$('.block-settings-type-view > a:not(.return-to-category)').toggleClass('active');
 			} else {
 				//Is already show
 			}

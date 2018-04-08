@@ -220,16 +220,18 @@
 </div>
 
 
+{% include 'lists/cloud-tags.html' %}
+
 
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 <script type="text/javascript">
  $('.slider-for').slick({
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  arrows: false,
-  fade: true,
-  asNavFor: '.slider-nav'
+	slidesToShow: 1,
+	slidesToScroll: 1,
+	arrows: false,
+	fade: true,
+	asNavFor: '.slider-nav',
 });
 
 
@@ -237,9 +239,10 @@ $('.slider-nav').slick({
   slidesToShow: 3,
   slidesToScroll: 1,
   asNavFor: '.slider-for',
-  dots: true,
+  dots: false,
   centerMode: true,
   focusOnSelect: true,
+  arrows: false,
 });
 
 $('.slick-arrow').css({

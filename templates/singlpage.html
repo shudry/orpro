@@ -45,13 +45,7 @@
 
 
         <div class="grid_3">
-            <ul class="cloud">
-                 {% for tag in tags %}
-                 {% if forloop.counter < 100 %}
-                 <li><a href="{%  url 'catalog' cat_url=tag.tag_url %}">{{ tag.tag_title }}</a></li>
-                 {% endif %}
-                 {% endfor %}
-            </ul>
+            {% include 'lists/cloud-tags.html' with subtags=tags count=60 %}
         </div>
     {% endif %}
 {% endblock %}
