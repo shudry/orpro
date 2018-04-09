@@ -1,6 +1,6 @@
 @charset "UTF-8";
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
+@import url('https://fonts.googleapis.com/css?family=Roboto:100, 400,500,700');
 
 
 
@@ -130,7 +130,7 @@ header .custom-brand > h1.brand_name{
 	padding-bottom: 10px;
 	font-size: 40px;
 }
-
+header a[href^="callto:"] > i{color: #0c623b !important;}
 header a[href^="callto:"] {
 	margin-top: 7px;
 	position: relative;
@@ -385,7 +385,7 @@ footer .copyright a:hover {
 	letter-spacing: 1px;*/
 	font-size: 16px;
 	width: 290px;
-	line-height: 15px;
+	line-height: 16px;
 	color: #444;
 	letter-spacing: .05em;
 }
@@ -767,10 +767,10 @@ footer .copyright a:hover {
 @media (max-width: 465px) {
 	body{padding-top: 60px;}
 	header .custom-brand > h1.brand_name{display: none;}
-	header .custom-brand > img{width: 100px;padding-right: 10px;}
+	header .custom-brand > img{width: 110px;padding-right: 10px;}
 	header > .custom-container{text-align: left;}
 	header > .custom-container > p{font-size: 14px;line-height: 17px;}
-	header a[href^="callto:"]{font-size: 16px;}
+	header a[href^="callto:"]{font-size: 19px;}
 	header a[href^="callto:"] + p{margin-top: 0;}
 	.custom-navbar {overflow-x: hidden;}
 
@@ -783,6 +783,13 @@ footer .copyright a:hover {
 	.catalog-order.order-show-block > .catalog-order-text > .title > h5{
 		font-size: 15px;line-height: 14px;font-weight: 600;margin-top: 5px;}
 
+}
+
+/* Показывается номер телефона в шапке при просмотре через мобильный(альбомный вид). */
+.visible-phone-mobile-landscape{display: none;}
+@media (min-width: 585px) and (max-width: 767px){
+	.visible-phone-mobile-landscape{display: inline-block;}
+	.custom-menu-icon > p{width: 500px;}
 }
 
 

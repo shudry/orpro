@@ -58,7 +58,7 @@
 					<li>
 						<form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
 							<a href="{{ fb1.fb_url }}" id="url_fb_1">
-								<div class="fa-globe yel"></div>
+								<div class="fa-code-fork"></div>
 								<span class="form-fb-1">
 									<h3>{{ fb1.fb_title }}</h3>
 									<p>{{ fb1.fb_text|safe  }}</p>
@@ -69,7 +69,7 @@
 							<span class="super_user">
 								<input type="hidden" name="edit" value="1">
 								<button type="submit" class="fast-set">
-									<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+									<span class="admin-icon-edit" aria-hidden="true"></span>
 								</button>
 							</span>
 							{% endif %}
@@ -78,7 +78,7 @@
 					<li>
 						<form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
 							<a href="{{ fb2.fb_url }}"  id="url_fb_2">
-								<div class="fa-lightbulb-o"></div>
+								<div class="fa-fire"></div>
 								<span class="form-fb-2">
 									<h3>{{ fb2.fb_title }}<br></h3>
 									<p>{{ fb2.fb_text|safe  }}</p>
@@ -89,7 +89,7 @@
 							<span class="super_user">
 								<input type="hidden" name="edit" value="2">
 								<button type="submit" class="fast-set" >
-									<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+									<span class="admin-icon-edit" aria-hidden="true"></span>
 								</button>
 							</span>
 							{% endif %}
@@ -98,7 +98,7 @@
 					<li>
 						<form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
 							<a href="{{ fb3.fb_url }}"  id="url_fb_3">
-								<div class="fa-cog"></div>
+								<div class="fa-bolt"></div>
 								<span class="form-fb-3">
 									<h3>{{ fb3.fb_title }}</h3>
 									<p>{{ fb3.fb_text|safe  }}</p>
@@ -109,7 +109,7 @@
 							<span class="super_user">
 								<input type="hidden" name="edit" value="3">
 								<button type="submit" class="fast-set">
-									<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+									<span class="admin-icon-edit" aria-hidden="true"></span>
 								</button>
 							</span>
 							{% endif %}
@@ -118,7 +118,7 @@
 					<li>
 						<form action="/fb_post" id="fb_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
 							<a href="{{ fb4.fb_url }}"  id="url_fb_4">
-								<div class="fa-briefcase"></div>
+								<div class="fa-pie-chart"></div>
 								<span class="form-fb-4">
 									<h3>{{ fb4.fb_title }}</h3>
 									<p>{{ fb4.fb_text|safe  }}</p>
@@ -129,7 +129,7 @@
 							<span class="super_user">
 								<input type="hidden" name="edit" value="4">
 								<button type="submit" class="fast-set">
-									<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+									<span class="admin-icon-edit" aria-hidden="true"></span>
 								</button>
 							</span>
 							{% endif %}
@@ -159,7 +159,7 @@
 								<span class="super_user">
 									<input type="hidden" name="edit" value="1">
 									<button type="submit" class="fast-set">
-										<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+										<span class="admin-icon-edit" aria-hidden="true"></span>
 									</button>
 								</span>
 								{% endif %}
@@ -182,7 +182,7 @@
 								<span class="super_user">
 									<input type="hidden" name="edit" value="2">
 									<button type="submit" class="fast-set">
-										<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+										<span class="admin-icon-edit" aria-hidden="true"></span>
 									</button>
 								</span>
 								{% endif %}
@@ -205,7 +205,7 @@
 								{% csrf_token %}
 								<span class="super_user">
 									<input type="hidden" name="edit" value="3">
-									<button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+									<button type="submit" class="fast-set"><span class="admin-icon-edit" aria-hidden="true"></span></button>
 								</span>
 								{% endif %}
 							</form>
@@ -227,7 +227,7 @@
 								<span class="super_user">
 									<input type="hidden" name="edit" value="4">
 									<button type="submit" class="fast-set">
-										<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+										<span class="admin-icon-edit" aria-hidden="true"></span>
 									</button>
 								</span>
 								{% endif %}
@@ -257,7 +257,7 @@
 								<span class="super_user">
 									<input type="hidden" name="edit" value="1">
 									<button type="submit" class="fast-set">
-										<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+										<span class="admin-icon-edit" aria-hidden="true"></span>
 									</button>
 								</span>
 								{% endif %}
@@ -280,7 +280,7 @@
 								<span class="super_user">
 									<input type="hidden" name="edit" value="2">
 									<button type="submit" class="fast-set">
-										<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+										<span class="admin-icon-edit" aria-hidden="true"></span>
 									</button>
 								</span>
 								{% endif %}
@@ -302,7 +302,7 @@
 								{% csrf_token %}
 								<span class="super_user">
 									<input type="hidden" name="edit" value="3">
-									<button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+									<button type="submit" class="fast-set"><span class="admin-icon-edit" aria-hidden="true"></span></button>
 								</span>
 								{% endif %}
 							</form>
@@ -324,7 +324,7 @@
 								<span class="super_user">
 									<input type="hidden" name="edit" value="4">
 									<button type="submit" class="fast-set">
-										<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+										<span class="admin-icon-edit" aria-hidden="true"></span>
 									</button>
 								</span>
 								{% endif %}
@@ -341,7 +341,7 @@
 			<div class="custom-container">
 				<div class="row">
 					<div class="grid_4">
-						<form action="/ac_post" id="ac_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+						<form action="/ac_post" class="admin-relative-block" id="ac_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
 							<span>
 								<h2>{{ ac1.ac_title }}</h2>
 								<p style="margin-top: 20px;">{{ ac1.ac_text|safe }}</p>
@@ -356,7 +356,7 @@
 							{% csrf_token %}
 							<span class="super_user">
 								<input type="hidden" name="edit" value="1">
-								<button type="submit" class="fast-set"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+								<button type="submit" class="fast-set"><span class="admin-icon-edit" aria-hidden="true"></span>
 								</button>
 							</span>
 							{% endif %}
@@ -368,7 +368,7 @@
 						<p>Список самых покупаемых товаров</p>
 						<ul class="marked-list-buy-orders">
 							{% for i in TO %}
-									<form action="/to_post" id="to_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+									<form action="/to_post" class="admin-relative-block" id="to_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
 										<span class="to_form_{{i.id}}">
 											<li><a href="/goods/{{i.to_link}}">{{ i.to_title }}</a></li>
 										</span>
@@ -379,7 +379,7 @@
 										<span class="super_user">
 											<input type="hidden" name="edit" value="{{i.id}}">
 											<button type="submit" class="fast-set">
-												<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+												<span class="admin-icon-edit" aria-hidden="true"></span>
 											</button>
 										</span>
 										{% endif %}
@@ -406,7 +406,7 @@
 								<span class="super_user">
 									<input type="hidden" name="edit" value="1">
 									<button type="submit" class="fast-set">
-										<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+										<span class="admin-icon-edit" aria-hidden="true"></span>
 									</button>
 								</span>
 								{% endif %}
@@ -433,7 +433,7 @@
 											<span class="super_user">
 												 <input type="hidden" name="edit" value="{{p.id}}">
 												 <button type="submit" class="fast-set">
-													 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+													 <span class="admin-icon-edit" aria-hidden="true"></span>
 												 </button>
 											</span>
 										{% endif %}
@@ -512,7 +512,6 @@
 			</div>
 			</div>
 		</div>
-		
 
 		<div class="custom-container">
 			<hr class="hr">

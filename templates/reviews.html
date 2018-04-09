@@ -30,13 +30,13 @@
 						<input class="home-button" type="submit" name="submit" value="Добавить"
 							   id="submit-id-submit"/>
 
-						<!-- {% if messages %}
+						<!--{# {% if messages %}
 							<div class="messages">
 								<div {% if message.tags %} class="{{ message.tags }}"{% endif %}>
 								{{ message }}
 								</div>
 							</div>
-						{% endif %} -->
+						{% endif %} #}-->
 					</form>
 				</div>
 
@@ -116,22 +116,11 @@
 	</div>
 {% endblock %}
 
-<!--{#  {% block footer %}
-<footer>
-	<div class="container">
-		<div class="copyright">
-			<p>
-				© Профсистемы-Крым 2016 г.
-				г. Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89
-				Время работы:пн-вс 8:00-18:00, без перерыва
-			</p>
-		</div>
-	</div>
-</footer>
-<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+{% block additional_scripts %}
+<!--<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
 <script type="text/javascript" src="{% static 'js/jquery.preloader.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/tiny_mce/tiny_mce.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/tiny_mce/tiny_mce.js' %}"></script>-->
 <script>
 	$(document).ready(function () {
 		$('#send-review').hide();
@@ -219,4 +208,4 @@
 			});
 		});
 </script>
-{% endblock %}  #}-->
+{% endblock %}
