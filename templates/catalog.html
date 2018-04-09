@@ -77,10 +77,11 @@
 			{% endfor %}
 		</div>
 
-		
+		{% if not request.user.is_superuser %}
 		<div class="hidden-mobile">
 			{% include 'lists/cloud-tags.html' %}
 		</div>
+		{% endif %}
 
 
 		<!--{# Панель отображения товаров(списком или блочно) и способ сортировки #}-->
@@ -130,10 +131,11 @@
 			{% endfor %}
 		</div>
 		
-
+			{% if not request.user.is_superuser %}
 			<div class="visible-mobile">
 				{% include 'lists/cloud-tags.html' %}
 			</div>
+			{% endif %}
 
 		{% endblock container_list_offers %}
 	</div>

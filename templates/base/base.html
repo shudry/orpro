@@ -46,17 +46,19 @@
 
 
 	{% if request.user.is_superuser %}
-    	<!-- Если вошёл администратор, подключаются стили и скрипты 
-                для формы изменения содержимого страницы.(Only admin)
+		<!-- Если вошёл администратор, подключаются стили и скрипты 
+				для формы изменения содержимого страницы.(Only admin)
+		-->
+		<link rel="stylesheet" href="{% static 'new-frontend/css/for-admin.css' %}">
 
-    	include libraries(jQuery, bootstrap) -->
-    	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet" type="text/css" />
-    	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
-    	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
-    		<!-- include summernote css/js -->
-    	<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet" type="text/css" />
-    	<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
-    {% endif %}
+		<!--include libraries(jQuery, bootstrap) 
+		<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet" type="text/css" />-->
+		<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>-->
+			<!-- include summernote css/js -->
+		<!--<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet" type="text/css" />
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>-->
+	{% endif %}
 </head>
 
 
@@ -66,7 +68,22 @@
 			так как в мобильной версии появляется панель отображения товаров(списком или блочно). #}-->
 <body style="background: #F1F1F1;" class="{% if category_page %} catalog-margin-top-30 {% endif %}">
 	<header style="background-image: url({{ hf.hp_photo.url }});{%if request.path == '/' %}margin-bottom: 0;{%endif%}">
-		
+		<!--{#  Изменение фоновой картинки в шапке  #}-->
+		{% if request.user.is_superuser %}
+		<form class="admin-visible-lg" action="hp_post" id="hp_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+			<span class="hp_form_id"></span>
+			{% csrf_token %}
+			<span class="super_user">
+				<input type="hidden" name="edit" value="1">
+				<button type="submit" class="fast-set">
+					<span class="admin-icon-edit" aria-hidden="true"></span>
+				</button>
+			</span>
+		</form>
+		{% endif %}
+
+
+
 
 		<div class="custom-container hidden-mobile-logo">
 			<div class="custom-brand">
@@ -74,7 +91,7 @@
 				<h1 class="brand_name"><a href="/">Профсистемы-Крым</a></h1>
 			</div>
 			
-			<a href="callto:#"><i class="fa-phone" style="color: #0c623b;"></i> +7(978)213-40-89</a>
+			<a href="callto:#"><i class="fa-phone"></i> +7 (978) 213-40-89</a>
 			<p>Время работы: пн-вс 8:00-18:00, без перерыва</p>
 		</div>
 		
@@ -84,7 +101,8 @@
 				<nav class="custom-navbar">
 					<div class="custom-menu-icon">
 						<span></span><span></span><span></span><span></span>
-						<p><b>Профсистемы-Крым</b> (пгт Гурзуф, ул. Ялтинская, 12)</p>
+						<p><b>Профсистемы-Крым</b> <b class="visible-phone-mobile-landscape"> | +7 (978) 213-40-89</b> <br>
+							пгт Гурзуф, ул. Ялтинская, 12</p>
 					</div>
 
 					<div class="logo-mobile-in-navbar">
@@ -150,19 +168,26 @@
 	<footer>
 		<div class="custom-container">
 			<div class="copyright">© Профсистемы-Крым 2016г. г.Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-40-89 Время работы: пн-вс 8:00-18:00, без перерыва</div>
-    	</div></footer>
+		</div></footer>
 	{% endblock footer %}
 
 
+	<!--{#
+	{% if request.user.is_superuser %}
+		<div class="admin-panel-pop-up"><div class="custom-container"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p></div></div>
+	{% endif %}#}-->
 
+	{% block additional_scripts %}{% endblock %}
+	
 
-
-
-</body>
 	<!--{# Мобильная версия. Кнопка открытия меню. #}-->
-    {% block additional_scripts %}{% endblock %}
-    <script type="text/javascript">
-    	(function($){
+	<script type="text/javascript">
+		(function($){
 			$(function() {
 				$('.custom-menu-icon').on('click', function() {
 					$(this).closest('.custom-navbar').toggleClass('menu_state_open');
@@ -178,5 +203,8 @@
 				});
 			});
 		})(jQuery);
-    </script>
+	</script>
+	
+
+	</body>
 </html>
