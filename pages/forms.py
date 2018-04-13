@@ -5,13 +5,16 @@ from django.forms import formset_factory
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from crispy_forms.bootstrap import Field, InlineRadios, TabHolder, Tab
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Div, Fieldset
+#from crispy_forms.bootstrap import Field, InlineRadios, TabHolder, Tab
+#from crispy_forms.helper import FormHelper
+#from crispy_forms.layout import Submit, Layout, Div, Fieldset
 from django.core.files.storage import default_storage as storage
-from tinymce.widgets import TinyMCE
+
+#from tinymce.widgets import TinyMCE
+from django_summernote.widgets import SummernoteWidget
 
 from .models import *
+
 
 
 class CommentAdminForm(forms.ModelForm):
@@ -19,7 +22,7 @@ class CommentAdminForm(forms.ModelForm):
         model = Reviews
         fields = ['comment']
         widgets = {
-            'comment': TinyMCE(attrs={'rows': 10}),
+            'comment': SummernoteWidget(attrs={'rows': 10}),
         }
 
 
@@ -32,20 +35,20 @@ class ReviewsForm(forms.Form):
     email = forms.CharField(label='Email', max_length=100, required=False)
     text = forms.CharField(label='Отзыв', widget=forms.Textarea)
 
-    def __init__(self, *args, **kwargs):
-        super(ReviewsForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_id = 'id-personal-data-form'
-        self.helper.form_method = 'post'
-        self.helper.form_action = reverse('review')
-        self.helper.add_input(Submit('submit', 'Добавить', css_class='btn-success '))
-        self.helper.form_class = 'form-horizontal'
-        self.helper.layout = Layout(
-            Fieldset('',
-                     Field('name', placeholder=''),
-                     Field('email', placeholder=''),
-                     Field('text', placeholder=''),
-                     ))
+    #def __init__(self, *args, **kwargs):
+    #    super(ReviewsForm, self).__init__(*args, **kwargs)
+    #    self.helper = FormHelper()
+    #    self.helper.form_id = 'id-personal-data-form'
+    #    self.helper.form_method = 'post'
+    #    self.helper.form_action = reverse('review')
+    #    self.helper.add_input(Submit('submit', 'Добавить', css_class='btn-success '))
+    #    self.helper.form_class = 'form-horizontal'
+    #    self.helper.layout = Layout(
+    #        Fieldset('',
+    #                 Field('name', placeholder=''),
+    #                 Field('email', placeholder=''),
+    #                 Field('text', placeholder=''),
+    #                 ))
 
 
 class FBlocksForm(forms.ModelForm):
@@ -53,15 +56,11 @@ class FBlocksForm(forms.ModelForm):
         model = FBlocks
         fields = ['fb_title', 'fb_text', 'fb_url']
         widgets = {
-            'fb_text': TinyMCE(attrs={'rows': 10}),
+            'fb_text': SummernoteWidget(attrs={'rows': 10}),
         }
 
-    class Media:
-        js = ('/static/js/tiny_mce/tiny_mce.js',
-              '/static/js/tiny_mce/textareas.js',)
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
 
@@ -70,15 +69,11 @@ class LBlocksForm(forms.ModelForm):
         model = LBlocks
         fields = ['lb_title', 'lb_text', 'lb_icon', 'lb_link']
         widgets = {
-            'lb_text': TinyMCE(attrs={'rows': 10}),
+            'lb_text': SummernoteWidget(attrs={'rows': 10}),
         }
 
-    class Media:
-        js = ('/static/js/tiny_mce/tiny_mce.js',
-              '/static/js/tiny_mce/textareas.js',)
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
 
@@ -87,15 +82,11 @@ class AboutCompanyForm(forms.ModelForm):
         model = AboutCompany
         fields = ['ac_title', 'ac_text']
         widgets = {
-            'ac_text': TinyMCE(attrs={'rows': 10}),
+            'ac_text': SummernoteWidget(attrs={'rows': 10}),
         }
 
-    class Media:
-        js = ('/static/js/tiny_mce/tiny_mce.js',
-              '/static/js/tiny_mce/textareas.js',)
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
 
@@ -104,12 +95,8 @@ class TopOffersForm(forms.ModelForm):
         model = TopOffers
         fields = ['to_title', 'to_link']
 
-    class Media:
-        js = ('/static/js/tiny_mce/tiny_mce.js',
-              '/static/js/tiny_mce/textareas.js',)
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
 
@@ -119,7 +106,6 @@ class SupportForm(forms.ModelForm):
         fields = ['sup_title', 'sup_time', 'sup_slogan', 'sup_phone']
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
 
@@ -129,7 +115,6 @@ class PersonalForm(forms.ModelForm):
         fields = ['p_name', 'p_doljnost', 'p_photo']
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
 
@@ -143,7 +128,6 @@ class CompanyForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
 
@@ -153,7 +137,6 @@ class HeaderPhotoForm(forms.ModelForm):
         fields = ['hp_name', 'hp_photo']
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
 
@@ -167,7 +150,7 @@ class OfferForm(forms.ModelForm):
                   'offer_text']
 
         widgets = {
-            'offer_text': TinyMCE(attrs={'rows': 45}),
+            'offer_text': SummernoteWidget(attrs={'rows': 45}),
             'offer_subtags': forms.CheckboxSelectMultiple,
         }
 
@@ -177,9 +160,6 @@ class OfferForm(forms.ModelForm):
             self.fields['offer_subtags'].queryset = Subtags.objects.filter(
                 tag_parent_tag=self.instance.offer_tag)
 
-    class Media:
-        js = ('/static/js/tiny_mce/tiny_mce.js',
-              '/static/js/tiny_mce/textareas.js',)
 
 
 class SubtagsForm(forms.ModelForm):
@@ -196,12 +176,8 @@ class SinglePageForm(forms.ModelForm):
         model = Post
         fields = ['post_text', 'post_title', 'post_cat_level', 'post_priority']
         widgets = {
-            'post_text': TinyMCE(attrs={'rows': 45}),
+            'post_text': SummernoteWidget(attrs={'rows': 45}),
         }
-
-    class Media:
-        js = ('/static/js/tiny_mce/tiny_mce.js',
-              '/static/js/tiny_mce/textareas.js',)
 
 
 class TagsForm(forms.ModelForm):

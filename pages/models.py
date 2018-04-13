@@ -179,7 +179,6 @@ class Subtags(models.Model):
     def create(cls, tag_title):
         tag = cls(tag_title=tag_title, tag_url=slugify_url(tag_title))
         tag.save()
-        # do something with the book
         return tag
 
 
@@ -300,6 +299,7 @@ class MainBaner(models.Model):
 class FBlocks(models.Model):
     fb_title = models.CharField(max_length=80)  # Текст на банере
     fb_text = models.TextField()                # Текст на банере
+    fb_icon = models.CharField(max_length=50, blank=True, null=True)
     fb_url = models.CharField(max_length=250)
 
     class Meta:
