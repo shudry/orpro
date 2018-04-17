@@ -25,7 +25,6 @@ olefile==0.44
 openpyxl==2.4.8
 Pillow==4.0.0
 pipfile==0.0.2
-pkg-resources==0.0.0
 psycopg2==2.7.3.2
 python-dateutil==2.6.1
 python-decouple==3.1
