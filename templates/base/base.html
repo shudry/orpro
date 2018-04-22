@@ -18,20 +18,20 @@
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
-	<meta name="application-name" content="Title"/> 
+	<meta name="application-name" content="Title"/>
 	<meta name="msapplication-tooltip" content="Description"/>
-	
+
 	<meta name="format-detection" content="telephone=no">
 	<meta name="format-detection" content="address=no"/>
-	
+
 	<meta name="theme-color" content="#0c623b">
-	
+
 	<meta name="description" content="Orpro.ru"/>
 	<meta name="keywords" content="Профсистемы-Крым (пгт Гурзуф, ул. Ялтинская, 12)"/>
 	<meta name="author" content="Orpro Digital"/>
-	<meta name="copyright" content="(c) Профсистемы-Крым 2016г."> 
+	<meta name="copyright" content="(c) Профсистемы-Крым 2016г.">
 	<meta http-equiv="Reply-to" content="@">
-	
+
 
 
 
@@ -47,26 +47,31 @@
 
 
 	{% if request.user.is_superuser %}
-		<!-- Если вошёл администратор, подключаются стили и скрипты 
+		<!-- Если вошёл администратор, подключаются стили и скрипты
 				для формы изменения содержимого страницы.(Only admin)
 		-->
 		<link rel="stylesheet" href="{% static 'new-frontend/css/for-admin.css' %}">
 
-		<!--<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet" async>
-		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js" async></script>
-
-		<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet" type="text/css" async />
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js" async></script>-->
+		{% if edit %}
+			<style type="text/css">
+				@font-face{
+					font-family:"summernote";
+					font-style:normal;font-weight:normal;
+					src:url("//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.10/font/summernote.eot") format("embedded-opentype"), 
+							url("//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.10/font/summernote.woff") format("woff"),
+							url("//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.10/font/summernote.ttf") format("truetype")}
+				</style>
+		{% endif %}
 	{% endif %}
 </head>
 
 
 
 <body style="background: #F1F1F1;" class="{% if category_page %} catalog-margin-top-30 {% endif %}">
-	<!-- Отступ требуется для корректного отображения логотипа на странице каталога, 
+	<!-- Отступ требуется для корректного отображения логотипа на странице каталога,
 			так как в мобильной версии появляется панель отображения товаров(списком или блочно). -->
 	<header style="background-image: url({{ hf.hp_photo.url }});{%if request.path == '/' %}margin-bottom: 0;{%endif%}">
-		
+
 		<!--  Изменение фоновой картинки в шапке  -->
 		{% if request.user.is_superuser %}
 		<form class="admin-visible-lg" action="hp_post" id="hp_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
@@ -89,11 +94,11 @@
 				<img src="{% static 'images/imgpsh_fullsize.png' %}" width="180px">
 				<h1 class="brand_name"><a href="/">Профсистемы-Крым</a></h1>
 			</div>
-			
+
 			<a href="callto:#"><i class="fa-phone"></i> +7 (978) 213-51-74</a>
 			<p>Время работы: пн-вс 8:00-18:00, без перерыва</p>
 		</div>
-		
+
 
 		<div id="header-menu-container" class="header-menu-container">
 			<div class="custom-container">
@@ -119,15 +124,15 @@
 						<li {%if request.path == '/' %} class="active-mobile" {%endif%}>
 							<a href="/">Главная</a>
 						</li>
-							
-						
+
+
 
 						<!--{# Список страниц в главном меню #}-->
 						{% for single_menu_item in topmenu_category %}
 							{% if single_menu_item.post_cat_level == 1 %}
-								
+
 								<!--{#  Если пользователь открывает страницу каталога на мобильном телефоне, список категорий
-											выводится в верхнем(открывающемся) меню. ВАЖНО: url должен быть 'catalog' 
+											выводится в верхнем(открывающемся) меню. ВАЖНО: url должен быть 'catalog'
 
 										Также, добавляется класс "active-mobile" к активной ссылке #}-->
 								{% if request.path|path_list:0 == 'catalog' and single_menu_item.post_seourl == 'catalog' %}
@@ -136,7 +141,7 @@
 											<i class="fa fa-arrow-down visible-mobile" style="margin-left: 10px;"></i>
 										</a>
 									</li>
-									
+
 									<div class="open-catalog-menu-mobile">
 										{% include 'lists/catalog-menu.html' with tags_menu=tags %}
 									</div>
@@ -163,7 +168,7 @@
 		</div>
 	</section>
 	{% endblock without_container %}
-	
+
 
 
 
@@ -189,7 +194,7 @@
 	{% endif %}#}-->
 
 	{% block additional_scripts %}{% endblock %}
-	
+
 
 	<!--{# Мобильная версия. Кнопка открытия меню. #}-->
 	<script type="text/javascript">
@@ -221,9 +226,9 @@
 			$(document).ready(function() {
 				$('#custom-admin-summernote').summernote();
 			});
-		</script>	
+		</script>
 	{% endif %}#}-->
-	
+
 
 	</body>
 </html>
