@@ -5,9 +5,7 @@ from django.forms import formset_factory
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-#from crispy_forms.bootstrap import Field, InlineRadios, TabHolder, Tab
-#from crispy_forms.helper import FormHelper
-#from crispy_forms.layout import Submit, Layout, Div, Fieldset
+
 from django.core.files.storage import default_storage as storage
 
 #from tinymce.widgets import TinyMCE

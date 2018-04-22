@@ -518,6 +518,8 @@ class Home(View):
                 self.context_data['edit_home_lb'] = int(request.POST['edit-home-lb'])
                 self.context_data['message_text'] = "Что-то пошло не так, попробуйте заново."
 
+        print(request.path)
+
         return render(request, self.template_name, self.context_data)
 
 
