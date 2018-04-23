@@ -2,7 +2,6 @@
 import os
 import json
 import urllib
-import random
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
@@ -111,8 +110,7 @@ def review(request):
 
     args['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
     args['reviews'] = Reviews.objects.filter(publish=True).order_by('-date')
-    #args['tags'] = Subtags.objects.all().order_by('?')[0:100]
-    args['tags'] = sorted(Subtags.objects.all(), key=lambda x: random.random())[0:100]
+    args['tags'] = Subtags.objects.all().order_by('?')[0:100]
     return render(request, 'reviews.html', args)
 
 
@@ -675,11 +673,8 @@ class OfferAjaxUpdateView(UpdateView):
             ctx['hf'] = HeaderPhoto.objects.get(id=1)
             ctx['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
             ctx['tags'] = Tags.objects.filter(tag_publish=True).order_by('tag_priority')
-            #ctx['subtags'] = Subtags.objects.filter(
-            #    tag_parent_tag=self.object.offer_tag).order_by(
-            #    'tag_priority')[0:100]
-            ctx['subtags'] = sorted(Subtags.objects.filter(tag_parent_tag=self.object.offer_tag)\
-                .order_by('tag_priority')[0:100], key=lambda x: random.random())
+            ctx['subtags'] = Subtags.objects.filter(tag_parent_tag=self.object.offer_tag)\
+                .order_by('tag_priority')[0:100]
         ctx['offer'] = self.object
 
         if self.request.user.is_superuser:
@@ -739,18 +734,14 @@ def catalog(request, cat_url='nothing'):
         args['pre'] = 'Группа товаров'
         mt = Tags.objects.get(tag_url=cat_url)
         offers = Offers.objects.filter(offer_tag=mt)
-        args['subtags'] = sorted(Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100], \
-                    key=lambda x: random.random())
-        #args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
+        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt).order_by('tag_priority')[0:100]
     except Exception:
         args['pre'] = 'КЛЮЧЕВОЕ СЛОВО'
         print(cat_url)
         mt = Subtags.objects.get(tag_url=cat_url)
         offers = Offers.objects.filter(offer_subtags=mt)
 
-        args['subtags'] = sorted(Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by('tag_priority')[0:100], \
-                    key=lambda x: random.random())
-        #args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by('tag_priority')[0:100]
+        args['subtags'] = Subtags.objects.filter(tag_parent_tag=mt.tag_parent_tag).order_by('tag_priority')[0:100]
 
     args['hf'] = HeaderPhoto.objects.get(id=1)
 

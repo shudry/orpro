@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
     'django_summernote',
     #'tinymce',
-    
+
     'django_extensions',
     'sorl.thumbnail',
     'captcha',
@@ -179,3 +179,14 @@ AWS_PUBLIC_MEDIA_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
 RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
+
+
+
+
+#django-summernote
+SUMMERNOTE_CONFIG = {
+	'default_css': (
+        'new-frontend/css/summernote.css',
+		'summernote/django_summernote.css',
+    ),
+}

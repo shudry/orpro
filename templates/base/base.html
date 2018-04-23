@@ -51,17 +51,6 @@
 				для формы изменения содержимого страницы.(Only admin)
 		-->
 		<link rel="stylesheet" href="{% static 'new-frontend/css/for-admin.css' %}">
-
-		{% if edit %}
-			<style type="text/css">
-				@font-face{
-					font-family:"summernote";
-					font-style:normal;font-weight:normal;
-					src:url("//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.10/font/summernote.eot") format("embedded-opentype"), 
-							url("//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.10/font/summernote.woff") format("woff"),
-							url("//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.10/font/summernote.ttf") format("truetype")}
-				</style>
-		{% endif %}
 	{% endif %}
 </head>
 
@@ -171,10 +160,6 @@
 
 
 
-
-
-
-
 	{% block footer %}
 	<footer>
 		<div class="custom-container">
@@ -183,15 +168,8 @@
 	{% endblock footer %}
 
 
-	<!--{#
-	{% if request.user.is_superuser %}
-		<div class="admin-panel-pop-up"><div class="custom-container"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p></div></div>
-	{% endif %}#}-->
+
+
 
 	{% block additional_scripts %}{% endblock %}
 
@@ -215,19 +193,6 @@
 			});
 		})(jQuery);
 	</script>
-
-
-
-
-
-	<!--{#{% if request.user.is_superuser %}
-		 Инициализация текстового редактора для изменения содержимого страниц.
-		<script type="text/javascript">
-			$(document).ready(function() {
-				$('#custom-admin-summernote').summernote();
-			});
-		</script>
-	{% endif %}#}-->
 
 
 	</body>
