@@ -185,6 +185,7 @@ RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
 
 #django-summernote
 SUMMERNOTE_CONFIG = {
+    'width': '100%',
 	'default_css': (
         'new-frontend/css/summernote.css',
 		'summernote/django_summernote.css',

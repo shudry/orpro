@@ -114,6 +114,57 @@ def review(request):
     return render(request, 'reviews.html', args)
 
 
+class AdminAjaxEditForm(View):
+
+    URL_TO_TEMPLATES = 'forms/admin-ajax/'
+    ADMIN_EDIT_FORM = {
+        'ac_form.html': {'form': AboutCompanyForm, 'model': AboutCompany},
+        'hp_form.html': {'form': HeaderPhotoForm, 'model': HeaderPhoto},
+    }
+
+
+    def get(self, request):
+        from django.template import loader
+
+        file_name_template = request.path.split('/')[-1]
+        if file_name_template in self.ADMIN_EDIT_FORM:
+            #self.context_data['django_form'] = self.django_forms_class[file_name_template]
+            self.get_form_with_data(
+                self.ADMIN_EDIT_FORM[file_name_template]['model'],
+                self.ADMIN_EDIT_FORM[file_name_template]['form'],
+                request.GET.get('model-id', None)
+                )
+
+            self.context_data['template_send'] = file_name_template
+
+            template = loader.get_template(self.URL_TO_TEMPLATES + file_name_template)
+            return HttpResponse(template.render(self.context_data, request))
+        return HttpResponseForbidden()
+
+
+    def post(self, request):
+        file_name_template = request.path.split('/')[-1]
+        if file_name_template in self.ADMIN_EDIT_FORM:
+            form = self.ADMIN_EDIT_FORM[file_name_template]['form']
+            form().save_to_database(request, self.ADMIN_EDIT_FORM[file_name_template]['model'])
+            return HttpResponse('Ok')
+        return HttpResponseForbidden()
+
+
+    def get_form_with_data(self, instance_model, instance_form, id_model):
+        ''' Добавление формы с данными в шаблон '''
+        if id_model is not None:
+            form_initial = instance_model.objects.get(id=id_model)
+            self.context_data['form'] = instance_form(model_initial=form_initial)
+            self.context_data['model_id'] = id_model
+
+
+    def __init__(self, *args, **kwargs):
+        self.context_data = {}
+
+
+
+
 #def fb_post(request):
 #    if request.user.is_superuser:
 #        if request.method == 'POST':

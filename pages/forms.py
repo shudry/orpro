@@ -15,6 +15,20 @@ from .models import *
 
 
 
+class FormAjaxBase(object):
+    def save_to_database(self, request, instance_model):
+        model_id = request.POST.get('model-id', None)
+        if model_id is not None:
+            try:
+                exist_model = instance_model.objects.get(id=model_id)
+            except model.DoesNotExist:
+                raise DoesNotExist('Model not found')
+
+            for field_model in ABOUT_COMPANY_FORM:
+                exist_model.__dict__[field_model] = request.POST[field_model]
+            exist_model.save()
+
+
 class CommentAdminForm(forms.ModelForm):
     class Meta:
         model = Reviews
@@ -74,18 +88,29 @@ class LBlocksForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-
-class AboutCompanyForm(forms.ModelForm):
+ABOUT_COMPANY_FORM = ['ac_title', 'ac_text']
+class AboutCompanyForm(forms.ModelForm, FormAjaxBase):
     class Meta:
         model = AboutCompany
-        fields = ['ac_title', 'ac_text']
+        fields = ABOUT_COMPANY_FORM
         widgets = {
-            'ac_text': SummernoteWidget(attrs={'rows': 10}),
+            'ac_text': SummernoteWidget(attrs={'toolbar': [
+                ['style', ['style']],
+            	['font', ['bold', 'italic', 'underline', 'clear']],
+	            ['font', ['fontsize', 'color']],
+	            ['para', ['paragraph']],
+                ['insert', ['picture', 'link', 'video', 'hr']],
+	            ['misc', ['codeview', 'undo', 'redo']],
+            ]}),
         }
 
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, model_initial=None, *args, **kwargs):
+        if model_initial is not None:
+            super().__init__(initial={ABOUT_COMPANY_FORM[0]: model_initial.ac_title,
+                ABOUT_COMPANY_FORM[1]: model_initial.ac_text}, *args, **kwargs)
+        else:
+            super().__init__(*args, **kwargs)
 
 
 class TopOffersForm(forms.ModelForm):
@@ -129,13 +154,18 @@ class CompanyForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
 
-class HeaderPhotoForm(forms.ModelForm):
+HEADER_PHOTO_FORM = ['hp_name', 'hp_photo']
+class HeaderPhotoForm(forms.ModelForm, FormAjaxBase):
     class Meta:
         model = HeaderPhoto
-        fields = ['hp_name', 'hp_photo']
+        fields = HEADER_PHOTO_FORM
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, model_initial=None, *args, **kwargs):
+        if model_initial is not None:
+            super().__init__(initial={HEADER_PHOTO_FORM[0]: model_initial.hp_name,
+                HEADER_PHOTO_FORM[1]: model_initial.hp_photo}, *args, **kwargs)
+        else:
+            super().__init__(*args, **kwargs)
 
 
 class OfferForm(forms.ModelForm):
