@@ -42,16 +42,16 @@
 
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	{% block additional_head %}{% endblock %}
-
 
 
 	{% if request.user.is_superuser %}
 		<!-- Если вошёл администратор, подключаются стили и скрипты
-				для формы изменения содержимого страницы.(Only admin)
-		-->
-		<link rel="stylesheet" href="{% static 'new-frontend/css/for-admin.css' %}">
+				для формы изменения содержимого страницы.(Only admin)-->
+		<link rel="stylesheet" href="{% static 'new-frontend/css/admin-style.css' %}">
+		<script src="{% static 'new-frontend/js/admin-script.js' %}"></script>
 	{% endif %}
+
+	{% block additional_head %}{% endblock %}
 </head>
 
 
@@ -60,22 +60,6 @@
 	<!-- Отступ требуется для корректного отображения логотипа на странице каталога,
 			так как в мобильной версии появляется панель отображения товаров(списком или блочно). -->
 	<header style="background-image: url({{ hf.hp_photo.url }});{%if request.path == '/' %}margin-bottom: 0;{%endif%}">
-
-		<!--  Изменение фоновой картинки в шапке  -->
-		{% if request.user.is_superuser %}
-		<form class="admin-visible-lg" action="hp_post" id="hp_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
-			<span class="hp_form_id"></span>
-			{% csrf_token %}
-			<span class="super_user">
-				<input type="hidden" name="edit" value="1">
-				<button type="submit" class="fast-set">
-					<span class="admin-icon-edit" aria-hidden="true"></span>
-				</button>
-			</span>
-		</form>
-		{% endif %}
-
-
 
 
 		<div class="custom-container hidden-mobile-logo">
@@ -157,6 +141,30 @@
 		</div>
 	</section>
 	{% endblock without_container %}
+
+
+	{% if request.user.is_superuser %}
+			<!--  Изменение фоновой картинки в шапке.
+							Здесь, потому что по другому не показывается и не работает -->
+			{% csrf_token %}
+			<span class="super_user admin-visible-lg">
+				<a href="javascript:viewFormEdit('button-edit-form-hp');" id="button-edit-form-hp" data-template-name="hp_form.html" data-model-id="1">
+					<span class="admin-icon-edit"></span></a>
+			</span>
+
+
+		<!-- Всплывающее окно для форм быстрого редактирования -->
+		<div class="admin-panel-pop-up" style="display: none;">
+			<div class="custom-pop-up-blur"></div>
+			<div class="custom-container container-pop">
+				<div class="alert-pop-up" id="alert-pop-up"></div>
+				{% csrf_token %}
+				<form action="javascript:sendData();" class="admin-relative-block" id="send-form-ajax" method="POST" novalidate enctype="multipart/form-data">
+
+				</form>
+			</div>
+		</div>
+	{% endif %}
 
 
 

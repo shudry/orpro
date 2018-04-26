@@ -1,18 +1,53 @@
 .admin-panel-pop-up{
 	position: fixed;
-	top: 0;left: 0;right: 0;
-	z-index: 3000;
+	top: 0;left: 0;right: 0;bottom: 0;
+	z-index: 10000;
 	margin: 0 auto;
+	padding: 20px 0;
+	overflow-y: scroll;
 }
-.admin-panel-pop-up > .custom-container{
+.admin-panel-pop-up > .custom-pop-up-blur{
+	z-index: 10001;
+	cursor: pointer;
+	position: inherit;
+	top: 0;left: 0;right: 0;bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+}
+.admin-panel-pop-up > .container-pop{
+	position: relative;
+	z-index: 10002;
 	background: #fff;
 	padding: 20px 60px;
 	border: 1px solid #DFDFDFFF;
-	border-radius: 3px;
+	border-radius: 5px;
 	margin-left: 30%;
 	margin-right: 30%;
 	width: auto;
+	box-shadow: 0 5px 25px 2px #000000;
 }
+.admin-panel-pop-up .load-span{
+	text-align: center;
+}
+.admin-panel-pop-up .alert-pop-up{
+	padding: 3px 10px;
+	border-radius: 3px;
+	max-height: 150px;
+	overflow-y: auto;
+}
+.admin-panel-pop-up .alert-pop-up > p{
+	color: #fff;
+	font-weight: 500;
+}
+
+
+
+.admin-form-group > div{
+	margin: 10px 0;
+}
+
+
+
+
 
 
 .super_user{
