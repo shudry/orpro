@@ -11,30 +11,24 @@ from django.core.files.storage import default_storage as storage
 #from tinymce.widgets import TinyMCE
 from django_summernote.widgets import SummernoteWidget
 
+from pages.utils.ajax import FormAjaxBase
 from .models import *
 
-
-
-class FormAjaxBase(object):
-    def save_to_database(self, request, instance_model):
-        model_id = request.POST.get('model-id', None)
-        if model_id is not None:
-            try:
-                exist_model = instance_model.objects.get(id=model_id)
-            except model.DoesNotExist:
-                raise DoesNotExist('Model not found')
-
-            for field_model in ABOUT_COMPANY_FORM:
-                exist_model.__dict__[field_model] = request.POST[field_model]
-            exist_model.save()
-
+SUMMERNOTE_ATTRS = {'toolbar': [
+    ['style', ['style']],
+    ['font', ['bold', 'italic', 'underline', 'clear']],
+    ['font', ['fontsize', 'color']],
+    ['para', ['paragraph']],
+    ['insert', ['picture', 'link', 'video', 'hr']],
+    ['misc', ['codeview', 'undo', 'redo']],
+]}
 
 class CommentAdminForm(forms.ModelForm):
     class Meta:
         model = Reviews
         fields = ['comment']
         widgets = {
-            'comment': SummernoteWidget(attrs={'rows': 10}),
+            'comment': SummernoteWidget(attrs=SUMMERNOTE_ATTRS),
         }
 
 
@@ -47,89 +41,49 @@ class ReviewsForm(forms.Form):
     email = forms.CharField(label='Email', max_length=100, required=False)
     text = forms.CharField(label='Отзыв', widget=forms.Textarea)
 
-    #def __init__(self, *args, **kwargs):
-    #    super(ReviewsForm, self).__init__(*args, **kwargs)
-    #    self.helper = FormHelper()
-    #    self.helper.form_id = 'id-personal-data-form'
-    #    self.helper.form_method = 'post'
-    #    self.helper.form_action = reverse('review')
-    #    self.helper.add_input(Submit('submit', 'Добавить', css_class='btn-success '))
-    #    self.helper.form_class = 'form-horizontal'
-    #    self.helper.layout = Layout(
-    #        Fieldset('',
-    #                 Field('name', placeholder=''),
-    #                 Field('email', placeholder=''),
-    #                 Field('text', placeholder=''),
-    #                 ))
 
-
-class FBlocksForm(forms.ModelForm):
+class FBlocksForm(FormAjaxBase):
     class Meta:
         model = FBlocks
-        fields = ['fb_title', 'fb_text', 'fb_url']
+        fields = ['fb_title', 'fb_text', 'fb_icon', 'fb_color', 'fb_url']
         widgets = {
-            'fb_text': SummernoteWidget(attrs={'rows': 10}),
+            'fb_text': SummernoteWidget(attrs=SUMMERNOTE_ATTRS),
+            'fb_color': forms.TextInput(attrs={'placeholder': '#000..., rgb(...) or rgba(...)'}),
+            'fb_icon': forms.TextInput(attrs={'placeholder': 'fa-example'})
         }
 
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-
-class LBlocksForm(forms.ModelForm):
+class LBlocksForm(FormAjaxBase):
     class Meta:
         model = LBlocks
-        fields = ['lb_title', 'lb_text', 'lb_icon', 'lb_link']
+        fields = ['lb_title', 'lb_text', 'lb_icon', 'lb_color', 'lb_link']
         widgets = {
-            'lb_text': SummernoteWidget(attrs={'rows': 10}),
+            'lb_text': SummernoteWidget(attrs=SUMMERNOTE_ATTRS),
+            'lb_color': forms.TextInput(attrs={'placeholder': '#000..., rgb(...) or rgba(...)'}),
+            'lb_icon': forms.TextInput(attrs={'placeholder': 'fa-example'})
         }
 
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-ABOUT_COMPANY_FORM = ['ac_title', 'ac_text']
-class AboutCompanyForm(forms.ModelForm, FormAjaxBase):
+class AboutCompanyForm(FormAjaxBase):
     class Meta:
         model = AboutCompany
-        fields = ABOUT_COMPANY_FORM
+        fields = ['ac_title', 'ac_text']
         widgets = {
-            'ac_text': SummernoteWidget(attrs={'toolbar': [
-                ['style', ['style']],
-            	['font', ['bold', 'italic', 'underline', 'clear']],
-	            ['font', ['fontsize', 'color']],
-	            ['para', ['paragraph']],
-                ['insert', ['picture', 'link', 'video', 'hr']],
-	            ['misc', ['codeview', 'undo', 'redo']],
-            ]}),
+            'ac_text': SummernoteWidget(attrs=SUMMERNOTE_ATTRS),
         }
 
 
-    def __init__(self, model_initial=None, *args, **kwargs):
-        if model_initial is not None:
-            super().__init__(initial={ABOUT_COMPANY_FORM[0]: model_initial.ac_title,
-                ABOUT_COMPANY_FORM[1]: model_initial.ac_text}, *args, **kwargs)
-        else:
-            super().__init__(*args, **kwargs)
 
-
-class TopOffersForm(forms.ModelForm):
+class TopOffersForm(FormAjaxBase):
     class Meta:
         model = TopOffers
         fields = ['to_title', 'to_link']
 
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-
-class SupportForm(forms.ModelForm):
+class SupportForm(FormAjaxBase):
     class Meta:
         model = Support
         fields = ['sup_title', 'sup_time', 'sup_slogan', 'sup_phone']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
 
 class PersonalForm(forms.ModelForm):
@@ -155,7 +109,7 @@ class CompanyForm(forms.ModelForm):
 
 
 HEADER_PHOTO_FORM = ['hp_name', 'hp_photo']
-class HeaderPhotoForm(forms.ModelForm, FormAjaxBase):
+class HeaderPhotoForm(FormAjaxBase):
     class Meta:
         model = HeaderPhoto
         fields = HEADER_PHOTO_FORM

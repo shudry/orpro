@@ -37,12 +37,25 @@
 .admin-panel-pop-up .alert-pop-up > p{
 	color: #fff;
 	font-weight: 500;
+	width: 100%;
 }
-
-
 
 .admin-form-group > div{
 	margin: 10px 0;
+}
+
+.admin-form-group input{
+	width: 100%;
+	display: block;
+	border-radius: 3px;
+	padding: 7px 10px;
+	border: 1px solid rgb(168, 168, 168);
+	font-size: 15px;
+	color: #5c5c5c;
+	background: #f6f6f6;
+}
+.admin-form-group a{
+	color: #17577a;
 }
 
 
@@ -159,22 +172,29 @@
 .lb_form > #preview-edit-icon{font-size: 23px;margin-left: 7px;}
 
 
-
-
 @media (max-width: 767px) {
 	.admin-visible-lg{display: none;}
-
+	.admin-panel-pop-up > .container-pop{
+		margin-left: 5%;
+		margin-right: 5%;
+	}
 }
 
 @media (min-width: 768px) and (max-width: 1000px) {
 	.admin-visible-lg{display: none;}
-
+	.admin-panel-pop-up > .container-pop{
+		margin-left: 15%;
+		margin-right: 15%;
+	}
 
 }
 
 @media (min-width: 1001px) and (max-width: 1199px){
 	.admin-visible-lg{display: none;}
-
+	.admin-panel-pop-up > .container-pop{
+		margin-left: 25%;
+		margin-right: 25%;
+	}
 }
 
 @media (min-width: 1200px) {

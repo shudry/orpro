@@ -55,20 +55,27 @@ function sendData() {
     if (xhr.status != 200) {
       viewPopUpAlert(false, xhr.statusText, xhr.status);
     } else {
-      viewPopUpAlert(true, xhr.responseText);
+      viewPopUpAlert(true);
     }
   }
 }
 
-function viewPopUpAlert(is_good, response_text, status=null) {
+function viewPopUpAlert(is_good, response_text=null, status=null) {
   $('#send-form-ajax').html('');
 
+
   if (is_good){
-    $('#alert-pop-up').css({'background': '#3384cf'});
-    $('#alert-pop-up').html('<p>'+ response_text +'</p>');
+    //$('#alert-pop-up').html('<p style="color: #157eb3;">'+ response_text +'</p>');
+    $('#alert-pop-up').css({'display': 'block'});
+    $('.admin-panel-pop-up').css({'display': 'none'});
+    $('body').css({'overflow': ''});
+    $('#alert-pop-up').css({'display': 'none'});
+    location.reload();
   } else {
     $('#alert-pop-up').css({'background': '#d22e2e'});
     $('#alert-pop-up').html('<p>Status code: '+ status +'</p>\
           <p>Error text: ' + response_text +'</p>');
+    $('#alert-pop-up').css({'display': 'block'});
+    return;
   }
 }
