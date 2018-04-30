@@ -301,6 +301,7 @@ class FBlocks(models.Model):
     fb_text = models.TextField()                # Текст на банере
     fb_icon = models.CharField(max_length=50, blank=True, null=True)
     fb_url = models.CharField(max_length=250)
+    fb_color = models.CharField(max_length=30, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Блоки под слайдером'
@@ -315,6 +316,7 @@ class LBlocks(models.Model):
     lb_text = models.TextField()                # Текст на банере
     lb_icon = models.CharField(max_length=80)
     lb_link = models.CharField(max_length=250, blank=True)
+    lb_color = models.CharField(max_length=30, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Список под 4 блоками'

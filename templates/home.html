@@ -41,26 +41,7 @@
 			<div class="custom-container banner_wr">
 				<ul class="banner">
 					{% for element_banner in fb_elements %}
-					<li>
-						{% if edit_home_fb and element_banner.id == edit_home_fb %}
-							<!-- Отображение формы быстрого редактирования -->
-
-							<form action="{% url 'home' %}" class="fb_form editable" method="post" novalidate enctype="multipart/form-data">
-								{% csrf_token %}
-								<p>{{ message_text }}</p>
-								<input type="text" name="fb_icon" value="{{ element_banner.fb_icon }}" placeholder="FontAwesome Icon Class" onkeyup="$('#preview-edit-icon').removeClass(); $('#preview-edit-icon').addClass(this.value);">
-								<span id="preview-edit-icon" class="{{ element_banner.fb_icon }}"></span>
-
-								<input type="text" name="fb_title" value="{{ element_banner.fb_title }}" placeholder="Title">
-								<textarea type="text" name="fb_text" placeholder="Text">{{ element_banner.fb_text }}</textarea>
-								<input type="text" name="fb_url" value="{{ element_banner.fb_url }}" placeholder="Url">
-
-								<input type="hidden" name="edit-home-fb" value="{{ element_banner.id }}">
-								<input type="submit" value="Сохранить">
-								<a href="{% url 'home' %}">Отмена</a>
-							</form>
-						{% else %}
-							<form action="{% url 'home' %}" id="fb_form" method="get" novalidate enctype="multipart/form-data">
+					<li class="admin-relative-block" style="{% if element_banner.fb_color %}background: {{element_banner.fb_color}};{%endif%}">
 								<a href="{{ element_banner.fb_url }}">
 									<div class="{{ element_banner.fb_icon }}"></div>
 									<span>
@@ -72,14 +53,10 @@
 								{% if request.user.is_superuser %}
 									{% csrf_token %}
 									<span class="super_user">
-										<input type="hidden" name="edit-home-fb" value="{{ element_banner.id }}">
-										<button type="submit" class="fast-set">
-											<span class="admin-icon-edit"></span>
-										</button>
+										<a href="javascript:viewFormEdit('button-edit-form-fb{{ element_banner.id }}');" id="button-edit-form-fb{{ element_banner.id }}" data-template-name="fb_form.html" data-model-id="{{ element_banner.id }}">
+											<span class="admin-icon-edit"></span></a>
 									</span>
 								{% endif %}
-							</form>
-						{% endif %}
 					</li>
 					{% endfor %}
 				</ul>
@@ -96,44 +73,24 @@
 				<div class="row">
 
 					{% for element_subbanner in lb_elements %}
-					<div class="grid_6 box-form wow fadeInRight" data-wow-delay=".{{ forloop.counter }}s">
-						{% if edit_home_lb and element_subbanner.id == edit_home_lb %}
-							<form action="{% url 'home' %}" class="lb_form editable" method="post" novalidate enctype="multipart/form-data">
-								{% csrf_token %}
-								<p>{{ message_text }}</p>
-								<input type="text" name="lb_icon" value="{{ element_subbanner.lb_icon }}" placeholder="FontAwesome Icon Class" onkeyup="$('#preview-edit-icon').removeClass(); $('#preview-edit-icon').addClass(this.value);">
-								<span id="preview-edit-icon" class="{{ element_subbanner.lb_icon }}"></span>
-
-								<input type="text" name="lb_title" value="{{ element_subbanner.lb_title }}" placeholder="Title">
-								<textarea type="text" name="lb_text" placeholder="Text">{{ element_subbanner.lb_text }}</textarea>
-								<input type="text" name="lb_url" value="{{ element_subbanner.lb_link }}" placeholder="Url">
-
-								<input type="hidden" name="edit-home-lb" value="{{ element_subbanner.id }}">
-								<input type="submit" value="Сохранить">
-								<a href="{% url 'home' %}">Отмена</a>
-							</form>
-						{% else %}
-							<form action="/" id="lb_form" method="get" novalidate enctype="multipart/form-data">
+					<div class="grid_6 box-form wow fadeInRight admin-relative-block" data-wow-delay=".{{ forloop.counter }}s">
 								<span class="form_lb_1">
 									<div class="box_aside">
-										<div class="icon {{ element_subbanner.lb_icon }}"></div>
+										<div class="icon {{ element_subbanner.lb_icon }}" style="{% if element_subbanner.lb_color %}background: {{element_subbanner.lb_color}}!important;{%endif%}"></div>
 									</div>
 									<div class="box_cnt__no-flow">
 										<h3><a href="{{ element_subbanner.lb_link }}">{{ element_subbanner.lb_title }}</a></h3>
 										<p>{{ element_subbanner.lb_text|safe }}</p>
 									</div>
 								</span>
+
 								{% if request.user.is_superuser %}
 								{% csrf_token %}
 								<span class="super_user">
-									<input type="hidden" name="edit-home-lb" value="{{ element_subbanner.id }}">
-									<button type="submit" class="fast-set">
-										<span class="admin-icon-edit" aria-hidden="true"></span>
-									</button>
+									<a href="javascript:viewFormEdit('button-edit-form-lb{{ element_subbanner.id }}');" id="button-edit-form-lb{{ element_subbanner.id }}" data-template-name="lb_form.html" data-model-id="{{ element_subbanner.id }}">
+										<span class="admin-icon-edit"></span></a>
 								</span>
 								{% endif %}
-							</form>
-						{% endif %}
 					</div>
 					{% endfor %}
 				</div>
@@ -175,7 +132,7 @@
 						<p>Список самых покупаемых товаров</p>
 						<ul class="marked-list-buy-orders">
 							{% for i in TO %}
-									<form action="/to_post" class="admin-relative-block" id="to_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+								<div class="admin-relative-block">
 										<span class="to_form_{{i.id}}">
 											<li><a href="/goods/{{i.to_link}}">{{ i.to_title }}</a></li>
 										</span>
@@ -184,13 +141,11 @@
 										{% if request.user.is_superuser %}
 										{% csrf_token %}
 										<span class="super_user">
-											<input type="hidden" name="edit" value="{{i.id}}">
-											<button type="submit" class="fast-set">
-												<span class="admin-icon-edit" aria-hidden="true"></span>
-											</button>
+											<a href="javascript:viewFormEdit('button-edit-form-to{{i.id}}');" id="button-edit-form-to{{i.id}}" data-template-name="to_form.html" data-model-id="{{ i.id }}">
+												<span class="admin-icon-edit"></span></a>
 										</span>
 										{% endif %}
-									</form>
+									</div>
 							{% endfor %}
 						</ul>
 						<a href="/catalog" class="home-button">Читать больше</a>
@@ -198,7 +153,7 @@
 
 					<div class="grid_4">
 						<div class="info-box">
-							<form action="/sup_post" id="sup_form" method="{% if edit %}post{% else %}get{% endif %}" novalidate enctype="multipart/form-data">
+							<div class="admin-relative-block">
 								<span class="sup_form">
 									<h2 class="fa-comment">{{ sup.sup_title  }}</h2>
 									<hr>
@@ -208,16 +163,15 @@
 									</dl>
 									<p>{{ sup.sup_phone }}</p>
 								</span>
+
 								{% if request.user.is_superuser %}
 								{% csrf_token %}
 								<span class="super_user">
-									<input type="hidden" name="edit" value="1">
-									<button type="submit" class="fast-set">
-										<span class="admin-icon-edit" aria-hidden="true"></span>
-									</button>
+									<a href="javascript:viewFormEdit('button-edit-form-sup');" id="button-edit-form-sup" data-template-name="sup_form.html" data-model-id="1">
+										<span class="admin-icon-edit"></span></a>
 								</span>
 								{% endif %}
-							</form>
+							</div>
 						</div>
 						<div class="owl-carousel">
 							{% for p in personal %}
@@ -263,6 +217,9 @@
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
+		//Анимирование елемента при прокрутке.
+		new WOW().init();
+
 		$('.custom-slider').slick({
 			dots: false,
 			slidesToShow: 1,
@@ -273,10 +230,6 @@
 			prevArrow: '<button type="button" class="custom-slick-prev custom-slick-prev-in"><i class="fa-angle-left"></i></button>',
 			nextArrow: '<button type="button" class="custom-slick-next custom-slick-next-in"><i class="fa-angle-right"></i></button>',
 		});
-
-
-		//Анимирование елемента при прокрутке.
-		new WOW().init();
 	});
 </script>
 {% endblock without_container %}
