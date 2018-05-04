@@ -360,7 +360,7 @@ class Home(View):
         self.context_data['p'] = Personal.objects.all()
         self.context_data['ac1'] = AboutCompany.objects.get(id=1)
         self.context_data['hf'] = HeaderPhoto.objects.get(id=1)
-        self.context_data['company'] = Company.objects.get(id=1)
+        #self.context_data['company'] = Company.objects.get(id=1)
         self.context_data['topmenu_category'] = Post.objects.filter(~Q(post_cat_level=0)).order_by('post_priority')
 
 
