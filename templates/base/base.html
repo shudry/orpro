@@ -27,16 +27,16 @@
 	<meta name="theme-color" content="#0c623b">
 
 	<meta name="description" content="Orpro.ru"/>
-	<meta name="keywords" content="Профсистемы-Крым (пгт Гурзуф, ул. Ялтинская, 12)"/>
-	<meta name="author" content="Orpro Digital"/>
-	<meta name="copyright" content="(c) Профсистемы-Крым 2016г.">
+	<meta name="keywords" content="{{orpro_data}} ({{orpro_data.address}})"/>
+	<meta name="author" content="Orpro Inc"/>
+	<meta name="copyright" content="(c) {{orpro_data}} 2016г.">
 	<meta http-equiv="Reply-to" content="@">
 
 
 
 
 
-	<title>Профсистемы-Крым (пгт Гурзуф, ул. Ялтинская, 12) | Прайс-лист компании Профсистемы-Крым</title>
+	<title>{{orpro_data}} ({{orpro_data.address}}) | Прайс-лист компании {{orpro_data}}</title>
 	<link rel="stylesheet" href="{% static 'new-frontend/css/grid.css' %}" type="text/css" />
 	<link rel="stylesheet" href="{% static 'new-frontend/css/style.css' %}" type="text/css" />
 
@@ -65,10 +65,10 @@
 		<div class="custom-container hidden-mobile-logo">
 			<div class="custom-brand">
 				<img src="{% static 'images/imgpsh_fullsize.png' %}" width="180px">
-				<h1 class="brand_name"><a href="/">Профсистемы-Крым</a></h1>
+				<h1 class="brand_name"><a href="/">{{orpro_data}}</a></h1>
 			</div>
 
-			<a href="callto:#"><i class="fa-phone"></i> +7 (978) 213-51-74</a>
+			<a href="callto:#"><i class="fa-phone"></i> {{orpro_data.mob_phone}}</a>
 			<p>Время работы: пн-вс 8:00-18:00, без перерыва</p>
 		</div>
 
@@ -82,8 +82,8 @@
 							Номер телефона отображается на мобильном(только альбомный режим) и на планшетах в любом режиме.	-->
 					<div class="custom-menu-icon">
 						<span></span><span></span><span></span><span></span>
-						<p><b>Профсистемы-Крым</b> <b class="visible-phone-mobile-landscape"> | +7 (978) 213-51-74</b> <br>
-							пгт Гурзуф, ул. Ялтинская, 12</p></div>
+						<p><b>{{orpro_data}}</b> <b class="visible-phone-mobile-landscape"> | {{orpro_data.mob_phone}}</b> <br>
+							{{orpro_data.address}}</p></div>
 
 
 					<!-- Логотип в шапке. Отображается, если размер экрана сравним с мобильным и более
@@ -171,7 +171,7 @@
 	{% block footer %}
 	<footer>
 		<div class="custom-container">
-			<div class="copyright">© Профсистемы-Крым 2016г. г.Гурзуф, ул. Ялтинская, 12 , +7 (978) 213-51-74 Время работы: пн-вс 8:00-18:00, без перерыва</div>
+			<div class="copyright">© {{orpro_data}} 2016г. {{orpro_data.address}} , {{orpro_data.mob_phone}} Время работы: пн-вс 8:00-18:00, без перерыва</div>
 		</div></footer>
 	{% endblock footer %}
 
