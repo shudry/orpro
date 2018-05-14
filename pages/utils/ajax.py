@@ -3,7 +3,7 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseForbidden
 
 
-__all__ = ('FormAjaxBase', )
+__all__ = ('FormAjaxBase', 'BaseAjaxView' )
 
 
 class FormAjaxBase(forms.ModelForm):
